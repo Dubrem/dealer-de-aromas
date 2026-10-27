@@ -2092,9 +2092,9 @@ function cerrarApertura(){}
   </div>
 
   <!-- Marca centrada sobre el hero -->
-  <div style="position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;gap:6px">
-    <div style="font-family:var(--ff-display);font-size:clamp(1.5rem,5vw,3.8rem);letter-spacing:0.2em;color:#fff;line-height:1.15;text-transform:uppercase;text-align:center;text-shadow:0 2px 32px rgba(0,0,0,.6)">Dealer <span style="color:var(--rose-light)">de Aromas</span></div>
-    <div style="font-family:var(--ff-script);font-size:clamp(1rem,2.5vw,1.8rem);color:rgba(255,255,255,.75);text-shadow:0 1px 12px rgba(0,0,0,.5)">Fragancias que te definen</div>
+  <div style="position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;gap:10px;background:radial-gradient(ellipse 54% 34% at 50% 50%, rgba(10,8,6,.72), rgba(10,8,6,.32) 58%, transparent 78%)">
+    <div style="font-family:var(--ff-display);font-size:clamp(1.5rem,5vw,3.8rem);letter-spacing:0.2em;color:#fff;line-height:1.15;text-transform:uppercase;text-align:center;text-shadow:0 2px 26px rgba(0,0,0,.9),0 0 70px rgba(0,0,0,.6)">Dealer <span style="color:var(--rose-light)">de Aromas</span></div>
+    <div style="font-family:var(--ff-script);font-size:clamp(1rem,2.5vw,1.8rem);color:rgba(255,255,255,.88);letter-spacing:.14em;text-shadow:0 1px 14px rgba(0,0,0,.85)">Fragancias que te definen</div>
   </div>
 
   <!-- Cinematic transition overlay -->
@@ -3217,10 +3217,6 @@ function startCatBannerSlideshow(section) {
     return src ? { src, mini: mini !== src ? mini : '', id: String(p.id) } : null;
   }).filter(Boolean);
 
-  // Fallback mujer
-  if (!_heroSlides.length && section === 'mujer') {
-    _heroSlides = [{ src: 'img/hero-mujer.jpg', id: 'new_1784002709501' }];
-  }
   if (!_heroSlides.length) { banner.style.display = 'none'; return; }
   banner.style.display = 'block';
 
