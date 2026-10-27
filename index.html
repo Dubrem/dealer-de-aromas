@@ -39,7 +39,7 @@
     "openingHours": "Mo-Fr 09:00-17:00",
     "priceRange": "$$",
     "currenciesAccepted": "MXN",
-    "paymentAccepted": "Cash, Credit Card, MercadoPago",
+    "paymentAccepted": "Cash",
     "hasMap": "https://maps.google.com/?q=Tula+de+Allende+Hidalgo+Mexico"
   }
   </script>
@@ -969,7 +969,6 @@
     .bank-row { display:flex; justify-content:space-between; margin-bottom:9px; align-items:center; }
     .bank-lbl { font-size:.62rem; color:var(--text-light); font-weight:600; text-transform:uppercase; letter-spacing:.1em; }
     .bank-val { font-size:.84rem; font-weight:700; color:var(--text-dark); text-align:right; }
-    .bank-clabe { font-size:1rem; font-weight:700; color:var(--text-dark); letter-spacing:1.5px; }
     .btn-copy { display:inline-flex; align-items:center; gap:5px; padding:6px 13px; border-radius:50px;
       border:1.5px solid var(--rose); background:#fff; color:var(--rose); font-family:var(--ff-body);
       font-size:.64rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; cursor:pointer;
@@ -2406,24 +2405,9 @@ function cerrarApertura(){}
       <h3 class="checkout-title">¿Cómo recibirás tu pedido?</h3>
       <div class="delivery-opts">
         <label class="delivery-opt selected" id="dOpt1">
-          <input type="radio" name="dv" value="pickup" checked onchange="setDelivery('pickup')">
-          <div class="delivery-opt-body"><h4>🏪 Recoger en Tienda</h4><p>H Colegio Militar 2, Centro, 42800 Tula de Allende, Hgo. · Lun–Sáb 10–19 h</p></div>
+          <input type="radio" name="dv" value="personal" checked onchange="setDelivery('personal')">
+          <div class="delivery-opt-body"><h4>🤝 Entrega personalizada</h4><p>Te la entrega Reynel Martínez González en mano. Acuerdan lugar y hora por WhatsApp.</p></div>
           <span class="delivery-opt-price">Gratis</span>
-        </label>
-        <label class="delivery-opt" id="dOpt2">
-          <input type="radio" name="dv" value="tepeji" onchange="setDelivery('tepeji')">
-          <div class="delivery-opt-body"><h4>🛵 Envío a Tepeji</h4><p>Entrega a domicilio en Tepeji del Río</p></div>
-          <span class="delivery-opt-price">$20</span>
-        </label>
-        <label class="delivery-opt" id="dOpt3">
-          <input type="radio" name="dv" value="tlahue" onchange="setDelivery('tlahue')">
-          <div class="delivery-opt-body"><h4>🛵 Envío a Tlahuelilpan</h4><p>Entrega a domicilio en Tlahuelilpan</p></div>
-          <span class="delivery-opt-price">$20</span>
-        </label>
-        <label class="delivery-opt" id="dOpt4">
-          <input type="radio" name="dv" value="ixmiquilpan" onchange="setDelivery('ixmiquilpan')">
-          <div class="delivery-opt-body"><h4>🛵 Envío a Ixmiquilpan</h4><p>Entrega a domicilio en Ixmiquilpan</p></div>
-          <span class="delivery-opt-price">$20</span>
         </label>
       </div>
       <div class="summary-box" id="sum1"></div>
@@ -2433,35 +2417,24 @@ function cerrarApertura(){}
     <div class="step-panel" id="sp2">
       <h3 class="checkout-title">Método de Pago</h3>
       <div class="pay-method-opts">
-        <div class="pay-opt selected" id="pmMp" onclick="setPayMethod('mp')">
+        <!-- Mercado Pago queda oculto hasta que la cuenta esté a nombre de la tienda (MP_ACTIVO) -->
+        <div class="pay-opt" id="pmMp" onclick="setPayMethod('mp')" style="display:none">
           <div style="font-size:1.4rem">💳</div>
           <div>
             <div style="font-weight:700;font-size:.85rem;color:#009EE3">MercadoPago</div>
           </div>
           <div class="pay-opt-check" id="pmMpCheck">✓</div>
         </div>
-        <div class="pay-opt" id="pmBank" onclick="setPayMethod('bank')">
-          <div style="font-size:1.4rem">🏦</div>
+        <div class="pay-opt selected" id="pmCash" onclick="setPayMethod('efectivo')">
+          <div style="font-size:1.4rem">💵</div>
           <div>
-            <div style="font-weight:700;font-size:.85rem;color:var(--text-dark)">Transferencia Mercado Pago</div>
-            <div style="font-size:.72rem;color:var(--text-light)">Manual, puede tardar más</div>
+            <div style="font-weight:700;font-size:.85rem;color:var(--text-dark)">Efectivo al recibir</div>
+            <div style="font-size:.72rem;color:var(--text-light)">Pagas al momento de la entrega</div>
           </div>
-          <div class="pay-opt-check" id="pmBankCheck" style="opacity:0">✓</div>
+          <div class="pay-opt-check" id="pmCashCheck">✓</div>
         </div>
       </div>
-      <div class="bank-card" id="bankCard" style="display:none;margin-top:12px">
-        <h4>🏦 Datos de Transferencia</h4>
-        <div class="bank-row"><span class="bank-lbl">Banco</span><span class="bank-val">Mercado Pago</span></div>
-        <div class="bank-row"><span class="bank-lbl">Titular</span><span class="bank-val">Dealer de Aromas</span></div>
-        <div class="bank-row" style="align-items:flex-start">
-          <span class="bank-lbl" style="padding-top:3px">CLABE</span>
-          <span style="display:flex;flex-direction:column;align-items:flex-end;gap:7px">
-            <span class="bank-clabe" data-clabe>722969010264030571</span>
-            <button type="button" class="btn-copy" onclick="copyClabe(this)">📋 Copiar CLABE</button>
-          </span>
-        </div>
-        <p class="pay-note" style="margin-top:10px;margin-bottom:0">⚠️ Transfiere exactamente el monto total. Incluye tu número de orden en el concepto.</p>
-      </div>
+      <p class="pay-note" style="margin-top:12px">💵 Pagas en efectivo cuando Reynel Martínez González te entregue el pedido. Te contactamos por WhatsApp para acordar lugar y hora.</p>
       <div class="summary-box" id="sum2"></div>
       <div class="checkout-nav">
         <button class="btn-back" onclick="goStep(1)">← Atrás</button>
@@ -2493,22 +2466,16 @@ function cerrarApertura(){}
       <div class="order-num" id="orderNum"></div>
     </div>
     <div class="confirm-steps">
-      <h4>📋 Pasos para completar tu pago:</h4>
+      <h4>📋 Lo que sigue:</h4>
       <ol>
-        <li>Realiza la transferencia a <strong>Mercado Pago</strong></li>
-        <li>
-          <span style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap">
-            CLABE: <strong data-clabe>722969010264030571</strong>
-            <button type="button" class="btn-copy" onclick="copyClabe(this)">📋 Copiar</button>
-          </span>
-        </li>
-        <li>Incluye tu número de pedido en el concepto</li>
-        <li>Toca el botón de abajo y <strong>envía tu comprobante por WhatsApp</strong></li>
-        <li>¡Listo! Confirmaremos tu pedido en breve 🌸</li>
+        <li>Toca el botón de abajo y <strong>mándanos tu pedido por WhatsApp</strong></li>
+        <li>Acuerdas con <strong>Reynel Martínez González</strong> el lugar y la hora de entrega</li>
+        <li>Recibes tus fragancias en mano y <strong>pagas en efectivo</strong> en ese momento</li>
+        <li>¡Listo! 🖤</li>
       </ol>
     </div>
     <a class="btn-whatsapp" id="btnWhatsApp" href="#" target="_blank" rel="noopener">
-      <span class="btn-whatsapp-icon">💬</span> Enviar comprobante por WhatsApp
+      <span class="btn-whatsapp-icon">💬</span> Enviar mi pedido por WhatsApp
     </a>
     <button class="btn-primary" onclick="closeOrderModal()">Seguir Comprando</button>
   </div>
@@ -2942,60 +2909,27 @@ const S = {
   orders: [],          // pedidos confirmados
   lbId: null,
   step: 1,
-  delivery: 'pickup',
+  delivery: 'personal',
   shipCost: 0,
 };
 const SHIP_COST  = 110;
-const WA_NUMBER  = '527731259393';   // destino de los comprobantes
+const WA_NUMBER  = '527731259393';   // WhatsApp de la tienda
 
-/** Copia al portapapeles la CLABE que se muestra junto al botón.
- *  Lee el valor del DOM para que nunca se copie algo distinto de lo visible. */
-async function copyClabe(btn){
-  const el = btn.parentElement.querySelector('[data-clabe]')
-          || document.querySelector('[data-clabe]');
-  const clabe = (el ? el.textContent : '').replace(/\s+/g, '');
-  if (!clabe) return;
-
-  let ok = false;
-  try {
-    await navigator.clipboard.writeText(clabe);
-    ok = true;
-  } catch(e) {
-    // Safari puede negar la API moderna: respaldo con textarea
-    try {
-      const ta = document.createElement('textarea');
-      ta.value = clabe;
-      ta.setAttribute('readonly', '');
-      ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
-      document.body.appendChild(ta);
-      ta.select();
-      ta.setSelectionRange(0, clabe.length);   // iOS necesita el rango explícito
-      ok = document.execCommand('copy');
-      document.body.removeChild(ta);
-    } catch(e2) { ok = false; }
-  }
-
-  const prev = btn.innerHTML;
-  btn.innerHTML = ok ? '✓ Copiada' : '✕ No se pudo';
-  btn.disabled  = true;
-  setTimeout(() => { btn.innerHTML = prev; btn.disabled = false; }, 1800);
-  toast(ok ? 'CLABE copiada al portapapeles' : 'No se pudo copiar — selecciona el número a mano',
-        ok ? 'ok' : 'err');
-}
 const FIREBASE_API_KEY = 'AIzaSyDsl_hZ4m2kfKWHUoDl5BMj6XYuzu9vBYo';
 // ← Cambia esta dirección por la real de tu tienda
-const SHIP_LOCAL = 20;
+// Mercado Pago apagado mientras la cuenta no esté a nombre de la tienda:
+// ponlo en true para que vuelva a aparecer en el paso de pago.
+const MP_ACTIVO = false;
+const SHIP_LOCAL = 0;
 const STORE_LOCATION = {
   address: 'H Colegio Militar 2, Centro, 42800 Tula de Allende, Hgo.',
   hours:   'Lun–Sáb 10:00–19:00 h',
   maps:    'https://maps.google.com/?q=H+Colegio+Militar+2+Centro+Tula+de+Allende+Hidalgo',
 };
 const DELIVERY_LABELS = {
-  pickup:      '🏪 Recoger en tienda',
-  tepeji:      '🛵 Envío a Tepeji',
-  tlahue:      '🛵 Envío a Tlahuelilpan',
-  ixmiquilpan: '🛵 Envío a Ixmiquilpan',
+  personal: '🤝 Entrega personalizada con Reynel Martínez González',
 };
+const REPARTIDOR = 'Reynel Martínez González';
 
 /* ──────────────────────────────────────────────────────
    FIREBASE — sync entre dispositivos (GRATIS)
@@ -4148,8 +4082,8 @@ const INFO_CONTENT = {
     <p class="auth-sub" style="margin-bottom:22px">Lee con atención antes de realizar tu pedido</p>
     <div style="display:flex;flex-direction:column;gap:14px;font-size:.84rem;line-height:1.7;color:var(--text-med)">
       <div style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
-        <strong style="color:var(--text-dark)">💳 Pago completo obligatorio</strong><br>
-        Solo se procesan pedidos pagados en su totalidad. El comprobante de transferencia bancaria debe enviarse al momento de realizar el pedido. Sin comprobante, el pedido no se procesa.
+        <strong style="color:var(--text-dark)">💵 Pago en efectivo al recibir</strong><br>
+        El pago es en efectivo al momento de la entrega. Reynel Martínez González te entrega el pedido en mano y ahí mismo liquidas el total.
       </div>
       <div style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
         <strong style="color:var(--text-dark)">🚫 Sin sistema de apartado</strong><br>
@@ -4204,8 +4138,8 @@ const INFO_CONTENT = {
         <p style="margin-top:8px">Toma fotografías del defecto inmediatamente y envíalas a nuestro número de contacto. Atenderemos tu caso a la brevedad.</p>
       </details>
       <details style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
-        <summary style="font-weight:700;color:var(--text-dark);cursor:pointer">¿Qué pasa si no envío el comprobante de pago?</summary>
-        <p style="margin-top:8px">El pedido <strong>no se procesará</strong>. Sin comprobante de transferencia no podemos confirmar el pago, por lo que el pedido quedará en espera hasta recibirlo.</p>
+        <summary style="font-weight:700;color:var(--text-dark);cursor:pointer">¿Cómo se acuerda la entrega?</summary>
+        <p style="margin-top:8px">Al confirmar tu pedido nos escribes por WhatsApp y acuerdas con <strong>Reynel Martínez González</strong> el lugar y la hora. Él te entrega las fragancias en mano y pagas en efectivo en ese momento.</p>
       </details>
     </div>`,
   nosotros: `
@@ -5543,12 +5477,14 @@ function normalizePhone(p){ return String(p).replace(/\D/g,''); }
    CHECKOUT
 ────────────────────────────────────────────────────── */
 function setPayMethod(m){
+  if(m === 'mp' && !MP_ACTIVO) m = 'efectivo';
   S.payMethod = m;
-  document.getElementById('pmMp').classList.toggle('selected', m==='mp');
-  document.getElementById('pmBank').classList.toggle('selected', m==='bank');
-  document.getElementById('pmMpCheck').style.opacity = m==='mp' ? '1' : '0';
-  document.getElementById('pmBankCheck').style.opacity = m==='bank' ? '1' : '0';
-  document.getElementById('bankCard').style.display = m==='bank' ? '' : 'none';
+  const mp = document.getElementById('pmMp'), cash = document.getElementById('pmCash');
+  if(mp)   mp.classList.toggle('selected', m==='mp');
+  if(cash) cash.classList.toggle('selected', m==='efectivo');
+  const mpChk = document.getElementById('pmMpCheck'), cashChk = document.getElementById('pmCashCheck');
+  if(mpChk)   mpChk.style.opacity   = m==='mp' ? '1' : '0';
+  if(cashChk) cashChk.style.opacity = m==='efectivo' ? '1' : '0';
   const btn = document.getElementById('btnConfirmarPedido');
   if(btn) btn.textContent = m==='mp' ? '💳 Pagar con MercadoPago' : '✓ Confirmar Pedido';
 }
@@ -5556,9 +5492,8 @@ function startCheckout(){
   if(!S.cart.length){ toast('Tu carrito está vacío','err'); return; }
   if(!S.user){ closeCart(); toast('Inicia sesión para continuar',''); setTimeout(openLoginModal,400); return; }
   closeCart();
-  S.step=1; S.delivery='pickup'; S.shipCost=0; S.payMethod='mp';
-  document.querySelector('input[name="dv"][value="pickup"]').checked=true;
-  ['dOpt1','dOpt2','dOpt3','dOpt4'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.remove('selected'); });
+  S.step=1; S.delivery='personal'; S.shipCost=0; S.payMethod = MP_ACTIVO ? 'mp' : 'efectivo';
+  document.querySelector('input[name="dv"][value="personal"]').checked=true;
   document.getElementById('dOpt1').classList.add('selected');
   // Resetear botón confirmar
   const cb = document.getElementById('btnConfirmarPedido');
@@ -5570,11 +5505,8 @@ function startCheckout(){
 function closeCheckoutModal(){ document.getElementById('checkoutModal').classList.remove('open'); unlockScroll(); }
 function setDelivery(opt){
   S.delivery=opt;
-  S.shipCost = opt==='pickup' ? 0 : SHIP_LOCAL;
-  document.getElementById('dOpt1').classList.toggle('selected',opt==='pickup');
-  document.getElementById('dOpt2').classList.toggle('selected',opt==='tepeji');
-  document.getElementById('dOpt3').classList.toggle('selected',opt==='tlahue');
-  document.getElementById('dOpt4').classList.toggle('selected',opt==='ixmiquilpan');
+  S.shipCost = 0;
+  document.getElementById('dOpt1').classList.toggle('selected', true);
   buildSummaries();
 }
 function goStep(n){
@@ -5590,8 +5522,8 @@ function goStep(n){
 function summaryHTML(){
   const sub=cartSubtotal(), total=sub+S.shipCost;
   const lines=S.cart.map(item=>{ const p=findProduct(item.id); return p?`<div class="summary-line"><span>${p.name} × ${item.qty}</span><span>${fmtMXN(p.price*item.qty)}</span></div>`:''; }).join('');
-  const deliveryLbl = DELIVERY_LABELS[S.delivery] || '🏪 Recoger en tienda';
-  return `<div class="summary-hdr">Resumen del Pedido</div>${lines}<div class="summary-line"><span>Subtotal</span><span>${fmtMXN(sub)}</span></div><div class="summary-line"><span>Envío (${deliveryLbl})</span><span>${S.shipCost===0?'Gratis':fmtMXN(S.shipCost)}</span></div><div class="summary-total"><span>Total</span><span>${fmtMXN(total)} MXN</span></div>`;
+  const deliveryLbl = DELIVERY_LABELS[S.delivery] || DELIVERY_LABELS.personal;
+  return `<div class="summary-hdr">Resumen del Pedido</div>${lines}<div class="summary-line"><span>Subtotal</span><span>${fmtMXN(sub)}</span></div><div class="summary-line"><span>${deliveryLbl}</span><span>${S.shipCost===0?'Gratis':fmtMXN(S.shipCost)}</span></div><div class="summary-total"><span>Total</span><span>${fmtMXN(total)} MXN</span></div>`;
 }
 function buildSummaries(){
   const h=summaryHTML();
@@ -5660,7 +5592,7 @@ async function confirmOrder(){
     if (document.querySelector('.products-section.catalog-visible')) renderGrid(_currentFilter);
   });
 
-  if(S.payMethod === 'mp'){
+  if(S.payMethod === 'mp' && MP_ACTIVO){
     // Pago con MercadoPago — redirigir a su checkout
     const confirmBtn2 = document.getElementById('btnConfirmarPedido');
     if(confirmBtn2){ confirmBtn2.textContent = '⏳ Preparando pago…'; }
@@ -5708,9 +5640,9 @@ async function confirmOrder(){
     return;
   }
 
-  // Pago por transferencia bancaria — flujo original
-  const msg = `¡Hola! 🖤 Ya realicé la transferencia bancaria de *${fmtMXN(total)} MXN* para mi pedido *${num}*. `
-            + `Por favor confirmar el despacho. ¡Gracias! — Dealer de Aromas`;
+  // Pago en efectivo contra entrega
+  const msg = `¡Hola! 🖤 Acabo de hacer mi pedido *${num}* por *${fmtMXN(total)} MXN*. `
+            + `Quiero agendar la entrega en mano y pago en efectivo al recibir. ¡Gracias!`;
   document.getElementById('btnWhatsApp').href =
     `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
 
@@ -6229,7 +6161,7 @@ function buildOrderCard(o){
     </label>`;
   }).join('');
 
-  const deliveryTxt = DELIVERY_LABELS[o.delivery] || '🏪 Recoger en tienda';
+  const deliveryTxt = DELIVERY_LABELS[o.delivery] || DELIVERY_LABELS.personal;
   const allDone = o.items.every(it=>it.done);
   const st = o.status || 'pendiente';
   const phoneHtml = o.phone
@@ -6483,7 +6415,7 @@ function customerOrderCard(o){
     </div>`).join('');
 
   // Bloque de ubicación (solo si es pickup y status = listo o completado)
-  const showLocation = o.delivery==='pickup' && ['listo','completado'].includes(st);
+  const showLocation = false;   // la entrega es en mano, no hay punto de recoleccion
   const locationHtml = showLocation ? `
     <div class="corder-location">
       <div class="corder-location-icon">📍</div>
@@ -6501,23 +6433,23 @@ function customerOrderCard(o){
       <span class="corder-item-price">${fmtMXN(it.price*it.qty)}</span>
     </div>`).join('');
 
-  const deliveryTxt = DELIVERY_LABELS[o.delivery] || '🏪 Recoger en tienda';
+  const deliveryTxt = DELIVERY_LABELS[o.delivery] || DELIVERY_LABELS.personal;
 
-  // Mientras el pago no este confirmado, el cliente puede mandar su
-  // comprobante al WhatsApp de la tienda sin depender del modal de compra,
-  // que desaparece en cuanto lo cierra.
-  const waMsg = `¡Hola! 🖤 Les envío el comprobante de mi pedido *${o.num}*.\n\n`
+  // Mientras el pedido no este entregado, el cliente puede escribir al
+  // WhatsApp de la tienda sin depender del modal de compra, que
+  // desaparece en cuanto lo cierra.
+  const waMsg = `¡Hola! 🖤 Quiero agendar la entrega de mi pedido *${o.num}*.\n\n`
     + `👤 ${o.customer || ''}\n`
     + `💰 Total: *${fmtMXN(o.total)} MXN*\n`
     + `${deliveryTxt}\n\n`
     + `📦 Productos:\n`
     + o.items.map(it => `• ${it.name} × ${it.qty}`).join('\n')
-    + `\n\nAdjunto mi comprobante de pago. ¡Gracias!`;
+    + `\n\n¿En qué horario me lo pueden entregar? ¡Gracias!`;
   const comprobanteHtml = st === 'pendiente' ? `
     <a class="btn-whatsapp" style="margin:14px 0 0"
        href="https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(waMsg)}"
        target="_blank" rel="noopener">
-      <span class="btn-whatsapp-icon">💬</span> Enviar comprobante por WhatsApp
+      <span class="btn-whatsapp-icon">💬</span> Agendar entrega por WhatsApp
     </a>
     <p style="font-size:.66rem;color:var(--text-light);text-align:center;margin:7px 0 0;line-height:1.5">
       Adjunta la captura de tu transferencia o de tu pago en Mercado Pago
