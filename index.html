@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google-site-verification" content="HDH5DrXLTo2X4rI_KlOXd1R2CURIYiTdHANEkfQPs-M" />
-  <title>Dealer de Aromas — Fragancias que te definen</title>
+  <title>Dealer de Aromas — Fragancias y accesorios</title>
 
   <!-- SEO -->
   <meta name="description" content="Dealer de Aromas — Perfumes para mujer, hombre y unisex. Fragancias árabes, de nicho, sets y miniaturas desde Tula de Allende, Hidalgo. Envíos a todo México." />
@@ -26,7 +26,7 @@
     "@context": "https://schema.org",
     "@type": "Store",
     "name": "Dealer de Aromas",
-    "alternateName": "Fragancias que te definen",
+    "alternateName": "Fragancias y accesorios",
     "url": "https://dealer-de-aromas.vercel.app/",
     "description": "Perfumería para mujer, hombre y unisex en Tula de Allende, Hidalgo: fragancias árabes, de nicho, sets, decants y línea corporal. Envíos a todo México.",
     "address": {
@@ -35,7 +35,7 @@
       "addressRegion": "Hidalgo",
       "addressCountry": "MX"
     },
-    "telephone": "+525563723284",
+    "telephone": "+527731259393",
     "openingHours": "Mo-Fr 09:00-17:00",
     "priceRange": "$$",
     "currenciesAccepted": "MXN",
@@ -43,6 +43,8 @@
     "hasMap": "https://maps.google.com/?q=Tula+de+Allende+Hidalgo+Mexico"
   }
   </script>
+  <link rel="icon" href="img/icono.png" type="image/png">
+  <link rel="apple-touch-icon" href="img/icono.png">
   <link rel="preconnect" href="https://images.unsplash.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -117,9 +119,12 @@
     .logo { text-decoration: none; justify-self: center; display: flex; align-items: center; gap: 10px; }
     .logo-icon {
       display: flex; align-items: center; justify-content: center;
-      width: 30px; height: 30px; flex-shrink: 0;
+      width: 34px; height: 34px; flex-shrink: 0;
     }
-    .logo-icon svg { width: 100%; height: 100%; }
+    .logo-icon img {
+      width: 100%; height: 100%; object-fit: cover; border-radius: 3px;
+      border: 1px solid rgba(176,134,58,.55); display: block;
+    }
     .logo-text {
       font-family: 'Cinzel', serif;
       font-size: 1.15rem; font-weight: 300; letter-spacing: 0.16em; white-space: nowrap;
@@ -1494,6 +1499,10 @@
       padding:52px 26px 40px; display:grid;
       grid-template-columns:1.2fr 1fr 1fr 1.1fr; gap:38px;
     }
+    .foot-mark {
+      width:92px; height:92px; object-fit:cover; display:block; margin-bottom:18px;
+      border:1px solid rgba(176,134,58,.4); border-radius:4px;
+    }
     .foot-logo {
       font-family:var(--ff-display); font-size:1.35rem; letter-spacing:.14em;
       text-transform:uppercase; color:#fff; line-height:1.5; margin-bottom:14px;
@@ -1532,6 +1541,35 @@
       text-transform:uppercase; text-decoration:none; transition:all .2s; background:none;
     }
     .foot-btn:hover { background:var(--rose); border-color:var(--rose); color:#fff; }
+
+    /* ── WhatsApp flotante ── */
+    .wa-float {
+      position:fixed; right:18px; bottom:18px; z-index:190;
+      width:54px; height:54px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      background:#1FA855; color:#fff; text-decoration:none;
+      box-shadow:0 10px 26px rgba(0,0,0,.3), 0 0 0 5px rgba(31,168,85,.16);
+      transition:transform .2s, box-shadow .2s;
+    }
+    .wa-float:hover { transform:scale(1.07); box-shadow:0 12px 30px rgba(0,0,0,.36), 0 0 0 8px rgba(31,168,85,.2); }
+    .wa-float svg { width:28px; height:28px; }
+    .wa-float::after {
+      content:'Escríbenos'; position:absolute; right:64px; white-space:nowrap;
+      background:#16130E; color:#fff; font-family:var(--ff-body); font-size:.62rem;
+      letter-spacing:.14em; text-transform:uppercase; padding:7px 12px; border-radius:3px;
+      opacity:0; transform:translateX(6px); transition:opacity .2s, transform .2s; pointer-events:none;
+      border:1px solid rgba(176,134,58,.4);
+    }
+    .wa-float:hover::after { opacity:1; transform:translateX(0); }
+    body:has(.modal.open) .wa-float,
+    body:has(.cart-sidebar.open) .wa-float,
+    body:has(.lightbox.open) .wa-float,
+    body:has(.sidebar.open) .wa-float { opacity:0; pointer-events:none; }
+    @media (max-width:640px) {
+      .wa-float { width:48px; height:48px; right:14px; bottom:14px; }
+      .wa-float svg { width:25px; height:25px; }
+      .wa-float::after { display:none; }
+    }
 
     /* ── Barra inferior ── */
     .foot-bottom {
@@ -2006,10 +2044,7 @@ function cerrarApertura(){}
     </button>
     <a href="#inicio" class="logo">
       <div class="logo-icon">
-        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="16,1 31,16 16,31 1,16" fill="none" stroke="var(--rose)" stroke-width="1.5"/>
-          <polygon points="16,7 25,16 16,25 7,16" fill="var(--rose)"/>
-        </svg>
+        <img src="img/logo.jpg" alt="Dealer de Aromas" width="34" height="34" decoding="async">
       </div>
       <span class="logo-text">Dealer <span>de Aromas</span></span>
     </a>
@@ -2094,7 +2129,7 @@ function cerrarApertura(){}
   <!-- Marca centrada sobre el hero -->
   <div style="position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;gap:10px;background:radial-gradient(ellipse 54% 34% at 50% 50%, rgba(10,8,6,.72), rgba(10,8,6,.32) 58%, transparent 78%)">
     <div style="font-family:var(--ff-display);font-size:clamp(1.5rem,5vw,3.8rem);letter-spacing:0.2em;color:#fff;line-height:1.15;text-transform:uppercase;text-align:center;text-shadow:0 2px 26px rgba(0,0,0,.9),0 0 70px rgba(0,0,0,.6)">Dealer <span style="color:var(--rose-light)">de Aromas</span></div>
-    <div style="font-family:var(--ff-script);font-size:clamp(1rem,2.5vw,1.8rem);color:rgba(255,255,255,.88);letter-spacing:.14em;text-shadow:0 1px 14px rgba(0,0,0,.85)">Fragancias que te definen</div>
+    <div style="font-family:var(--ff-script);font-size:clamp(1rem,2.5vw,1.8rem);color:rgba(255,255,255,.88);letter-spacing:.14em;text-shadow:0 1px 14px rgba(0,0,0,.85)">Fragancias y accesorios</div>
   </div>
 
   <!-- Cinematic transition overlay -->
@@ -2118,13 +2153,13 @@ function cerrarApertura(){}
 <div class="hero-ticker" aria-hidden="true">
   <div class="hero-ticker-track">
     <span class="hero-ticker-item">DEALER DE AROMAS</span>
-    <span class="hero-ticker-item">Fragancias que te Definen</span>
+    <span class="hero-ticker-item">Fragancias y Accesorios</span>
     <span class="hero-ticker-item">Tula de Allende, Hidalgo</span>
     <span class="hero-ticker-item">Envíos a todo México</span>
     <span class="hero-ticker-item">Nuevas Fragancias 2026</span>
     <span class="hero-ticker-item">Perfumería Fina</span>
     <span class="hero-ticker-item">DEALER DE AROMAS</span>
-    <span class="hero-ticker-item">Fragancias que te Definen</span>
+    <span class="hero-ticker-item">Fragancias y Accesorios</span>
     <span class="hero-ticker-item">Tula de Allende, Hidalgo</span>
     <span class="hero-ticker-item">Envíos a todo México</span>
     <span class="hero-ticker-item">Nuevas Fragancias 2026</span>
@@ -2142,7 +2177,7 @@ function cerrarApertura(){}
       <div class="cat-banner-label" id="catBannerLabel" onclick="catBannerClick()">Ver →</div>
     </div>
     <p class="section-gender-label" id="sectionGenderLabel"></p>
-    <p class="section-tagline">Fragancias que te definen</p>
+    <p class="section-tagline">Fragancias y accesorios</p>
     <div class="search-results-info" id="searchInfo"></div>
     <!-- Dropdown colapsable de categorías -->
     <div class="filter-dropdown-wrap" id="filterDropdownWrap">
@@ -2721,8 +2756,9 @@ function cerrarApertura(){}
   <!-- Marca y enlaces -->
   <div class="foot-main">
     <div>
+      <img class="foot-mark" src="img/logo.jpg" alt="Dealer de Aromas — Fragancias y accesorios" width="96" height="96" loading="lazy" decoding="async">
       <div class="foot-logo">Dealer <span>de Aromas</span></div>
-      <p class="foot-claim">Fragancias que te definen</p>
+      <p class="foot-claim">Fragancias y accesorios</p>
       <p class="foot-loc">Tula de Allende, Hidalgo<br>México</p>
     </div>
 
@@ -2749,9 +2785,9 @@ function cerrarApertura(){}
 
     <div class="foot-col">
       <h4>Contacto</h4>
-      <a href="tel:+525563723284" class="foot-tel">+52 55 6372 3284</a>
+      <a href="tel:+527731259393" class="foot-tel">+52 773 125 9393</a>
       <p class="foot-hrs">Lun – Vie &nbsp; 9:00 – 17:00 h<br>Sáb y Dom cerrado</p>
-      <a href="https://wa.me/525563723284" target="_blank" rel="noopener" class="foot-btn">
+      <a href="https://wa.me/527731259393" target="_blank" rel="noopener" class="foot-btn">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         WhatsApp
       </a>
@@ -2768,6 +2804,8 @@ function cerrarApertura(){}
     <button class="foot-admin" onclick="openAdminLogin()">⚙ Admin</button>
   </div>
 </footer>
+
+<a class="wa-float" id="waFloat" href="https://wa.me/527731259393?text=Hola%2C%20vi%20su%20tienda%20en%20l%C3%ADnea%20y%20quiero%20informaci%C3%B3n%20sobre%20un%20perfume" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
 
 <div class="toast" id="toast"></div>
 
@@ -2908,7 +2946,7 @@ const S = {
   shipCost: 0,
 };
 const SHIP_COST  = 110;
-const WA_NUMBER  = '525563723284';   // destino de los comprobantes
+const WA_NUMBER  = '527731259393';   // destino de los comprobantes
 
 /** Copia al portapapeles la CLABE que se muestra junto al botón.
  *  Lee el valor del DOM para que nunca se copie algo distinto de lo visible. */
@@ -4136,10 +4174,10 @@ const INFO_CONTENT = {
     <h2 class="auth-title" style="margin-bottom:6px">📞 Contacto</h2>
     <p class="auth-sub" style="margin-bottom:22px">Estamos para ayudarte</p>
     <div style="display:flex;flex-direction:column;gap:12px">
-      <a href="tel:+525563723284" style="display:flex;align-items:center;gap:14px;background:var(--blush-light);border-radius:12px;padding:16px 18px;text-decoration:none;color:var(--text-dark)">
+      <a href="tel:+527731259393" style="display:flex;align-items:center;gap:14px;background:var(--blush-light);border-radius:12px;padding:16px 18px;text-decoration:none;color:var(--text-dark)">
         <span style="font-size:1.6rem">📱</span>
         <div>
-          <div style="font-weight:700;font-size:.9rem">+52 55 6372 3284</div>
+          <div style="font-weight:700;font-size:.9rem">+52 773 125 9393</div>
           <div style="font-size:.72rem;color:var(--text-light)">Llamadas y WhatsApp</div>
         </div>
       </a>
@@ -4159,7 +4197,7 @@ const INFO_CONTENT = {
       </details>
       <details style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
         <summary style="font-weight:700;color:var(--text-dark);cursor:pointer">¿Qué pasa si no me avisan que está listo para recoger?</summary>
-        <p style="margin-top:8px">Si no recibes notificación en el tiempo esperado, comunícate directamente a nuestro número de contacto: <strong>+52 55 6372 3284</strong>.</p>
+        <p style="margin-top:8px">Si no recibes notificación en el tiempo esperado, comunícate directamente a nuestro número de contacto: <strong>+52 773 125 9393</strong>.</p>
       </details>
       <details style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
         <summary style="font-weight:700;color:var(--text-dark);cursor:pointer">¿Qué hago si el producto llega en mal estado?</summary>
