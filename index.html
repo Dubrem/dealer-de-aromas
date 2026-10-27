@@ -39,7 +39,7 @@
     "openingHours": "Mo-Fr 09:00-17:00",
     "priceRange": "$$",
     "currenciesAccepted": "MXN",
-    "paymentAccepted": "Cash",
+    "paymentAccepted": "Cash, Bank Transfer",
     "hasMap": "https://maps.google.com/?q=Tula+de+Allende+Hidalgo+Mexico"
   }
   </script>
@@ -2433,8 +2433,23 @@ function cerrarApertura(){}
           </div>
           <div class="pay-opt-check" id="pmCashCheck">✓</div>
         </div>
+        <div class="pay-opt" id="pmBank" onclick="setPayMethod('bank')">
+          <div style="font-size:1.4rem">🏦</div>
+          <div>
+            <div style="font-weight:700;font-size:.85rem;color:var(--text-dark)">Transferencia</div>
+            <div style="font-size:.72rem;color:var(--text-light)">Pagas antes y mandas tu comprobante</div>
+          </div>
+          <div class="pay-opt-check" id="pmBankCheck" style="opacity:0">✓</div>
+        </div>
       </div>
-      <p class="pay-note" style="margin-top:12px">💵 Pagas en efectivo cuando Reynel Martínez González te entregue el pedido. Te contactamos por WhatsApp para acordar lugar y hora.</p>
+      <p class="pay-note" id="payNoteCash" style="margin-top:12px">💵 Pagas en efectivo cuando Reynel Martínez González te entregue el pedido. Te contactamos por WhatsApp para acordar lugar y hora.</p>
+      <div class="bank-card" id="bankCard" style="display:none;margin-top:12px">
+        <h4>🏦 Datos de Transferencia</h4>
+        <div class="bank-row"><span class="bank-lbl">Banco</span><span class="bank-val" data-banco>XXXXXXXX</span></div>
+        <div class="bank-row"><span class="bank-lbl">Titular</span><span class="bank-val" data-titular>XXXXXXXX</span></div>
+        <div class="bank-row"><span class="bank-lbl">CLABE</span><span class="bank-val" data-clabe>XXXX XXXX XXXX XXXX XX</span></div>
+        <p class="pay-note" style="margin-top:10px;margin-bottom:0">⚠️ Pídenos los datos por WhatsApp antes de transferir. Transfiere el monto exacto e incluye tu número de pedido en el concepto.</p>
+      </div>
       <div class="summary-box" id="sum2"></div>
       <div class="checkout-nav">
         <button class="btn-back" onclick="goStep(1)">← Atrás</button>
@@ -2465,17 +2480,9 @@ function cerrarApertura(){}
       <div class="order-num-lbl">Número de Pedido</div>
       <div class="order-num" id="orderNum"></div>
     </div>
-    <div class="confirm-steps">
-      <h4>📋 Lo que sigue:</h4>
-      <ol>
-        <li>Toca el botón de abajo y <strong>mándanos tu pedido por WhatsApp</strong></li>
-        <li>Acuerdas con <strong>Reynel Martínez González</strong> el lugar y la hora de entrega</li>
-        <li>Recibes tus fragancias en mano y <strong>pagas en efectivo</strong> en ese momento</li>
-        <li>¡Listo! 🖤</li>
-      </ol>
-    </div>
+    <div class="confirm-steps" id="confirmSteps"></div>
     <a class="btn-whatsapp" id="btnWhatsApp" href="#" target="_blank" rel="noopener">
-      <span class="btn-whatsapp-icon">💬</span> Enviar mi pedido por WhatsApp
+      <span class="btn-whatsapp-icon">💬</span> Continuar por WhatsApp
     </a>
     <button class="btn-primary" onclick="closeOrderModal()">Seguir Comprando</button>
   </div>
@@ -4082,8 +4089,8 @@ const INFO_CONTENT = {
     <p class="auth-sub" style="margin-bottom:22px">Lee con atención antes de realizar tu pedido</p>
     <div style="display:flex;flex-direction:column;gap:14px;font-size:.84rem;line-height:1.7;color:var(--text-med)">
       <div style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
-        <strong style="color:var(--text-dark)">💵 Pago en efectivo al recibir</strong><br>
-        El pago es en efectivo al momento de la entrega. Reynel Martínez González te entrega el pedido en mano y ahí mismo liquidas el total.
+        <strong style="color:var(--text-dark)">💵 Efectivo al recibir o transferencia</strong><br>
+        Puedes pagar en efectivo cuando Reynel Martínez González te entregue el pedido en mano, o por transferencia antes de la entrega — en ese caso pídenos los datos por WhatsApp y mándanos tu comprobante.
       </div>
       <div style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
         <strong style="color:var(--text-dark)">🚫 Sin sistema de apartado</strong><br>
@@ -5479,12 +5486,14 @@ function normalizePhone(p){ return String(p).replace(/\D/g,''); }
 function setPayMethod(m){
   if(m === 'mp' && !MP_ACTIVO) m = 'efectivo';
   S.payMethod = m;
-  const mp = document.getElementById('pmMp'), cash = document.getElementById('pmCash');
-  if(mp)   mp.classList.toggle('selected', m==='mp');
-  if(cash) cash.classList.toggle('selected', m==='efectivo');
-  const mpChk = document.getElementById('pmMpCheck'), cashChk = document.getElementById('pmCashCheck');
-  if(mpChk)   mpChk.style.opacity   = m==='mp' ? '1' : '0';
-  if(cashChk) cashChk.style.opacity = m==='efectivo' ? '1' : '0';
+  const marca = (id, on) => { const el = document.getElementById(id); if(el) el.classList.toggle('selected', on); };
+  const palomita = (id, on) => { const el = document.getElementById(id); if(el) el.style.opacity = on ? '1' : '0'; };
+  marca('pmMp', m==='mp'); marca('pmCash', m==='efectivo'); marca('pmBank', m==='bank');
+  palomita('pmMpCheck', m==='mp'); palomita('pmCashCheck', m==='efectivo'); palomita('pmBankCheck', m==='bank');
+  const banco = document.getElementById('bankCard');
+  if(banco) banco.style.display = m==='bank' ? '' : 'none';
+  const notaEfectivo = document.getElementById('payNoteCash');
+  if(notaEfectivo) notaEfectivo.style.display = m==='efectivo' ? '' : 'none';
   const btn = document.getElementById('btnConfirmarPedido');
   if(btn) btn.textContent = m==='mp' ? '💳 Pagar con MercadoPago' : '✓ Confirmar Pedido';
 }
@@ -5640,9 +5649,25 @@ async function confirmOrder(){
     return;
   }
 
-  // Pago en efectivo contra entrega
-  const msg = `¡Hola! 🖤 Acabo de hacer mi pedido *${num}* por *${fmtMXN(total)} MXN*. `
-            + `Quiero agendar la entrega en mano y pago en efectivo al recibir. ¡Gracias!`;
+  // Efectivo contra entrega o transferencia
+  const esTransfer = S.payMethod === 'bank';
+  const msg = esTransfer
+    ? `¡Hola! 🖤 Acabo de hacer mi pedido *${num}* por *${fmtMXN(total)} MXN* y quiero pagar por *transferencia*. `
+      + `¿Me pasan los datos de la cuenta? En cuanto transfiera les mando el comprobante. ¡Gracias!`
+    : `¡Hola! 🖤 Acabo de hacer mi pedido *${num}* por *${fmtMXN(total)} MXN*. `
+      + `Quiero agendar la entrega en mano y pago en efectivo al recibir. ¡Gracias!`;
+  const pasos = document.getElementById('confirmSteps');
+  if (pasos) pasos.innerHTML = esTransfer
+    ? `<h4>📋 Lo que sigue:</h4><ol>`
+      + `<li>Toca el botón de abajo y <strong>pídenos los datos por WhatsApp</strong></li>`
+      + `<li>Transfiere el monto exacto e incluye tu número de pedido en el concepto</li>`
+      + `<li><strong>Manda tu comprobante</strong> por WhatsApp</li>`
+      + `<li>Acuerdas con <strong>${REPARTIDOR}</strong> el lugar y la hora de entrega</li></ol>`
+    : `<h4>📋 Lo que sigue:</h4><ol>`
+      + `<li>Toca el botón de abajo y <strong>mándanos tu pedido por WhatsApp</strong></li>`
+      + `<li>Acuerdas con <strong>${REPARTIDOR}</strong> el lugar y la hora de entrega</li>`
+      + `<li>Recibes tus fragancias en mano y <strong>pagas en efectivo</strong> en ese momento</li>`
+      + `<li>¡Listo! 🖤</li></ol>`;
   document.getElementById('btnWhatsApp').href =
     `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
 
