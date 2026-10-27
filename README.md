@@ -45,3 +45,13 @@ npx serve -p 4321 .
 ```
 
 Las funciones de `api/` solo corren en Vercel (`vercel dev` si quieres probarlas).
+
+## Pendientes de datos reales
+
+- **Transferencia:** banco, titular y CLABE están como `XXXXXXXX` en el paso de
+  pago del checkout (busca `data-banco`, `data-titular` y `data-clabe` en
+  `index.html`). Sustitúyelos cuando haya cuenta a nombre de la tienda.
+- **Mercado Pago:** oculto con `const MP_ACTIVO = false;` (~línea 2922). Ponlo en
+  `true` y define `MP_ACCESS_TOKEN` en Vercel para reactivar el pago con tarjeta.
+- **Entrega:** una sola opción, en mano con Reynel Martínez González
+  (`const REPARTIDOR`), sin costo de envío (`SHIP_LOCAL = 0`).
