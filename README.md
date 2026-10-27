@@ -1,7 +1,7 @@
-# ESENCIA — Fragancias que te definen
+# Dealer de Aromas — Fragancias que te definen
 
-Tienda de perfumes. Misma infraestructura que DUBREM (`~/bella-esencia`), con el
-catálogo, los textos y las categorías adaptados a perfumería.
+Tienda de perfumes en línea: catálogo, carrito, checkout con Mercado Pago y
+panel de administración.
 
 ## Qué incluye
 
@@ -16,20 +16,18 @@ catálogo, los textos y las categorías adaptados a perfumería.
 
 ## Antes de publicar
 
-1. **Firebase Realtime Database.** Crea una base nueva y pon su URL en:
-   - `index.html` → `const FIREBASE_DB_URL` (línea ~3046)
-   - variable de entorno `FIREBASE_DB_URL` en Vercel (la usan `api/products.js`,
-     `api/img.js` y `api/webhook.js`).
-   Hoy apunta al placeholder `https://esencia-perfumes-default-rtdb.firebaseio.com`,
-   que todavía no existe: hasta que la crees, el catálogo se ve vacío.
+1. **Firebase.** Ya conectado al proyecto `dealer-de-aromas`: `index.html` tiene
+   `FIREBASE_DB_URL` (línea ~3046) y `FIREBASE_API_KEY` (~3020). En Vercel hay que
+   definir `FIREBASE_DB_URL`, que usan `api/products.js`, `api/img.js` y
+   `api/webhook.js`. El acceso al panel usa Authentication (correo/contraseña).
 2. **Mercado Pago.** Variable `MP_ACCESS_TOKEN` en Vercel. En
-   `api/create-preference.js` ya quedan `statement_descriptor: 'ESENCIA'` y
-   `notification_url: https://esencia-perfumes.vercel.app/api/webhook` — cambia el
+   `api/create-preference.js` ya quedan `statement_descriptor: 'DEALERAROMAS'` y
+   `notification_url: https://dealer-de-aromas.vercel.app/api/webhook` — cambia el
    dominio si usas otro.
-3. **Dominio.** Se usó `esencia-perfumes.vercel.app` en meta tags, sitemap, robots
+3. **Dominio.** Se usó `dealer-de-aromas.vercel.app` en meta tags, sitemap, robots
    y webhook. Reemplázalo por el dominio real.
-4. **Contacto.** El WhatsApp (`525563723284`) y el Facebook siguen siendo los de
-   DUBREM; cámbialos si la perfumería usa otros.
+4. **Contacto.** El WhatsApp (`525563723284`), la CLABE, el Facebook y la dirección
+   de la tienda vienen del proyecto anterior; cámbialos por los del negocio.
 
 ## Catálogo
 

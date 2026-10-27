@@ -30,7 +30,7 @@ export default async function handler(req, res) {
         })),
         payer: {
           name: payer?.name || '',
-          email: payer?.email || 'cliente@esencia.com',
+          email: payer?.email || 'cliente@dealerdearomas.com',
         },
         back_urls: {
           success: `${backUrl}?pago=exitoso&orden=${encodeURIComponent(orderNum)}`,
@@ -39,8 +39,8 @@ export default async function handler(req, res) {
         },
         auto_return: 'all',
         external_reference: orderNum,
-        statement_descriptor: 'ESENCIA',
-        notification_url: 'https://esencia-perfumes.vercel.app/api/webhook',
+        statement_descriptor: 'DEALERAROMAS',
+        notification_url: 'https://dealer-de-aromas.vercel.app/api/webhook',
         expires: false,
       }),
     });

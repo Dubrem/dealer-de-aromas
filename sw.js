@@ -1,5 +1,5 @@
-const CACHE = 'esencia-v4';
-const IMG_CACHE = 'esencia-img-v1';
+const CACHE = 'dda-v4';
+const IMG_CACHE = 'dda-img-v1';
 const IMG_MAX = 300;
 
 self.addEventListener('install', e => {

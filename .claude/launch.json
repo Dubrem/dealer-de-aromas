@@ -2,7 +2,7 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "esencia",
+      "name": "dealer-de-aromas",
       "runtimeExecutable": "npx",
       "runtimeArgs": ["serve", "-p", "4321", "."],
       "port": 4321
