@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 
-const DB = process.env.FIREBASE_DB_URL || 'https://esencia-perfumes-default-rtdb.firebaseio.com';
+const DB = process.env.FIREBASE_DB_URL || 'https://dealer-de-aromas-default-rtdb.firebaseio.com';
 const TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif']);
 
 // Sirve una foto base64 guardada en Firebase como imagen real y cacheable.

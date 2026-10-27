@@ -1,4 +1,4 @@
-const DB = process.env.FIREBASE_DB_URL || 'https://esencia-perfumes-default-rtdb.firebaseio.com';
+const DB = process.env.FIREBASE_DB_URL || 'https://dealer-de-aromas-default-rtdb.firebaseio.com';
 
 // Catálogo sin fotos (~158 KB). Las fotos se sirven aparte por /api/img.
 //
