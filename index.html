@@ -3505,7 +3505,21 @@ async function fbLoadReservations() {
   } catch(e) { ALL_RESERVATIONS = {}; }
 }
 
-/** Mezcla PRODUCTS hardcoded con overrides de Firebase */
+/** Momento en que se dio de alta un producto. Las claves nuevas son
+ *  'new_<timestamp>', asi que la fecha viene en el propio id. Lo que no
+ *  trae fecha (el catalogo base) cuenta como lo mas viejo. */
+function altaProducto(p){
+  const id = String(p && p.id || '');
+  if (id.startsWith('new_')) {
+    const ms = parseInt(id.slice(4), 10);
+    if (!isNaN(ms)) return ms;
+  }
+  return 0;
+}
+
+/** Mezcla PRODUCTS hardcoded con overrides de Firebase.
+ *  Sale lo mas nuevo primero para que el cliente vea las novedades al
+ *  entrar a cada categoria, sin tener que bajar hasta el final. */
 function getMergedProducts(){
   // 1. Copiar base con posibles overrides
   const base = PRODUCTS.map(p => {
@@ -3516,7 +3530,7 @@ function getMergedProducts(){
   const added = Object.entries(PRODUCT_OVERRIDES)
     .filter(([k]) => k.startsWith('new_'))
     .map(([k, v]) => ({ ...v, id: k }));
-  return [...base, ...added];
+  return [...added, ...base].sort((a, b) => altaProducto(b) - altaProducto(a));
 }
 
 /* ──────────────────────────────────────────────────────
