@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Cómo comprar en Dealer de Aromas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Jost:wght@300;400;500;600&family=Marcellus&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F6F3EB;
+    --gold:#B0863A;
+    --gold-light:#D6AE6A;
+    --gold-pale:#F3E9D6;
+    --ink:#16130E;
+    --ink-soft:#5B5346;
+    --line:#DFD8C8;
+    --ff-display:'Cinzel', Georgia, serif;
+    --ff-head:'Marcellus', Georgia, serif;
+    --ff-body:'Jost', 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  @page { size: letter; margin: 14mm 0 18mm; }
+  @page :first { margin: 0; }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    font-family:var(--ff-body);
+    color:var(--ink);
+    background:#fff;
+    font-size:11pt;
+    line-height:1.5;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+  
+  /* ── Portada ─────────────────────────────────────────── */
+  .portada{
+    page-break-after:always;
+    height:279.4mm;
+    background:var(--ink);
+    color:#fff;
+    margin:0;
+    padding:32mm 22mm 26mm;
+    display:flex; flex-direction:column; justify-content:space-between;
+    text-align:center;
+  }
+  .portada-top{ display:flex; flex-direction:column; align-items:center; }
+  .portada img{
+    width:118px; height:118px; object-fit:cover; border-radius:6px;
+    border:1px solid rgba(214,174,106,.55);
+    box-shadow:0 10px 40px rgba(0,0,0,.6);
+  }
+  .marca{
+    font-family:var(--ff-display); font-size:30pt; letter-spacing:.14em;
+    text-transform:uppercase; margin:26px 0 0; font-weight:400; line-height:1.1;
+  }
+  .marca span{ color:var(--gold-light); }
+  .eslogan{
+    font-family:var(--ff-head); font-size:12pt; letter-spacing:.3em;
+    text-transform:uppercase; color:rgba(255,255,255,.62); margin-top:12px;
+  }
+  .filete{
+    width:120px; height:1px; background:var(--gold); margin:34px auto;
+  }
+  .titulo-guia{
+    font-family:var(--ff-display); font-size:21pt; letter-spacing:.1em;
+    text-transform:uppercase; line-height:1.4; margin:0;
+  }
+  .sub-guia{
+    font-family:var(--ff-body); font-weight:300; font-size:11.5pt;
+    color:rgba(255,255,255,.7); margin-top:14px; letter-spacing:.04em;
+  }
+  .portada-datos{
+    border:1px solid rgba(214,174,106,.35);
+    padding:20px 18px;
+    display:grid; grid-template-columns:1fr 1fr; gap:18px;
+    text-align:left;
+  }
+  .pd-item .pd-t{
+    font-size:7.5pt; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--gold-light); margin-bottom:6px;
+  }
+  .pd-item .pd-v{
+    font-size:10pt; font-weight:300; color:rgba(255,255,255,.9); line-height:1.5;
+  }
+  .pd-item .pd-v b{ font-weight:500; }
+  .pd-ancho{ grid-column:1 / -1; }
+
+  /* ── Encabezado interior ─────────────────────────────── */
+  .intro{ margin:0 13mm 22px; }
+  .intro h2{
+    font-family:var(--ff-display); font-size:15pt; letter-spacing:.1em;
+    text-transform:uppercase; margin:0 0 8px; font-weight:400;
+  }
+  .intro h2 span{ color:var(--gold); }
+  .intro p{
+    margin:0; color:var(--ink-soft); font-weight:300; font-size:10.5pt; max-width:62em;
+  }
+  .intro .liga{
+    display:inline-block; margin-top:12px;
+    background:var(--gold-pale); border:1px solid var(--gold-light);
+    color:var(--ink); font-size:10pt; font-weight:500;
+    padding:7px 16px; border-radius:50px; letter-spacing:.02em;
+  }
+
+  /* ── Pasos ───────────────────────────────────────────── */
+  .paso{
+    break-inside:avoid; page-break-inside:avoid;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:14px 16px 16px;
+    margin:0 13mm 16px;
+    background:var(--cream);
+  }
+  .paso-cab{ display:flex; align-items:flex-start; gap:13px; }
+  .num{
+    flex:0 0 auto;
+    width:30px; height:30px; border-radius:50%;
+    background:var(--gold); color:#fff;
+    font-family:var(--ff-head); font-size:12pt;
+    display:flex; align-items:center; justify-content:center;
+    line-height:1;
+  }
+  .paso-txt h3{
+    font-family:var(--ff-head); font-size:13pt; margin:2px 0 5px;
+    letter-spacing:.02em; font-weight:400;
+  }
+  .paso-txt p{
+    margin:0; font-size:10.3pt; font-weight:300; color:var(--ink-soft); line-height:1.55;
+  }
+  .paso-txt p + p{ margin-top:6px; }
+  .paso-txt b{ font-weight:600; color:var(--ink); }
+  .tip{
+    margin-top:8px; padding:8px 12px;
+    background:#fff; border-left:3px solid var(--gold-light);
+    font-size:9.5pt; color:var(--ink-soft);
+  }
+  .captura{
+    margin-top:11px; text-align:center;
+    background:#fff; border:1px solid var(--line); border-radius:3px;
+    padding:10px;
+  }
+  .captura img{ display:block; margin:0 auto; max-width:100%; }
+  .captura.ancha  img{ width:100%; }
+  .captura.alta   img{ max-height:96mm; width:auto; }
+  .captura.media  img{ max-height:76mm; width:auto; }
+  .pie-foto{
+    margin-top:8px; font-size:8pt; letter-spacing:.14em;
+    text-transform:uppercase; color:#9a9080;
+  }
+  .sin-foto{
+    margin-top:12px; padding:12px 14px;
+    border:1px dashed var(--gold-light); background:#fff;
+    font-size:9.5pt; color:var(--ink-soft);
+  }
+
+  /* ── Cierre ──────────────────────────────────────────── */
+  .cierre{
+    break-inside:avoid; page-break-inside:avoid;
+    margin:24px 13mm 0; background:var(--ink); color:#fff;
+    border-radius:4px; padding:26px 28px;
+  }
+  .cierre h2{
+    font-family:var(--ff-display); font-size:14pt; letter-spacing:.12em;
+    text-transform:uppercase; margin:0 0 6px; font-weight:400;
+  }
+  .cierre h2 span{ color:var(--gold-light); }
+  .cierre > p{
+    margin:0 0 20px; font-weight:300; font-size:10.5pt; color:rgba(255,255,255,.72);
+  }
+  .cierre-cols{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .cc h4{
+    font-size:8pt; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--gold-light); margin:0 0 7px; font-weight:500;
+  }
+  .cc p{ margin:0; font-size:10.5pt; font-weight:300; line-height:1.6; }
+  .cc p b{ font-weight:500; }
+  .cierre-nota{
+    margin-top:20px; padding-top:16px; border-top:1px solid rgba(214,174,106,.3);
+    font-size:9.5pt; font-weight:300; color:rgba(255,255,255,.7);
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ PORTADA ══════════ -->
+<section class="portada">
+  <div class="portada-top">
+    <img src="img/logo.jpg" alt="Dealer de Aromas">
+    <h1 class="marca">Dealer <span>de Aromas</span></h1>
+    <div class="eslogan">Fragancias y accesorios</div>
+    <div class="filete"></div>
+    <h2 class="titulo-guia">Cómo comprar<br>en línea</h2>
+    <div class="sub-guia">Guía paso a paso · 13 pasos sencillos</div>
+  </div>
+
+  <div class="portada-datos">
+    <div class="pd-item pd-ancho">
+      <div class="pd-t">Tienda en línea</div>
+      <div class="pd-v"><b>dealer-de-aromas.vercel.app</b></div>
+    </div>
+    <div class="pd-item">
+      <div class="pd-t">WhatsApp</div>
+      <div class="pd-v"><b>773 125 9393</b></div>
+    </div>
+    <div class="pd-item">
+      <div class="pd-t">Entregas</div>
+      <div class="pd-v">En mano con <b>Reynel Martínez González</b></div>
+    </div>
+    <div class="pd-item pd-ancho">
+      <div class="pd-t">Punto de entrega</div>
+      <div class="pd-v"><b>Impresión en Tabloide</b><br>Calle Pte. 3, U.H. Pemex, 42808 Tula de Allende, Hgo.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ PASOS ══════════ -->
+<div class="intro">
+  <h2>Comprar es <span>muy fácil</span></h2>
+  <p>Sigue estos 13 pasos y en unos minutos tu pedido queda apartado. Cualquier duda, escríbenos por WhatsApp y con gusto te ayudamos.</p>
+  <div class="liga">https://dealer-de-aromas.vercel.app/</div>
+</div>
+
+<div class="paso">
+  <div class="paso-cab">
+    <div class="num">1</div>
+    <div class="paso-txt">
+      <h3>Entra a la tienda</h3>
+      <p>Abre la página <b>https://dealer-de-aromas.vercel.app/</b> y da clic en cualquiera de las categorías: <b>Mujer, Hombre, Unisex o Árabes</b>.</p>
+    </div>
+  </div>
+  <div class="captura ancha">
+    <img src="img/p01.webp" alt="Pantalla principal de Dealer de Aromas">
+    <div class="pie-foto">Pantalla principal · da clic en una categoría</div>
+  </div>
+</div>
+
+<div class="paso">
+  <div class="paso-cab">
+    <div class="num">2</div>
+    <div class="paso-txt">
+      <h3>Da clic en «Iniciar sesión»</h3>
+      <p>Arriba a la derecha, en la barra negra, encuentras el botón <b>Iniciar sesión</b>. Dale clic.</p>
+    </div>
+  </div>
+  <div class="captura ancha">
+    <img src="img/p02.webp" alt="Botón Iniciar sesión">
+    <div class="pie-foto">Botón «Iniciar sesión» en la barra superior</div>
+  </div>
+</div>
+
+<div class="paso">
+  <div class="paso-cab">
+    <div class="num">3</div>
+    <div class="paso-txt">
+      <h3>Da clic en «Regístrate aquí»</h3>
+      <p>Si es tu primera compra todavía no tienes cuenta. Hasta abajo de la ventana da clic en <b>«Regístrate aquí»</b>.</p>
+    </div>
+  </div>
+  <div class="captura alta">
+    <img src="img/p03.png" alt="Ventana de inicio de sesión">
+    <div class="pie-foto">Abajo de la ventana: «¿No tienes cuenta? Regístrate aquí»</div>
+  </div>
+</div>
+
+<div class="paso">
+  <div class="paso-cab">
+    <div class="num">4</div>
+    <div class="paso-txt">
+      <h3>Llena todos tus datos</h3>
+      <p>Completa <b>todos</b> los campos: nombre completo, correo, teléfono o WhatsApp y tu contraseña.</p>
+      <div class="tip">⚠️ Importante: regístrate con <b>tus datos reales</b>. Con ellos te contactamos y le damos seguimiento a tu pedido.</div>
+    </div>
+  </div>
+  <div class="captura alta">
+    <img src="img/p04.png" alt="Formulario Crear cuenta">
+    <div class="pie-foto">Formulario de registro</div>
+  </div>
+</div>
+
+<div class="paso">
+  <div class="paso-cab">
+    <div class="num">5</div>
+    <div class="paso-txt">
+      <h3>Listo, tu registro fue exitoso</h3>
+      <p>Cuando te registras bien, arriba a la derecha aparece <b>tu nombre</b> y el botón <b>Mis pedidos</b>. Esa es la señal de que ya tienes tu cuenta.</p>
+    </div>
+  </div>
+  <div class="captura ancha">
+    <img src="img/p05.webp" alt="Barra superior con el nombre del cliente">
+    <div class="pie-foto">Tu nombre en la barra superior = registro exitoso</div>
+  </div>
+</div>
+
+<div class="paso">
+  <div class="paso-cab">
+    <div class="num">6</div>
+    <div class="paso-txt">
+      <h3>Busca tu perfume y agrégalo al carrito</h3>
+      <p>En el <b>menú</b> (las tres rayitas de arriba a la izquierda) puedes ver todas las categorías que tenemos.</p>
+      <p>Cuando encuentres el perfume que buscas, ábrelo y dale clic al <b>botón dorado del carrito</b>.</p>
+    </div>
+  </div>
+  <div class="captura alta">
+    <img src="img/p06.png" alt="Menú de categorías y botón agregar al carrito">
+    <div class="pie-foto">Menú de categorías y botón para agregar al carrito</div>
+  </div>
+</div>
+
+<div class="paso">
+  <div class="paso-cab">
+    <div class="num">7</div>
+    <div class="paso-txt">
+      <h3>Revisa tu carrito</h3>
+      <p>Arriba a la derecha el carrito te muestra <b>cuántos productos llevas</b>. Dale clic para revisar tu pedido y continuar.</p>
+    </div>
+  </div>
+  <div class="captura ancha">
+    <img src="img/p07.png" alt="Carrito con un producto">
+    <div class="pie-foto">El carrito marca los productos que llevas</div>
+  </div>
+</div>
+
+<div class="paso">
+  <div class="paso-cab">
+    <div class="num">8</div>
+    <div class="paso-txt">
+      <h3>Elige cómo recibir tu pedido</h3>
+      <p>Selecciona la <b>entrega personalizada</b>: te la entrega <b>Reynel Martínez González</b> en mano, sin costo. Acuerdan lugar y hora por WhatsApp.</p>
+      <div class="tip">📍 La dirección que aparece es solo de referencia: <b>Impresión en Tabloide</b>, Calle Pte. 3, U.H. Pemex, Tula de Allende.</div>
+      <p>Revisa el resumen y da clic en <b>«Continuar al pago»</b>.</p>
+    </div>
+  </div>
+  <div class="captura alta">
+    <img src="img/p08.png" alt="Paso 1 del checkout: entrega">
+    <div class="pie-foto">Paso 1 de 3 · Entrega</div>
+  </div>
+</div>
+
+<div class="paso">
+  <div class="paso-cab">
+    <div class="num">9</div>
+    <div class="paso-txt">
+      <h3>Elige tu forma de pago</h3>
+      <p>Tienes dos opciones:</p>
+      <p><b>Efectivo al recibir</b> — pagas en el momento de la entrega.<br>
+         <b>Transferencia</b> — pagas antes y nos mandas tu comprobante. Pídenos los datos de la cuenta por WhatsApp.</p>
+      <p>Elige la tuya y da clic en <b>«Ver resumen»</b>.</p>
+    </div>
+  </div>
+  <div class="captura alta">
+    <img src="img/p09.png" alt="Paso 2 del checkout: método de pago">
+    <div class="pie-foto">Paso 2 de 3 · Método de pago</div>
+  </div>
+</div>
+
+<div class="paso">
+  <div class="paso-cab">
+    <div class="num">10</div>
+    <div class="paso-txt">
+      <h3>Confirma tu pedido</h3>
+      <p>En el paso 3 revisas por última vez tus productos, la forma de entrega, la forma de pago y el total.</p>
+      <p>Si todo está correcto, da clic en <b>«Confirmar pedido»</b>. La página te dará tu <b>número de pedido</b> — algo como <b>BE-371041-101</b>.</p>
+      <div class="tip">📝 Anota o toma captura de tu número de pedido. Con ese número le damos seguimiento a tu compra.</div>
+    </div>
+  </div>
+</div>
+
+<div class="paso">
+  <div class="paso-cab">
+    <div class="num">11</div>
+    <div class="paso-txt">
+      <h3>Mándanos tu comprobante por WhatsApp</h3>
+      <p>Da clic en el botón verde <b>«Agendar entrega por WhatsApp»</b>. Se abre WhatsApp con el mensaje ya escrito y <b>tu número de pedido incluido automáticamente</b>.</p>
+      <p>Tú nada más <b>adjuntas la captura de tu pago</b> y lo envías. Con eso empezamos a preparar tu pedido.</p>
+      <div class="tip">💵 Si elegiste pagar en efectivo al recibir, no necesitas comprobante: solo manda el mensaje para acordar lugar y hora.</div>
+    </div>
+  </div>
+</div>
+
+<div class="paso">
+  <div class="paso-cab">
+    <div class="num">12</div>
+    <div class="paso-txt">
+      <h3>Entra a tu perfil de cliente</h3>
+      <p>Arriba a la derecha da clic en <b>tu nombre</b> y luego en <b>«Mis pedidos»</b>. Desde ahí ves todas tus compras.</p>
+    </div>
+  </div>
+  <div class="captura media">
+    <img src="img/p10.png" alt="Menú del perfil del cliente">
+    <div class="pie-foto">Tu nombre › Mis pedidos</div>
+  </div>
+</div>
+
+<div class="paso">
+  <div class="paso-cab">
+    <div class="num">13</div>
+    <div class="paso-txt">
+      <h3>Dale seguimiento a tu pedido</h3>
+      <p>Aquí ves en qué etapa va tu compra: <b>pedido realizado → pago confirmado → en preparación → listo para recoger → entregado</b>.</p>
+      <p>Cuando llegue a <b>«Listo p/recoger»</b> ya puedes pasar por él. Pero no te preocupes: <b>también te aviso por WhatsApp</b> en cuanto esté listo.</p>
+    </div>
+  </div>
+  <div class="captura media">
+    <img src="img/p11.png" alt="Seguimiento del pedido">
+    <div class="pie-foto">Seguimiento del pedido paso a paso</div>
+  </div>
+</div>
+
+<!-- ══════════ CIERRE ══════════ -->
+<section class="cierre">
+  <h2>¿Dudas? <span>Escríbenos</span></h2>
+  <p>Con gusto te ayudamos a encontrar tu fragancia y a terminar tu pedido.</p>
+  <div class="cierre-cols">
+    <div class="cc">
+      <h4>WhatsApp</h4>
+      <p><b>773 125 9393</b></p>
+    </div>
+    <div class="cc">
+      <h4>Tienda en línea</h4>
+      <p><b>dealer-de-aromas.vercel.app</b></p>
+    </div>
+    <div class="cc">
+      <h4>Punto de entrega</h4>
+      <p><b>Impresión en Tabloide</b><br>Calle Pte. 3, U.H. Pemex<br>42808 Tula de Allende, Hgo.</p>
+    </div>
+    <div class="cc">
+      <h4>Entrega personalizada</h4>
+      <p>Te la entrega en mano<br><b>Reynel Martínez González</b><br>Sin costo de envío</p>
+    </div>
+  </div>
+  <div class="cierre-nota">
+    Dealer de Aromas · Fragancias y accesorios — gracias por tu compra. 🖤
+  </div>
+</section>
+
+</body>
+</html>
