@@ -595,6 +595,35 @@
     .hero-prod-item.hero-selected .hero-check { display:flex; }
     .hero-prod-name { position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.55);color:#fff;font-size:.55rem;padding:4px 5px;text-align:center;line-height:1.2; }
 
+    /* ── ADMIN CLIENTES Y TRÁFICO ── */
+    .admin-clientes-section { flex:1; overflow-y:auto; padding:20px 1.5rem 48px; }
+    .cli-titulo { font-size:.8rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--text-dark); margin:0 0 4px; }
+    .cli-sub { font-size:.68rem; color:var(--text-light); margin:0 0 14px; letter-spacing:.03em; }
+    .cli-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(118px,1fr)); gap:10px; margin-bottom:22px; }
+    .cli-card { background:var(--blush-light); border:1px solid var(--border); border-radius:12px; padding:12px 14px; }
+    .cli-card .n { font-family:var(--ff-display); font-size:1.5rem; line-height:1; color:var(--text-dark); }
+    .cli-card .l { display:block; margin-top:5px; font-size:.6rem; letter-spacing:.1em; text-transform:uppercase; color:var(--text-light); }
+    .cli-barras { display:flex; align-items:flex-end; gap:5px; height:92px; padding:0 2px 0; margin-bottom:6px; }
+    .cli-bar { flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; height:100%; gap:3px; }
+    .cli-bar i { display:block; width:100%; background:var(--rose); border-radius:4px 4px 0 0; min-height:2px; opacity:.85; }
+    .cli-bar b { font-size:.55rem; font-weight:700; color:var(--text-med); line-height:1; }
+    .cli-bar span { font-size:.5rem; color:var(--text-light); letter-spacing:.02em; line-height:1; white-space:nowrap; }
+    .cli-vacio { font-size:.72rem; color:var(--text-light); padding:16px 0; }
+    .cli-buscar { width:100%; max-width:320px; padding:9px 14px; border:1.5px solid var(--border); border-radius:50px; font-family:var(--ff-body); font-size:.76rem; margin-bottom:12px; }
+    .cli-tabla { width:100%; border-collapse:collapse; font-size:.72rem; }
+    .cli-tabla th { text-align:left; font-size:.58rem; letter-spacing:.1em; text-transform:uppercase; color:var(--text-light); font-weight:700; padding:0 10px 8px 0; border-bottom:1px solid var(--border); white-space:nowrap; }
+    .cli-tabla td { padding:10px 10px 10px 0; border-bottom:1px solid var(--border); vertical-align:top; }
+    .cli-tabla .nom { font-weight:600; color:var(--text-dark); }
+    .cli-tabla .mail { font-size:.65rem; color:var(--text-light); word-break:break-all; }
+    .cli-tabla a.wa { color:#0a5931; text-decoration:none; font-weight:600; white-space:nowrap; }
+    .cli-tabla a.wa:hover { text-decoration:underline; }
+    .cli-tabla .num { text-align:center; white-space:nowrap; }
+    @media(max-width:640px){
+      .cli-tabla .ocultar-movil { display:none; }
+      .cli-barras { height:76px; }
+      .cli-bar span { font-size:.44rem; }
+    }
+
     /* ── FILTER DROPDOWN ── */
     .filter-dropdown-wrap { position:relative; max-width:300px; margin:0 auto; }
     .filter-dropdown-btn {
@@ -1179,14 +1208,16 @@
       display: flex; gap: 0; padding: 0 2rem;
       background: #0A0A0A; border-bottom: 1px solid rgba(255,255,255,.1);
       flex-shrink: 0;
+      overflow-x: auto; scrollbar-width: none;
     }
+    .admin-tabs::-webkit-scrollbar { display: none; }
     .admin-tab {
       padding: 12px 24px; border: none; background: transparent;
       color: rgba(255,255,255,.45); font-family: var(--ff-body);
       font-size: .72rem; font-weight: 600; letter-spacing: .12em;
       text-transform: uppercase; cursor: pointer;
       border-bottom: 2px solid transparent; margin-bottom: -1px;
-      transition: all .2s;
+      transition: all .2s; flex-shrink: 0; white-space: nowrap;
     }
     .admin-tab.active { color: #fff; border-bottom-color: var(--rose); }
     .admin-tab:hover { color: rgba(255,255,255,.85); }
@@ -1249,6 +1280,7 @@
       .admin-header { padding:0 1rem; }
       .admin-logo   { font-size:.88rem; }
       .admin-tabs   { padding:0 1rem; }
+      .admin-tab    { padding:12px 14px; font-size:.64rem; letter-spacing:.08em; }
       /* Stats: una sola fila horizontal scrolleable */
       .admin-stats  {
         padding:8px 1rem; gap:6px;
@@ -2559,6 +2591,7 @@ function cerrarApertura(){}
     <button class="admin-tab active" data-tab="orders" onclick="switchAdminTab('orders')">📦 Pedidos</button>
     <button class="admin-tab" data-tab="products" onclick="switchAdminTab('products')">🛍 Productos</button>
     <button class="admin-tab" data-tab="heroes" onclick="switchAdminTab('heroes')">🖼 Héroes</button>
+    <button class="admin-tab" data-tab="clientes" onclick="switchAdminTab('clientes')">👥 Clientes</button>
   </div>
 
   <!-- Stats (solo tab Pedidos) -->
@@ -2575,6 +2608,9 @@ function cerrarApertura(){}
 
   <!-- Sección Héroes de Categoría -->
   <div class="admin-heroes-section" id="adminHeroesSection" style="display:none"></div>
+
+  <!-- Sección Clientes y tráfico -->
+  <div class="admin-clientes-section" id="adminClientesSection" style="display:none"></div>
 
 </div>
 
@@ -2978,6 +3014,35 @@ async function fbSet(path, data){
   });
 }
 
+/* ── Trafico de la tienda ───────────────────────────────
+   Cada dispositivo guarda un id propio (dda_vid) y cada pestana nueva
+   cuenta como una visita. En Firebase queda asi:
+     stats/visitas/<fecha>/<dispositivo>/<visita> = timestamp
+   Contando hijos salen los visitantes del dia; contando nietos, las
+   visitas. No se guarda nada que identifique a la persona. */
+function fechaCorta(d){
+  const p = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`;
+}
+function idVisitante(){
+  let v = null;
+  try { v = localStorage.getItem('dda_vid'); } catch(e){}
+  if(!v){
+    v = 'v' + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+    try { localStorage.setItem('dda_vid', v); } catch(e){}
+  }
+  return v;
+}
+async function registrarVisita(){
+  if(!FIREBASE_DB_URL) return;
+  try {
+    if(sessionStorage.getItem('dda_visita')) return;   // una por pestana
+    sessionStorage.setItem('dda_visita','1');
+  } catch(e){ return; }
+  const sid = 's' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+  await fbSet(`stats/visitas/${fechaCorta(new Date())}/${idVisitante()}/${sid}`, Date.now());
+}
+
 // Trae usuarios de Firebase y los fusiona con los locales
 async function syncUsers(){
   const data = await fbFetch('users');
@@ -2996,7 +3061,8 @@ async function syncUsers(){
 async function fbSaveUser(user){
   const key = user.email.replace(/[.#$[\]@]/g,'_');
   await fbSet(`users/${key}`, {
-    name:user.name, email:user.email, phone:user.phone||'', pass:user.pass
+    name:user.name, email:user.email, phone:user.phone||'', pass:user.pass,
+    createdAt: user.createdAt || Date.now()
   });
 }
 
@@ -3700,6 +3766,148 @@ function findProduct(id) {
   return PRODUCT_OVERRIDES[id] || null;
 }
 
+/* ──────────────────────────────────────────────────────
+   ADMIN — CLIENTES Y TRÁFICO
+────────────────────────────────────────────────────── */
+let _clientesBusqueda = '';
+
+function escHtml(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => (
+    { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]
+  ));
+}
+
+function fechaLarga(ms){
+  if(!ms) return '—';
+  const d = new Date(ms);
+  if(isNaN(d)) return '—';
+  return d.toLocaleDateString('es-MX', { day:'2-digit', month:'short', year:'numeric' });
+}
+
+/* Convierte el arbol de stats/visitas en una lista por dia,
+   de la fecha mas reciente a la mas vieja. */
+function resumenVisitas(datos){
+  if(!datos || typeof datos !== 'object') return [];
+  return Object.entries(datos).map(([fecha, dispositivos]) => {
+    const d = (dispositivos && typeof dispositivos === 'object') ? dispositivos : {};
+    const personas = Object.keys(d).length;
+    const visitas = Object.values(d).reduce((n, ses) =>
+      n + (ses && typeof ses === 'object' ? Object.keys(ses).length : 1), 0);
+    return { fecha, personas, visitas };
+  }).sort((a, b) => a.fecha < b.fecha ? 1 : -1);
+}
+
+function sumaDesde(dias, desdeFecha){
+  return dias.filter(d => d.fecha >= desdeFecha)
+             .reduce((a, d) => ({ visitas:a.visitas+d.visitas, personas:a.personas+d.personas }),
+                     { visitas:0, personas:0 });
+}
+
+async function renderAdminClientes(){
+  const sec = document.getElementById('adminClientesSection');
+  if(!sec) return;
+  sec.innerHTML = '<p class="cli-vacio">Cargando…</p>';
+
+  const [visitasRaw] = await Promise.all([
+    fbFetch('stats/visitas'),
+    syncUsers(),
+    (S.orders && S.orders.length) ? Promise.resolve() : syncAdminOrders()
+  ]);
+
+  const dias = resumenVisitas(visitasRaw);
+  const hoyF = fechaCorta(new Date());
+  const haceDias = n => { const d = new Date(); d.setDate(d.getDate() - n); return fechaCorta(d); };
+  const hoy  = dias.find(d => d.fecha === hoyF) || { visitas:0, personas:0 };
+  const sem  = sumaDesde(dias, haceDias(6));
+  const mes  = sumaDesde(dias, haceDias(29));
+  const tot  = dias.reduce((a, d) => a + d.visitas, 0);
+
+  // Ultimos 14 dias, siempre completos aunque algun dia no tenga visitas
+  const ultimos = [];
+  for(let i = 13; i >= 0; i--){
+    const f = haceDias(i);
+    const d = dias.find(x => x.fecha === f);
+    ultimos.push({ fecha:f, visitas: d ? d.visitas : 0 });
+  }
+  const tope = Math.max(1, ...ultimos.map(d => d.visitas));
+  const barras = ultimos.map(d => {
+    const [, m, dd] = d.fecha.split('-');
+    return `<div class="cli-bar" title="${d.fecha}: ${d.visitas} visita(s)">
+      <b>${d.visitas || ''}</b>
+      <i style="height:${Math.round(d.visitas / tope * 100)}%"></i>
+      <span>${dd}/${m}</span>
+    </div>`;
+  }).join('');
+
+  // Pedidos por cliente, para saber quien ya compro
+  const porCorreo = {};
+  (S.orders || []).forEach(o => {
+    const e = (o.email || '').toLowerCase();
+    if(!e) return;
+    if(!porCorreo[e]) porCorreo[e] = { n:0, total:0 };
+    porCorreo[e].n++;
+    if(o.status !== 'cancelado') porCorreo[e].total += Number(o.total) || 0;
+  });
+
+  const q = _clientesBusqueda.trim().toLowerCase();
+  const usuarios = (S.users || [])
+    .filter(u => u && u.email)
+    .slice()
+    .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  const visibles = q
+    ? usuarios.filter(u => `${u.name||''} ${u.email} ${u.phone||''}`.toLowerCase().includes(q))
+    : usuarios;
+
+  const filas = visibles.map(u => {
+    const tel = String(u.phone || '').replace(/\D/g, '');
+    const compras = porCorreo[(u.email || '').toLowerCase()];
+    return `<tr>
+      <td>
+        <div class="nom">${escHtml(u.name || 'Sin nombre')}</div>
+        <div class="mail">${escHtml(u.email)}</div>
+      </td>
+      <td>${tel ? `<a class="wa" href="https://wa.me/52${tel}" target="_blank" rel="noopener">${escHtml(tel)}</a>` : '—'}</td>
+      <td class="ocultar-movil">${fechaLarga(u.createdAt)}</td>
+      <td class="num">${compras ? compras.n : 0}</td>
+      <td class="num ocultar-movil">${compras && compras.total ? '$' + compras.total.toLocaleString('es-MX') : '—'}</td>
+    </tr>`;
+  }).join('');
+
+  sec.innerHTML = `
+    <h3 class="cli-titulo">Tráfico de la tienda</h3>
+    <p class="cli-sub">Una visita es cada vez que alguien abre la página. Las personas son dispositivos distintos.</p>
+    <div class="cli-cards">
+      <div class="cli-card"><span class="n">${hoy.visitas}</span><span class="l">Visitas hoy</span></div>
+      <div class="cli-card"><span class="n">${hoy.personas}</span><span class="l">Personas hoy</span></div>
+      <div class="cli-card"><span class="n">${sem.visitas}</span><span class="l">Últimos 7 días</span></div>
+      <div class="cli-card"><span class="n">${mes.visitas}</span><span class="l">Últimos 30 días</span></div>
+      <div class="cli-card"><span class="n">${tot}</span><span class="l">Visitas totales</span></div>
+    </div>
+    ${tot ? `<div class="cli-barras">${barras}</div>
+    <p class="cli-sub">Visitas por día · últimas dos semanas</p>`
+    : `<p class="cli-vacio">Todavía no hay visitas registradas. El conteo empieza desde hoy.</p>`}
+
+    <h3 class="cli-titulo" style="margin-top:26px">Clientes registrados</h3>
+    <p class="cli-sub">${usuarios.length} cuenta${usuarios.length === 1 ? '' : 's'} creada${usuarios.length === 1 ? '' : 's'} · las más nuevas primero</p>
+    <input class="cli-buscar" id="cliBuscar" type="search" placeholder="Buscar por nombre, correo o teléfono"
+           value="${escHtml(_clientesBusqueda)}"
+           oninput="_clientesBusqueda=this.value; clearTimeout(window._cliT); window._cliT=setTimeout(renderAdminClientes,350)">
+    ${visibles.length ? `<table class="cli-tabla">
+      <thead><tr>
+        <th>Cliente</th><th>WhatsApp</th><th class="ocultar-movil">Se registró</th>
+        <th class="num">Pedidos</th><th class="num ocultar-movil">Comprado</th>
+      </tr></thead>
+      <tbody>${filas}</tbody>
+    </table>` : `<p class="cli-vacio">${q ? 'Ningún cliente coincide con la búsqueda.' : 'Todavía no hay clientes registrados.'}</p>`}
+  `;
+
+  // Que no se pierda el cursor al redibujar mientras se escribe
+  if(q){
+    const inp = document.getElementById('cliBuscar');
+    if(inp){ inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); }
+  }
+}
+
 function switchAdminTab(tab, mantenerFiltro) {
   // Al entrar por la pestaña se ven todas; el filtro solo llega desde
   // la tarjeta de Agotadas, que pide mantenerlo
@@ -3713,19 +3921,24 @@ function switchAdminTab(tab, mantenerFiltro) {
   const filters = document.getElementById('adminFilters');
   const prods   = document.getElementById('adminProdsSection');
   const heroes  = document.getElementById('adminHeroesSection');
-  const showOnly = (el) => [body,stats,filters,prods,heroes].forEach(e => e && (e.style.display = e===el ? '' : 'none'));
+  const clien   = document.getElementById('adminClientesSection');
+  const ocultar = () => [prods,heroes,clien].forEach(e => e && (e.style.display='none'));
   if (tab === 'orders') {
     stats.style.display = filters.style.display = body.style.display = '';
-    prods.style.display = heroes.style.display = 'none';
+    ocultar();
     renderAdminOrders();
   } else if (tab === 'products') {
     stats.style.display = filters.style.display = body.style.display = 'none';
-    prods.style.display = ''; heroes.style.display = 'none';
+    ocultar(); prods.style.display = '';
     renderAdminProducts();
   } else if (tab === 'heroes') {
     stats.style.display = filters.style.display = body.style.display = 'none';
-    prods.style.display = 'none'; heroes.style.display = '';
+    ocultar(); heroes.style.display = '';
     renderAdminHeroes('mujer');
+  } else if (tab === 'clientes') {
+    stats.style.display = filters.style.display = body.style.display = 'none';
+    ocultar(); clien.style.display = '';
+    renderAdminClientes();
   }
 }
 
@@ -4521,6 +4734,7 @@ document.addEventListener('DOMContentLoaded', () => {
   refreshCartUI();
   // Login, registro y recuperar contraseña sincronizan usuarios al usarse; aquí solo si ya hay sesión
   if (S.user) setTimeout(() => syncUsers(), 4000);
+  setTimeout(() => registrarVisita(), 2500);
 
   // Restaurar sección desde hash en URL (para refresh y navegación directa)
   const _initHash = location.hash.slice(1);
@@ -5476,7 +5690,7 @@ async function doRegister(){
       showRegErr('Este número de teléfono ya tiene una cuenta. Intenta iniciar sesión.'); return;
     }
 
-    const newUser = { name, email, phone, pass };
+    const newUser = { name, email, phone, pass, createdAt: Date.now() };
     S.users.push(newUser);
     saveUsers();
     fbSaveUser(newUser); // guardar en Firebase (no bloqueante)

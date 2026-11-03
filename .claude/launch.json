@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "dealer-de-aromas",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", "-p", "4321", "."],
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "4321"],
       "port": 4321
     }
   ]
