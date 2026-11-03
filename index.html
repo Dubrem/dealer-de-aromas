@@ -2073,7 +2073,7 @@ function cerrarApertura(){}
     <button class="menu-btn" onclick="openSidebar()" aria-label="Menú">
       <span></span><span></span><span></span>
     </button>
-    <a href="#inicio" class="logo">
+    <a href="/" class="logo" onclick="irAlInicio(event)">
       <div class="logo-icon">
         <img src="img/logo.jpg" alt="Dealer de Aromas" width="34" height="34" decoding="async">
       </div>
@@ -4991,6 +4991,17 @@ function reintentarCarga() {
   renderGrid(_currentFilter || 'all');
   fbRefreshProductMeta().then(() => { _fbFetching = false; renderGrid(_currentFilter || 'all'); });
 }
+/* El logo regresa a la portada sin dejar #inicio en la barra: lo que la
+   gente copia y comparte tiene que ser la direccion limpia, y Google
+   descarta de todas formas lo que va despues del #. Ademas, estando
+   dentro de una categoria el ancla sola no servia, porque la portada
+   esta oculta en ese momento. */
+function irAlInicio(e){
+  e.preventDefault();
+  showHero();
+  history.replaceState({}, '', location.pathname);
+}
+
 function showHero() {
   clearInterval(_heroInterval);
   document.getElementById('inicio').style.display = '';
