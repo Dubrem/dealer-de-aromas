@@ -1009,6 +1009,27 @@
     .pay-opt { display:flex; align-items:center; gap:14px; border:2px solid var(--border); border-radius:14px; padding:14px 16px; cursor:pointer; transition:all .2s; background:#fff; }
     .pay-opt.selected { border-color:#009EE3; background:#f0f9ff; }
     .pay-opt-check { margin-left:auto; width:22px; height:22px; border-radius:50%; background:#009EE3; color:#fff; display:flex; align-items:center; justify-content:center; font-size:.75rem; font-weight:700; flex-shrink:0; }
+    .mapa-link { display:inline-block; margin-top:7px; font-size:.7rem; font-weight:600; color:var(--rose); text-decoration:none; letter-spacing:.03em; }
+    .mapa-link:hover { text-decoration:underline; }
+    /* Apartado a plazos */
+    .plan-card { border:1.5px solid var(--rose); border-radius:14px; padding:16px 18px; margin-bottom:16px; background:var(--rose-pale); }
+    .plan-card h4 { font-size:.8rem; font-weight:700; color:var(--text-dark); margin-bottom:11px; }
+    .plan-opts { display:flex; gap:9px; margin-bottom:12px; }
+    .plan-btn { flex:1; padding:10px; border:1.5px solid var(--border); border-radius:50px; background:#fff; color:var(--text-med); font-family:var(--ff-body); font-size:.76rem; font-weight:600; cursor:pointer; transition:all .18s; }
+    .plan-btn.selected { background:var(--rose); border-color:var(--rose); color:#fff; }
+    .plan-fechas { background:#fff; border:1px solid var(--border); border-radius:10px; padding:11px 14px; }
+    .plan-fila { display:flex; justify-content:space-between; gap:12px; font-size:.75rem; color:var(--text-med); margin-bottom:6px; }
+    .plan-fila:last-child { margin-bottom:0; padding-top:6px; border-top:1px solid var(--border); font-weight:700; color:var(--text-dark); }
+    .plan-fila b { color:var(--text-dark); white-space:nowrap; }
+    /* Aviso de tipos de perfume */
+    .tipos-lista { display:flex; flex-direction:column; gap:11px; margin:16px 0 4px; }
+    .tipo-item { border-left:3px solid var(--rose); padding:2px 0 2px 13px; }
+    .tipo-item h4 { font-family:var(--ff-head); font-size:.95rem; color:var(--text-dark); margin-bottom:3px; }
+    .tipo-item h4 em { font-style:normal; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--rose); margin-left:7px; }
+    .tipo-item p { font-size:.76rem; color:var(--text-med); line-height:1.55; }
+    .tipo-dura { display:inline-block; margin-top:4px; font-size:.65rem; letter-spacing:.06em; text-transform:uppercase; color:var(--text-light); }
+    .btn-tipos { display:inline-flex; align-items:center; gap:6px; margin:0 auto 18px; padding:8px 18px; border:1.5px solid var(--border); border-radius:50px; background:transparent; color:var(--text-med); font-family:var(--ff-body); font-size:.68rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; transition:all .2s; }
+    .btn-tipos:hover { border-color:var(--rose); color:var(--rose); }
     .checkout-nav { display:flex; gap:10px; margin-top:2px; }
     .btn-back { padding:11px 22px; border:1.5px solid var(--border); background:transparent; color:var(--text-med); border-radius:50px; font-size:.72rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; transition:all .2s; }
     .btn-back:hover { border-color:var(--rose); color:var(--rose); }
@@ -2209,6 +2230,7 @@ function cerrarApertura(){}
     </div>
     <p class="section-gender-label" id="sectionGenderLabel"></p>
     <p class="section-tagline">Fragancias y accesorios</p>
+    <button class="btn-tipos" onclick="abrirTiposPerfume(true)">💡 ¿Qué tipo de perfume buscas?</button>
     <div class="search-results-info" id="searchInfo"></div>
     <!-- Dropdown colapsable de categorías -->
     <div class="filter-dropdown-wrap" id="filterDropdownWrap">
@@ -2437,8 +2459,14 @@ function cerrarApertura(){}
       <h3 class="checkout-title">¿Cómo recibirás tu pedido?</h3>
       <div class="delivery-opts">
         <label class="delivery-opt selected" id="dOpt1">
-          <input type="radio" name="dv" value="personal" checked onchange="setDelivery('personal')">
-          <div class="delivery-opt-body"><h4>🤝 Entrega personalizada</h4><p>Te la entrega Reynel Martínez González en mano. Acuerdan lugar y hora por WhatsApp.</p></div>
+          <input type="radio" name="dv" value="local" checked onchange="setDelivery('local')">
+          <div class="delivery-opt-body">
+            <h4>🏪 Entrega en local</h4>
+            <p>Recoges tu pedido en <strong>Impresión en Tabloide</strong><br>
+               Calle Pte. 3, U.H. Pemex, 42808 Tula de Allende, Hgo.</p>
+            <a class="mapa-link" id="linkMapa" href="#" target="_blank" rel="noopener"
+               onclick="event.stopPropagation()">📍 Ver en Google Maps</a>
+          </div>
           <span class="delivery-opt-price">Gratis</span>
         </label>
       </div>
@@ -2473,8 +2501,34 @@ function cerrarApertura(){}
           </div>
           <div class="pay-opt-check" id="pmBankCheck" style="opacity:0">✓</div>
         </div>
+        <div class="pay-opt" id="pmApartado" onclick="setPayMethod('apartado')">
+          <div style="font-size:1.4rem">📅</div>
+          <div>
+            <div style="font-weight:700;font-size:.85rem;color:var(--text-dark)">Apartado a plazos</div>
+            <div style="font-size:.72rem;color:var(--text-light)">Lo apartamos y lo pagas en 1 o 2 meses</div>
+          </div>
+          <div class="pay-opt-check" id="pmApartadoCheck" style="opacity:0">✓</div>
+        </div>
+        <div class="pay-opt" id="pmTanda" onclick="setPayMethod('tanda')">
+          <div style="font-size:1.4rem">🤝</div>
+          <div>
+            <div style="font-weight:700;font-size:.85rem;color:var(--text-dark)">Entrar a tanda</div>
+            <div style="font-size:.72rem;color:var(--text-light)">Pagas por semanas junto con más personas</div>
+          </div>
+          <div class="pay-opt-check" id="pmTandaCheck" style="opacity:0">✓</div>
+        </div>
       </div>
-      <p class="pay-note" id="payNoteCash" style="margin-top:12px">💵 Pagas en efectivo cuando Reynel Martínez González te entregue el pedido. Te contactamos por WhatsApp para acordar lugar y hora.</p>
+      <div class="plan-card" id="planCard" style="display:none">
+        <h4>📅 ¿En cuánto tiempo lo quieres pagar?</h4>
+        <div class="plan-opts">
+          <button type="button" class="plan-btn selected" id="planB1" onclick="setPlanMeses(1)">1 mes</button>
+          <button type="button" class="plan-btn" id="planB2" onclick="setPlanMeses(2)">2 meses</button>
+        </div>
+        <div class="plan-fechas" id="planFechas"></div>
+        <p class="pay-note" style="margin:10px 0 0">⚠️ Tu perfume queda apartado desde hoy. Si no terminas de pagar en la fecha límite, se regresa al catálogo.</p>
+      </div>
+      <p class="pay-note" id="payNoteTanda" style="display:none;margin-top:12px">🤝 Te anotamos en la tanda. Por WhatsApp te decimos en qué número quedaste, de cuánto es el pago y cada cuándo toca. Tu perfume se aparta desde que entras.</p>
+      <p class="pay-note" id="payNoteCash" style="margin-top:12px">💵 Pagas en efectivo cuando pases por tu pedido al local. Te avisamos por WhatsApp en cuanto esté listo.</p>
       <div class="bank-card" id="bankCard" style="display:none;margin-top:12px">
         <h4>🏦 Datos de Transferencia</h4>
         <div class="bank-row"><span class="bank-lbl">Banco</span><span class="bank-val" data-banco>XXXXXXXX</span></div>
@@ -2612,6 +2666,45 @@ function cerrarApertura(){}
   <!-- Sección Clientes y tráfico -->
   <div class="admin-clientes-section" id="adminClientesSection" style="display:none"></div>
 
+</div>
+
+<!-- ========== AVISO: TIPOS DE PERFUME ========== -->
+<div class="modal" id="tiposModal" style="z-index:650">
+  <div class="modal-overlay" onclick="cerrarTiposPerfume()"></div>
+  <div class="modal-box" style="max-width:480px">
+    <button class="modal-x" onclick="cerrarTiposPerfume()">✕</button>
+    <h2 class="auth-title" style="margin-bottom:6px">¿Qué tipo de perfume buscas?</h2>
+    <p class="auth-sub" style="margin-bottom:0">Para que sepas qué estás comprando</p>
+    <div class="tipos-lista">
+      <div class="tipo-item">
+        <h4>Decant</h4>
+        <p>Una porción del perfume original pasada a un frasco chico, normalmente de 5 a 10 ml. Es el mismo perfume, solo que menos cantidad y mucho más barato. Ideal para probarlo antes de comprar el frasco completo.</p>
+      </div>
+      <div class="tipo-item">
+        <h4>Eau de Toilette <em>EDT</em></h4>
+        <p>Entre 5 % y 15 % de esencia. Fresco y ligero.</p>
+        <span class="tipo-dura">Dura 3 a 5 horas · ideal para diario y para el calor</span>
+      </div>
+      <div class="tipo-item">
+        <h4>Eau de Parfum <em>EDP</em></h4>
+        <p>Entre 15 % y 20 % de esencia. Es el más común y el más equilibrado.</p>
+        <span class="tipo-dura">Dura 6 a 8 horas · sirve para el día y para la noche</span>
+      </div>
+      <div class="tipo-item">
+        <h4>Parfum / Extrait</h4>
+        <p>Entre 20 % y 30 % de esencia. El más concentrado de todos; con dos toques basta.</p>
+        <span class="tipo-dura">Dura 8 a 12 horas · rinde muchísimo</span>
+      </div>
+      <div class="tipo-item">
+        <h4>Elixir</h4>
+        <p>La versión más intensa de un perfume que ya existe: mismos ingredientes pero más cargados, casi siempre más dulces y amaderados.</p>
+        <span class="tipo-dura">Alta duración · para la noche y el frío</span>
+      </div>
+    </div>
+    <p style="font-size:.72rem;color:var(--text-light);text-align:center;margin-top:16px;line-height:1.6">
+      ¿Sigues con dudas? Escríbenos por WhatsApp y te ayudamos a elegir.
+    </p>
+  </div>
 </div>
 
 <!-- ========== MODAL EDITAR PRODUCTO ========== -->
@@ -2965,13 +3058,27 @@ const FIREBASE_API_KEY = 'AIzaSyDsl_hZ4m2kfKWHUoDl5BMj6XYuzu9vBYo';
 const MP_ACTIVO = false;
 const SHIP_LOCAL = 0;
 const STORE_LOCATION = {
-  address: 'H Colegio Militar 2, Centro, 42800 Tula de Allende, Hgo.',
+  name:    'Impresión en Tabloide',
+  address: 'Calle Pte. 3, U.H. Pemex, 42808 Tula de Allende, Hgo.',
   hours:   'Lun–Sáb 10:00–19:00 h',
-  maps:    'https://maps.google.com/?q=H+Colegio+Militar+2+Centro+Tula+de+Allende+Hidalgo',
+  maps:    'https://www.google.com/maps/search/?api=1&query=' +
+           encodeURIComponent('Impresión en Tabloide, Calle Pte. 3, U.H. Pemex, 42808 Tula de Allende, Hgo.'),
 };
 const DELIVERY_LABELS = {
-  personal: '🤝 Entrega personalizada con Reynel Martínez González',
+  local:    '🏪 Entrega en local — Impresión en Tabloide',
+  personal: '🤝 Entrega personalizada con Reynel Martínez González',  // pedidos viejos
 };
+
+/* Formas de pago. 'apartado' y 'tanda' no cobran nada en linea: el pedido
+   queda registrado y el trato se cierra por WhatsApp. */
+const PAY_LABELS = {
+  efectivo: '💵 Efectivo al recibir',
+  bank:     '🏦 Transferencia',
+  mp:       '💳 MercadoPago',
+  apartado: '📅 Apartado a plazos',
+  tanda:    '🤝 Tanda',
+};
+const APARTADO_MESES = [1, 2];    // plazos que ofrece la tienda
 const REPARTIDOR = 'Reynel Martínez González';
 
 /* ──────────────────────────────────────────────────────
@@ -4316,16 +4423,20 @@ const INFO_CONTENT = {
     <p class="auth-sub" style="margin-bottom:22px">Lee con atención antes de realizar tu pedido</p>
     <div style="display:flex;flex-direction:column;gap:14px;font-size:.84rem;line-height:1.7;color:var(--text-med)">
       <div style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
-        <strong style="color:var(--text-dark)">💵 Efectivo al recibir o transferencia</strong><br>
-        Puedes pagar en efectivo cuando Reynel Martínez González te entregue el pedido en mano, o por transferencia antes de la entrega — en ese caso pídenos los datos por WhatsApp y mándanos tu comprobante.
+        <strong style="color:var(--text-dark)">🏪 Entrega en local</strong><br>
+        Recoges tu pedido en <strong>Impresión en Tabloide</strong> — Calle Pte. 3, U.H. Pemex, 42808 Tula de Allende, Hgo. Te avisamos por WhatsApp en cuanto esté listo.
       </div>
       <div style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
-        <strong style="color:var(--text-dark)">🚫 Sin sistema de apartado</strong><br>
-        No manejamos apartados. El producto se reserva únicamente cuando el pago ha sido confirmado en su totalidad.
+        <strong style="color:var(--text-dark)">💵 Efectivo o transferencia</strong><br>
+        Puedes pagar en efectivo al recoger tu pedido, o por transferencia antes — en ese caso pídenos los datos por WhatsApp y mándanos tu comprobante.
       </div>
       <div style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
-        <strong style="color:var(--text-dark)">🚫 Sin pagos en partes</strong><br>
-        No aceptamos pagos fraccionados ni abonos. El monto total debe liquidarse antes de la entrega.
+        <strong style="color:var(--text-dark)">📅 Apartado a 1 o 2 meses</strong><br>
+        Apartamos tu perfume y lo pagas en el plazo que elijas. Al apartarlo se fija la fecha límite; si no se liquida para entonces, el perfume regresa al catálogo.
+      </div>
+      <div style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
+        <strong style="color:var(--text-dark)">🤝 Tanda</strong><br>
+        También puedes entrar a la tanda. Tu perfume se aparta desde que entras y por WhatsApp te decimos en qué número quedaste, de cuánto es el pago y cada cuándo toca.
       </div>
     </div>`,
   devolucion: `
@@ -4373,7 +4484,7 @@ const INFO_CONTENT = {
       </details>
       <details style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
         <summary style="font-weight:700;color:var(--text-dark);cursor:pointer">¿Cómo se acuerda la entrega?</summary>
-        <p style="margin-top:8px">Al confirmar tu pedido nos escribes por WhatsApp y acuerdas con <strong>Reynel Martínez González</strong> el lugar y la hora. Él te entrega las fragancias en mano y pagas en efectivo en ese momento.</p>
+        <p style="margin-top:8px">Al confirmar tu pedido nos escribes por WhatsApp y te avisamos en cuanto esté listo. Pasas por él a <strong>Impresión en Tabloide</strong> — Calle Pte. 3, U.H. Pemex, 42808 Tula de Allende, Hgo.</p>
       </details>
     </div>`,
   nosotros: `
@@ -4984,7 +5095,26 @@ function showCatalog(section, pushHistory = true) {
     fbRefreshProductMeta().then(() => { _fbFetching = false; renderGrid('all'); });
   }
   setTimeout(() => document.getElementById('catalogo').scrollIntoView({behavior:'smooth'}), 50);
+  if (CATS_CON_AVISO.includes(section)) setTimeout(() => abrirTiposPerfume(false), 900);
 }
+/* Aviso de tipos de perfume. Sale solo la primera vez que el cliente
+   abre una categoria principal en esta visita; despues queda a la mano
+   en el boton de arriba del catalogo, para no estorbar a cada rato. */
+const CATS_CON_AVISO = ['mujer', 'hombre', 'unisex', 'arabes'];
+
+function abrirTiposPerfume(manual){
+  if(!manual){
+    try { if(sessionStorage.getItem('dda_tipos_visto')) return; } catch(e){ return; }
+  }
+  try { sessionStorage.setItem('dda_tipos_visto','1'); } catch(e){}
+  document.getElementById('tiposModal').classList.add('open');
+  lockScroll();
+}
+function cerrarTiposPerfume(){
+  document.getElementById('tiposModal').classList.remove('open');
+  unlockScroll();
+}
+
 function reintentarCarga() {
   _fbFetching = true;
   _fbLoadError = false;
@@ -5722,27 +5852,89 @@ function normalizePhone(p){ return String(p).replace(/\D/g,''); }
 /* ──────────────────────────────────────────────────────
    CHECKOUT
 ────────────────────────────────────────────────────── */
+/* Fecha limite de un apartado: el mismo dia, n meses despues. Si ese dia
+   no existe en el mes destino (un 31 cayendo en febrero), JS se pasa al
+   mes siguiente, asi que lo regresamos al ultimo dia del mes correcto. */
+function sumarMeses(fecha, meses){
+  const d = new Date(fecha.getTime());
+  const dia = d.getDate();
+  d.setMonth(d.getMonth() + meses);
+  if(d.getDate() !== dia) d.setDate(0);
+  return d;
+}
+function fechaBonita(d){
+  return d.toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' });
+}
+
+/* Datos del apartado que se guardan con el pedido. */
+function planApartado(){
+  const hoy = new Date();
+  const limite = sumarMeses(hoy, S.planMeses || 1);
+  return {
+    meses:  S.planMeses || 1,
+    inicio: hoy.getTime(),
+    limite: limite.getTime(),
+    inicioTxt: fechaBonita(hoy),
+    limiteTxt: fechaBonita(limite),
+  };
+}
+
+function setPlanMeses(n){
+  S.planMeses = n;
+  const b1 = document.getElementById('planB1'), b2 = document.getElementById('planB2');
+  if(b1) b1.classList.toggle('selected', n===1);
+  if(b2) b2.classList.toggle('selected', n===2);
+  pintarPlan();
+  buildSummaries();
+}
+
+function pintarPlan(){
+  const caja = document.getElementById('planFechas');
+  if(!caja) return;
+  const pl = planApartado();
+  const total = cartSubtotal() + S.shipCost;
+  const porMes = Math.ceil(total / pl.meses);
+  caja.innerHTML =
+    `<div class="plan-fila"><span>Apartas hoy</span><b>${pl.inicioTxt}</b></div>`
+  + `<div class="plan-fila"><span>Fecha límite para terminar de pagar</span><b>${pl.limiteTxt}</b></div>`
+  + `<div class="plan-fila"><span>${pl.meses === 1 ? 'Un solo pago de' : '2 pagos mensuales de'}</span><b>${fmtMXN(porMes)}</b></div>`;
+}
+
 function setPayMethod(m){
   if(m === 'mp' && !MP_ACTIVO) m = 'efectivo';
   S.payMethod = m;
   const marca = (id, on) => { const el = document.getElementById(id); if(el) el.classList.toggle('selected', on); };
   const palomita = (id, on) => { const el = document.getElementById(id); if(el) el.style.opacity = on ? '1' : '0'; };
   marca('pmMp', m==='mp'); marca('pmCash', m==='efectivo'); marca('pmBank', m==='bank');
+  marca('pmApartado', m==='apartado'); marca('pmTanda', m==='tanda');
   palomita('pmMpCheck', m==='mp'); palomita('pmCashCheck', m==='efectivo'); palomita('pmBankCheck', m==='bank');
-  const banco = document.getElementById('bankCard');
-  if(banco) banco.style.display = m==='bank' ? '' : 'none';
-  const notaEfectivo = document.getElementById('payNoteCash');
-  if(notaEfectivo) notaEfectivo.style.display = m==='efectivo' ? '' : 'none';
+  palomita('pmApartadoCheck', m==='apartado'); palomita('pmTandaCheck', m==='tanda');
+  const ver = (id, on) => { const el = document.getElementById(id); if(el) el.style.display = on ? '' : 'none'; };
+  ver('bankCard',     m==='bank');
+  ver('payNoteCash',  m==='efectivo');
+  ver('planCard',     m==='apartado');
+  ver('payNoteTanda', m==='tanda');
+  if(m === 'apartado') pintarPlan();
   const btn = document.getElementById('btnConfirmarPedido');
-  if(btn) btn.textContent = m==='mp' ? '💳 Pagar con MercadoPago' : '✓ Confirmar Pedido';
+  if(btn) btn.textContent =
+      m==='mp'       ? '💳 Pagar con MercadoPago'
+    : m==='apartado' ? '✓ Apartar mi perfume'
+    : m==='tanda'    ? '✓ Anotarme en la tanda'
+    : '✓ Confirmar Pedido';
+  buildSummaries();   // el resumen cambia segun la forma de pago
 }
 function startCheckout(){
   if(!S.cart.length){ toast('Tu carrito está vacío','err'); return; }
   if(!S.user){ closeCart(); toast('Inicia sesión para continuar',''); setTimeout(openLoginModal,400); return; }
   closeCart();
-  S.step=1; S.delivery='personal'; S.shipCost=0; S.payMethod = MP_ACTIVO ? 'mp' : 'efectivo';
-  document.querySelector('input[name="dv"][value="personal"]').checked=true;
+  S.step=1; S.delivery='local'; S.shipCost=0; S.payMethod = MP_ACTIVO ? 'mp' : 'efectivo';
+  S.planMeses = 1;
+  setPlanMeses(1);
+  setPayMethod(S.payMethod);
+  document.querySelector('input[name="dv"][value="local"]').checked=true;
   document.getElementById('dOpt1').classList.add('selected');
+  const mapa = document.getElementById('linkMapa');
+  if(mapa) mapa.href = STORE_LOCATION.maps;
   // Resetear botón confirmar
   const cb = document.getElementById('btnConfirmarPedido');
   if (cb) { cb.disabled = false; cb.textContent = '✓ Confirmar Pedido'; }
@@ -5770,8 +5962,15 @@ function goStep(n){
 function summaryHTML(){
   const sub=cartSubtotal(), total=sub+S.shipCost;
   const lines=S.cart.map(item=>{ const p=findProduct(item.id); return p?`<div class="summary-line"><span>${p.name} × ${item.qty}</span><span>${fmtMXN(p.price*item.qty)}</span></div>`:''; }).join('');
-  const deliveryLbl = DELIVERY_LABELS[S.delivery] || DELIVERY_LABELS.personal;
-  return `<div class="summary-hdr">Resumen del Pedido</div>${lines}<div class="summary-line"><span>Subtotal</span><span>${fmtMXN(sub)}</span></div><div class="summary-line"><span>${deliveryLbl}</span><span>${S.shipCost===0?'Gratis':fmtMXN(S.shipCost)}</span></div><div class="summary-total"><span>Total</span><span>${fmtMXN(total)} MXN</span></div>`;
+  const deliveryLbl = DELIVERY_LABELS[S.delivery] || DELIVERY_LABELS.local;
+  let plazo = '';
+  if(S.payMethod === 'apartado'){
+    const pl = planApartado();
+    plazo = `<div class="summary-line"><span>📅 Apartado · ${pl.meses === 1 ? '1 mes' : '2 meses'}</span><span>hasta el ${pl.limiteTxt}</span></div>`;
+  } else if(S.payMethod === 'tanda'){
+    plazo = `<div class="summary-line"><span>🤝 Tanda</span><span>te confirmamos por WhatsApp</span></div>`;
+  }
+  return `<div class="summary-hdr">Resumen del Pedido</div>${lines}<div class="summary-line"><span>Subtotal</span><span>${fmtMXN(sub)}</span></div><div class="summary-line"><span>${deliveryLbl}</span><span>${S.shipCost===0?'Gratis':fmtMXN(S.shipCost)}</span></div>${plazo}<div class="summary-total"><span>Total</span><span>${fmtMXN(total)} MXN</span></div>`;
 }
 function buildSummaries(){
   const h=summaryHTML();
@@ -5822,6 +6021,8 @@ async function confirmOrder(){
     phone:    S.user ? (S.user.phone || '') : '',
     delivery: S.delivery,
     total,
+    payMethod: S.payMethod,
+    plan: S.payMethod === 'apartado' ? planApartado() : null,
     status: 'pendiente',   // pendiente | pagado | listo | enviado | completado
     items: orderItems,
   };
@@ -5888,25 +6089,47 @@ async function confirmOrder(){
     return;
   }
 
-  // Efectivo contra entrega o transferencia
-  const esTransfer = S.payMethod === 'bank';
-  const msg = esTransfer
-    ? `¡Hola! 🖤 Acabo de hacer mi pedido *${num}* por *${fmtMXN(total)} MXN* y quiero pagar por *transferencia*. `
-      + `¿Me pasan los datos de la cuenta? En cuanto transfiera les mando el comprobante. ¡Gracias!`
-    : `¡Hola! 🖤 Acabo de hacer mi pedido *${num}* por *${fmtMXN(total)} MXN*. `
-      + `Quiero agendar la entrega en mano y pago en efectivo al recibir. ¡Gracias!`;
-  const pasos = document.getElementById('confirmSteps');
-  if (pasos) pasos.innerHTML = esTransfer
-    ? `<h4>📋 Lo que sigue:</h4><ol>`
+  // Efectivo, transferencia, apartado o tanda
+  const pl = newOrder.plan;
+  const recoge = `<li>Pasas por él a <strong>${STORE_LOCATION.name}</strong> — ${STORE_LOCATION.address}</li>`;
+  let msg, pasosHtml;
+
+  if (S.payMethod === 'bank') {
+    msg = `¡Hola! 🖤 Acabo de hacer mi pedido *${num}* por *${fmtMXN(total)} MXN* y quiero pagar por *transferencia*. `
+        + `¿Me pasan los datos de la cuenta? En cuanto transfiera les mando el comprobante. ¡Gracias!`;
+    pasosHtml = `<h4>📋 Lo que sigue:</h4><ol>`
       + `<li>Toca el botón de abajo y <strong>pídenos los datos por WhatsApp</strong></li>`
       + `<li>Transfiere el monto exacto e incluye tu número de pedido en el concepto</li>`
       + `<li><strong>Manda tu comprobante</strong> por WhatsApp</li>`
-      + `<li>Acuerdas con <strong>${REPARTIDOR}</strong> el lugar y la hora de entrega</li></ol>`
-    : `<h4>📋 Lo que sigue:</h4><ol>`
+      + `<li>Te avisamos cuando esté listo</li>${recoge}</ol>`;
+  } else if (S.payMethod === 'apartado') {
+    msg = `¡Hola! 🖤 Acabo de apartar mi pedido *${num}* por *${fmtMXN(total)} MXN* `
+        + `a *${pl.meses === 1 ? '1 mes' : '2 meses'}*, con fecha límite el *${pl.limiteTxt}*. `
+        + `¿Cómo le hacemos con los pagos? ¡Gracias!`;
+    pasosHtml = `<h4>📅 Tu apartado:</h4><ol>`
+      + `<li>Tu perfume queda <strong>apartado desde hoy, ${pl.inicioTxt}</strong></li>`
+      + `<li>Tienes hasta el <strong>${pl.limiteTxt}</strong> para terminar de pagar</li>`
+      + `<li>Escríbenos por WhatsApp y acordamos <strong>cómo y cuándo abonas</strong></li>`
+      + `<li>Al quedar liquidado, pasas por él a <strong>${STORE_LOCATION.name}</strong></li></ol>`;
+  } else if (S.payMethod === 'tanda') {
+    msg = `¡Hola! 🖤 Quiero *entrar a la tanda* con mi pedido *${num}* por *${fmtMXN(total)} MXN*. `
+        + `¿En qué número quedo y de cuánto es el pago? ¡Gracias!`;
+    pasosHtml = `<h4>🤝 Tu lugar en la tanda:</h4><ol>`
+      + `<li>Toca el botón de abajo para <strong>apartar tu lugar por WhatsApp</strong></li>`
+      + `<li>Te decimos <strong>en qué número quedaste</strong>, de cuánto es el pago y cada cuándo toca</li>`
+      + `<li>Tu perfume <strong>se aparta desde que entras</strong></li>`
+      + `<li>Cuando te toque tu número, pasas por él a <strong>${STORE_LOCATION.name}</strong></li></ol>`;
+  } else {
+    msg = `¡Hola! 🖤 Acabo de hacer mi pedido *${num}* por *${fmtMXN(total)} MXN*. `
+        + `Paso por él al local y pago en efectivo al recoger. ¡Gracias!`;
+    pasosHtml = `<h4>📋 Lo que sigue:</h4><ol>`
       + `<li>Toca el botón de abajo y <strong>mándanos tu pedido por WhatsApp</strong></li>`
-      + `<li>Acuerdas con <strong>${REPARTIDOR}</strong> el lugar y la hora de entrega</li>`
-      + `<li>Recibes tus fragancias en mano y <strong>pagas en efectivo</strong> en ese momento</li>`
-      + `<li>¡Listo! 🖤</li></ol>`;
+      + `<li>Te avisamos en cuanto esté listo</li>`
+      + recoge
+      + `<li><strong>Pagas en efectivo</strong> al recogerlo. ¡Listo! 🖤</li></ol>`;
+  }
+  const pasos = document.getElementById('confirmSteps');
+  if (pasos) pasos.innerHTML = pasosHtml;
   document.getElementById('btnWhatsApp').href =
     `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
 
@@ -6425,7 +6648,7 @@ function buildOrderCard(o){
     </label>`;
   }).join('');
 
-  const deliveryTxt = DELIVERY_LABELS[o.delivery] || DELIVERY_LABELS.personal;
+  const deliveryTxt = DELIVERY_LABELS[o.delivery] || DELIVERY_LABELS.local;
   const allDone = o.items.every(it=>it.done);
   const st = o.status || 'pendiente';
   const phoneHtml = o.phone
@@ -6459,6 +6682,8 @@ function buildOrderCard(o){
           <div style="font-size:.75rem;color:var(--text-light);margin-top:2px">📅 ${o.date} &nbsp;·&nbsp; 👤 ${o.customer}</div>
           ${phoneHtml}
           <div style="font-size:.75rem;color:var(--text-light)">${deliveryTxt}</div>
+          <div style="font-size:.75rem;color:var(--text-light)">${PAY_LABELS[o.payMethod] || PAY_LABELS.efectivo}</div>
+          ${o.plan ? `<div style="font-size:.75rem;font-weight:700;color:#8a6726">⏳ Apartado a ${o.plan.meses === 1 ? '1 mes' : '2 meses'} · vence el ${o.plan.limiteTxt}</div>` : ''}
         </div>
         <div style="text-align:right">
           <span class="status-badge status-${st}">${statusMap[st]||st}</span>
@@ -6697,7 +6922,7 @@ function customerOrderCard(o){
       <span class="corder-item-price">${fmtMXN(it.price*it.qty)}</span>
     </div>`).join('');
 
-  const deliveryTxt = DELIVERY_LABELS[o.delivery] || DELIVERY_LABELS.personal;
+  const deliveryTxt = DELIVERY_LABELS[o.delivery] || DELIVERY_LABELS.local;
 
   // Mientras el pedido no este entregado, el cliente puede escribir al
   // WhatsApp de la tienda sin depender del modal de compra, que
@@ -6725,6 +6950,7 @@ function customerOrderCard(o){
         <div>
           <div class="corder-num">${o.num}</div>
           <div class="corder-meta"><span>📅 ${o.date}</span><span>${deliveryTxt}</span></div>
+          ${o.plan ? `<div class="corder-meta"><span>📅 Apartado a ${o.plan.meses === 1 ? '1 mes' : '2 meses'}</span><span>Fecha límite: <strong>${o.plan.limiteTxt}</strong></span></div>` : ''}
         </div>
         <div class="corder-total">${fmtMXN(o.total)} MXN</div>
       </div>
