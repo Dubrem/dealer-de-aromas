@@ -5097,16 +5097,14 @@ function showCatalog(section, pushHistory = true) {
   setTimeout(() => document.getElementById('catalogo').scrollIntoView({behavior:'smooth'}), 50);
   if (CATS_CON_AVISO.includes(section)) setTimeout(() => abrirTiposPerfume(false), 900);
 }
-/* Aviso de tipos de perfume. Sale solo la primera vez que el cliente
-   abre una categoria principal en esta visita; despues queda a la mano
-   en el boton de arriba del catalogo, para no estorbar a cada rato. */
+/* Aviso de tipos de perfume. Sale cada vez que el cliente abre una
+   categoria principal, y tambien desde el boton de arriba del catalogo.
+   No sale si ya hay otro modal encima: el aviso llega con retraso y no
+   debe taparle al cliente algo que acaba de abrir el mismo. */
 const CATS_CON_AVISO = ['mujer', 'hombre', 'unisex', 'arabes'];
 
 function abrirTiposPerfume(manual){
-  if(!manual){
-    try { if(sessionStorage.getItem('dda_tipos_visto')) return; } catch(e){ return; }
-  }
-  try { sessionStorage.setItem('dda_tipos_visto','1'); } catch(e){}
+  if(!manual && document.querySelector('.modal.open')) return;
   document.getElementById('tiposModal').classList.add('open');
   lockScroll();
 }
