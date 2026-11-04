@@ -2080,7 +2080,7 @@ function cerrarApertura(){}
     </div>
     <p class="section-gender-label" id="sectionGenderLabel"></p>
     <p class="section-tagline">Fragancias y accesorios</p>
-    <button class="btn-tipos" onclick="abrirTiposPerfume(true)">💡 ¿Qué tipo de perfume buscas?</button>
+    <button class="btn-tipos" onclick="abrirTiposPerfume()">💡 ¿Qué tipo de perfume buscas?</button>
     <div class="search-results-info" id="searchInfo"></div>
     <!-- Dropdown colapsable de categorías -->
     <div class="filter-dropdown-wrap" id="filterDropdownWrap">
@@ -5047,16 +5047,10 @@ function showCatalog(section, pushHistory = true) {
     fbRefreshProductMeta().then(() => { _fbFetching = false; renderGrid('all'); });
   }
   setTimeout(() => document.getElementById('catalogo').scrollIntoView({behavior:'smooth'}), 50);
-  if (CATS_CON_AVISO.includes(section)) setTimeout(() => abrirTiposPerfume(false), 900);
 }
-/* Aviso de tipos de perfume. Sale cada vez que el cliente abre una
-   categoria principal, y tambien desde el boton de arriba del catalogo.
-   No sale si ya hay otro modal encima: el aviso llega con retraso y no
-   debe taparle al cliente algo que acaba de abrir el mismo. */
-const CATS_CON_AVISO = ['mujer', 'hombre', 'unisex', 'tester'];
-
-function abrirTiposPerfume(manual){
-  if(!manual && document.querySelector('.modal.open')) return;
+/* Aviso de tipos de perfume. Solo sale cuando el cliente toca el boton de
+   arriba del catalogo; ya no se abre solo al entrar a una categoria. */
+function abrirTiposPerfume(){
   document.getElementById('tiposModal').classList.add('open');
   lockScroll();
 }
