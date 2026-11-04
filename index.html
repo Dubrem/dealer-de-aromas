@@ -69,6 +69,8 @@
       --rose:          #B0863A;
       --rose-dark:     #8A6726;
       --rose-pale:     #F3E9D6;
+      --jade:          #1F7A66;   /* próximos lanzamientos */
+      --jade-light:    #57B99E;
       --gold:          #0C0C0B;
       --gold-dark:     #080808;
       --text-dark:     #16130E;
@@ -1030,6 +1032,21 @@
     .tipo-dura { display:inline-block; margin-top:4px; font-size:.65rem; letter-spacing:.06em; text-transform:uppercase; color:var(--text-light); }
     .btn-tipos { display:inline-flex; align-items:center; gap:6px; margin:0 auto 18px; padding:8px 18px; border:1.5px solid var(--border); border-radius:50px; background:transparent; color:var(--text-med); font-family:var(--ff-body); font-size:.68rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; transition:all .2s; }
     .btn-tipos:hover { border-color:var(--rose); color:var(--rose); }
+
+    /* ── Próximos lanzamientos ──────────────────────────
+       Esta categoría se ve distinta a propósito: color jade y la
+       tipografía de títulos en cursiva, para que se note que es lo que
+       viene en camino y no lo que ya está a la venta. */
+    .sb-cat-nuevo { font-family:var(--ff-head) !important; font-style:italic;
+      font-size:.98rem !important; font-weight:400 !important; letter-spacing:.03em !important;
+      text-transform:none !important; color:var(--jade-light) !important; }
+    .sb-cat-nuevo .sb-arrow { color:var(--jade-light); }
+    .nav-nuevo { font-family:var(--ff-head) !important; font-style:italic;
+      font-size:.92rem !important; letter-spacing:.03em !important;
+      text-transform:none !important; color:var(--jade-light) !important; }
+    .foot-col ul a.nav-nuevo:hover, .nav-nuevo:hover { color:var(--jade) !important; }
+    .section-gender-label.es-nuevo { font-family:var(--ff-head); font-style:italic; color:var(--jade); }
+    .section-tagline.es-nuevo { color:var(--jade-light); }
     .checkout-nav { display:flex; gap:10px; margin-top:2px; }
     .btn-back { padding:11px 22px; border:1.5px solid var(--border); background:transparent; color:var(--text-med); border-radius:50px; font-size:.72rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; transition:all .2s; }
     .btn-back:hover { border-color:var(--rose); color:var(--rose); }
@@ -1928,163 +1945,7 @@ function cerrarApertura(){}
     <span class="sb-title">Categorías</span>
     <button class="sb-close" onclick="closeSidebar()">✕</button>
   </div>
-  <nav class="sb-body">
-    <!-- Mujer -->
-    <div class="sb-section">
-      <button class="sb-cat" onclick="toggleSidebarCat(this,'sub-mujer')">
-        <span>Mujer</span><span class="sb-arrow">›</span>
-      </button>
-      <div class="sb-sub" id="sub-mujer">
-        <a onclick="goToSection('mujer','all')">✦ Todos</a>
-        <a onclick="goToSection('mujer','eau-de-parfum')">Eau de Parfum</a>
-        <a onclick="goToSection('mujer','eau-de-toilette')">Eau de Toilette</a>
-        <a onclick="goToSection('mujer','arabe')">Árabes</a>
-        <a onclick="goToSection('mujer','nicho')">Nicho</a>
-        <a onclick="goToSection('mujer','floral')">Florales</a>
-        <a onclick="goToSection('mujer','dulce')">Dulces / Gourmand</a>
-        <a onclick="goToSection('mujer','amaderado')">Amaderados</a>
-        <a onclick="goToSection('mujer','citrico')">Cítricos</a>
-        <a onclick="goToSection('mujer','set')">Sets</a>
-        <a onclick="goToSection('mujer','exclusivo')">Marca Exclusiva</a>
-      </div>
-    </div>
-    <!-- Hombre -->
-    <div class="sb-section">
-      <button class="sb-cat" onclick="toggleSidebarCat(this,'sub-hombre')">
-        <span>Hombre</span><span class="sb-arrow">›</span>
-      </button>
-      <div class="sb-sub" id="sub-hombre">
-        <a onclick="goToSection('hombre','all')">✦ Todos</a>
-        <a onclick="goToSection('hombre','eau-de-parfum')">Eau de Parfum</a>
-        <a onclick="goToSection('hombre','eau-de-toilette')">Eau de Toilette</a>
-        <a onclick="goToSection('hombre','arabe')">Árabes</a>
-        <a onclick="goToSection('hombre','nicho')">Nicho</a>
-        <a onclick="goToSection('hombre','amaderado')">Amaderados</a>
-        <a onclick="goToSection('hombre','aromatico')">Aromáticos</a>
-        <a onclick="goToSection('hombre','citrico')">Cítricos</a>
-        <a onclick="goToSection('hombre','especiado')">Especiados</a>
-        <a onclick="goToSection('hombre','set')">Sets</a>
-        <a onclick="goToSection('hombre','exclusivo')">Marca Exclusiva</a>
-      </div>
-    </div>
-    <!-- Unisex -->
-    <div class="sb-section">
-      <button class="sb-cat" onclick="toggleSidebarCat(this,'sub-unisex')">
-        <span>Unisex</span><span class="sb-arrow">›</span>
-      </button>
-      <div class="sb-sub" id="sub-unisex">
-        <a onclick="goToSection('unisex','all')">✦ Todos</a>
-        <a onclick="goToSection('unisex','eau-de-parfum')">Eau de Parfum</a>
-        <a onclick="goToSection('unisex','arabe')">Árabes</a>
-        <a onclick="goToSection('unisex','nicho')">Nicho</a>
-        <a onclick="goToSection('unisex','oud')">Oud</a>
-        <a onclick="goToSection('unisex','amaderado')">Amaderados</a>
-        <a onclick="goToSection('unisex','dulce')">Dulces / Gourmand</a>
-        <a onclick="goToSection('unisex','citrico')">Cítricos</a>
-        <a onclick="goToSection('unisex','set')">Sets</a>
-      </div>
-    </div>
-    <!-- Árabes -->
-    <div class="sb-section">
-      <button class="sb-cat" onclick="toggleSidebarCat(this,'sub-arabes')">
-        <span>Árabes</span><span class="sb-arrow">›</span>
-      </button>
-      <div class="sb-sub" id="sub-arabes">
-        <a onclick="goToSection('arabes','all')">✦ Todos</a>
-        <a onclick="goToSection('arabes','oud')">Oud</a>
-        <a onclick="goToSection('arabes','attar')">Attar / Aceites</a>
-        <a onclick="goToSection('arabes','bakhoor')">Bakhoor</a>
-        <a onclick="goToSection('arabes','spray')">Sprays</a>
-        <a onclick="goToSection('arabes','dulce')">Dulces / Gourmand</a>
-        <a onclick="goToSection('arabes','set')">Sets</a>
-      </div>
-    </div>
-    <!-- Nicho -->
-    <div class="sb-section">
-      <button class="sb-cat" onclick="toggleSidebarCat(this,'sub-nicho')">
-        <span>Nicho</span><span class="sb-arrow">›</span>
-      </button>
-      <div class="sb-sub" id="sub-nicho">
-        <a onclick="goToSection('nicho','all')">✦ Todos</a>
-        <a onclick="goToSection('nicho','extracto')">Extracto de Perfume</a>
-        <a onclick="goToSection('nicho','eau-de-parfum')">Eau de Parfum</a>
-        <a onclick="goToSection('nicho','oud')">Oud</a>
-        <a onclick="goToSection('nicho','amaderado')">Amaderados</a>
-        <a onclick="goToSection('nicho','floral')">Florales</a>
-        <a onclick="goToSection('nicho','exclusivo')">Marca Exclusiva</a>
-      </div>
-    </div>
-    <!-- Sets y Estuches -->
-    <div class="sb-section">
-      <button class="sb-cat" onclick="toggleSidebarCat(this,'sub-sets')">
-        <span>Sets y Estuches</span><span class="sb-arrow">›</span>
-      </button>
-      <div class="sb-sub" id="sub-sets">
-        <a onclick="goToSection('sets','all')">✦ Todos</a>
-        <a onclick="goToSection('sets','set-pareja')">Sets de Pareja</a>
-        <a onclick="goToSection('sets','set-viaje')">Sets de Viaje</a>
-        <a onclick="goToSection('sets','cofre')">Cofres de Lujo</a>
-        <a onclick="goToSection('sets','estuche')">Estuches de Regalo</a>
-        <a onclick="goToSection('sets','set-corporal')">Sets Corporales</a>
-      </div>
-    </div>
-    <!-- Miniaturas -->
-    <div class="sb-section">
-      <button class="sb-cat" onclick="toggleSidebarCat(this,'sub-miniaturas')">
-        <span>Miniaturas</span><span class="sb-arrow">›</span>
-      </button>
-      <div class="sb-sub" id="sub-miniaturas">
-        <a onclick="goToSection('miniaturas','all')">✦ Todos</a>
-        <a onclick="goToSection('miniaturas','decant-5')">Decants 5 ml</a>
-        <a onclick="goToSection('miniaturas','decant-10')">Decants 10 ml</a>
-        <a onclick="goToSection('miniaturas','miniatura')">Miniaturas</a>
-        <a onclick="goToSection('miniaturas','probador')">Probadores / Testers</a>
-        <a onclick="goToSection('miniaturas','coleccion')">Colecciones de Minis</a>
-      </div>
-    </div>
-    <!-- Línea Corporal -->
-    <div class="sb-section">
-      <button class="sb-cat" onclick="toggleSidebarCat(this,'sub-corporal')">
-        <span>Línea Corporal</span><span class="sb-arrow">›</span>
-      </button>
-      <div class="sb-sub" id="sub-corporal">
-        <a onclick="goToSection('corporal','all')">✦ Todos</a>
-        <a onclick="goToSection('corporal','body-mist')">Body Mist</a>
-        <a onclick="goToSection('corporal','splash')">Splash</a>
-        <a onclick="goToSection('corporal','crema')">Cremas Corporales</a>
-        <a onclick="goToSection('corporal','desodorante')">Desodorantes</a>
-        <a onclick="goToSection('corporal','jabon')">Jabones Perfumados</a>
-        <a onclick="goToSection('corporal','aceite')">Aceites Corporales</a>
-      </div>
-    </div>
-    <!-- Aromas de Hogar -->
-    <div class="sb-section">
-      <button class="sb-cat" onclick="toggleSidebarCat(this,'sub-hogar')">
-        <span>Aromas de Hogar</span><span class="sb-arrow">›</span>
-      </button>
-      <div class="sb-sub" id="sub-hogar">
-        <a onclick="goToSection('hogar','all')">✦ Todos</a>
-        <a onclick="goToSection('hogar','difusor')">Difusores de Varitas</a>
-        <a onclick="goToSection('hogar','vela')">Velas Aromáticas</a>
-        <a onclick="goToSection('hogar','spray-textil')">Sprays Textiles</a>
-        <a onclick="goToSection('hogar','aromatizante')">Aromatizantes de Ambiente</a>
-        <a onclick="goToSection('hogar','auto')">Aromas para Auto</a>
-      </div>
-    </div>
-    <!-- Ofertas -->
-    <div class="sb-section">
-      <button class="sb-cat" onclick="toggleSidebarCat(this,'sub-ofertas')">
-        <span>Ofertas</span><span class="sb-arrow">›</span>
-      </button>
-      <div class="sb-sub" id="sub-ofertas">
-        <a onclick="goToSection('ofertas','all')">✦ Todos</a>
-        <a onclick="goToSection('ofertas','liquidacion')">Liquidación</a>
-        <a onclick="goToSection('ofertas','ultimas-piezas')">Últimas Piezas</a>
-        <a onclick="goToSection('ofertas','combo')">Combos</a>
-        <a onclick="goToSection('ofertas','descuento')">Descuentos</a>
-      </div>
-    </div>
-  </nav>
+  <nav class="sb-body" id="sbBody"></nav>
   <div class="sb-foot" id="sbFoot" style="display:none"></div>
 </aside>
 
@@ -2125,37 +1986,26 @@ function cerrarApertura(){}
       autocomplete="off" autocorrect="off" spellcheck="false">
     <button class="header-search-x" id="searchClear" onclick="clearSearch()" aria-label="Limpiar">✕</button>
   </div>
-  <nav class="mobile-nav" id="mobileNav">
-    <a href="#catalogo" onclick="showCatalog('mujer');closeMobileNav()">Mujer</a>
-    <a href="#catalogo" onclick="showCatalog('hombre');closeMobileNav()">Hombre</a>
-    <a href="#catalogo" onclick="showCatalog('unisex');closeMobileNav()">Unisex</a>
-    <a href="#catalogo" onclick="showCatalog('arabes');closeMobileNav()">Árabes</a>
-    <a href="#catalogo" onclick="showCatalog('nicho');closeMobileNav()">Nicho</a>
-    <a href="#catalogo" onclick="showCatalog('sets');closeMobileNav()">Sets y Estuches</a>
-    <a href="#catalogo" onclick="showCatalog('miniaturas');closeMobileNav()">Miniaturas</a>
-    <a href="#catalogo" onclick="showCatalog('corporal');closeMobileNav()">Línea Corporal</a>
-    <a href="#catalogo" onclick="showCatalog('hogar');closeMobileNav()">Aromas de Hogar</a>
-    <a href="#catalogo" onclick="showCatalog('ofertas');closeMobileNav()">Ofertas</a>
-  </nav>
+  <nav class="mobile-nav" id="mobileNav"></nav>
 </header>
 
 <!-- ========== HERO ========== -->
 <section class="hero" id="inicio">
 
-  <!-- Panel Mujer -->
+  <!-- Panel Dama -->
   <div class="hero-panel" onclick="heroTransitionTo('mujer',event,this)">
-    <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1200&q=80" alt="Colección Mujer" fetchpriority="high">
+    <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1200&q=80" alt="Colección Dama" fetchpriority="high">
     <div class="hero-panel-info">
-      <span class="hero-panel-label">Mujer</span>
+      <span class="hero-panel-label">Dama</span>
       <button class="hero-panel-cta">Ver Colección</button>
     </div>
   </div>
 
-  <!-- Panel Hombre -->
+  <!-- Panel Caballero -->
   <div class="hero-panel" onclick="heroTransitionTo('hombre',event,this)">
-    <img src="https://images.unsplash.com/photo-1587017539504-67cfbddac569?auto=format&fit=crop&w=1200&q=80" alt="Colección Hombre" fetchpriority="high">
+    <img src="https://images.unsplash.com/photo-1587017539504-67cfbddac569?auto=format&fit=crop&w=1200&q=80" alt="Colección Caballero" fetchpriority="high">
     <div class="hero-panel-info">
-      <span class="hero-panel-label">Hombre</span>
+      <span class="hero-panel-label">Caballero</span>
       <button class="hero-panel-cta">Ver Colección</button>
     </div>
   </div>
@@ -2169,11 +2019,11 @@ function cerrarApertura(){}
     </div>
   </div>
 
-  <!-- Panel Árabes -->
-  <div class="hero-panel" onclick="heroTransitionTo('arabes',event,this)">
-    <img src="https://images.unsplash.com/photo-1615634260167-c8cdede054de?auto=format&fit=crop&w=1200&q=80" alt="Colección Árabes" fetchpriority="high">
+  <!-- Panel Tester -->
+  <div class="hero-panel" onclick="heroTransitionTo('tester',event,this)">
+    <img src="https://images.unsplash.com/photo-1615634260167-c8cdede054de?auto=format&fit=crop&w=1200&q=80" alt="Colección Tester" fetchpriority="high">
     <div class="hero-panel-info">
-      <span class="hero-panel-label">Árabes</span>
+      <span class="hero-panel-label">Tester</span>
       <button class="hero-panel-cta">Ver Colección</button>
     </div>
   </div>
@@ -2505,7 +2355,7 @@ function cerrarApertura(){}
           <div style="font-size:1.4rem">📅</div>
           <div>
             <div style="font-weight:700;font-size:.85rem;color:var(--text-dark)">Apartado a plazos</div>
-            <div style="font-size:.72rem;color:var(--text-light)">Lo apartamos y lo pagas en 1 o 2 meses</div>
+            <div style="font-size:.72rem;color:var(--text-light)">Más de $2,000 a 1 o 2 meses · menos, a 1 mes</div>
           </div>
           <div class="pay-opt-check" id="pmApartadoCheck" style="opacity:0">✓</div>
         </div>
@@ -2513,13 +2363,14 @@ function cerrarApertura(){}
           <div style="font-size:1.4rem">🤝</div>
           <div>
             <div style="font-weight:700;font-size:.85rem;color:var(--text-dark)">Entrar a tanda</div>
-            <div style="font-size:.72rem;color:var(--text-light)">Pagas por semanas junto con más personas</div>
+            <div style="font-size:.72rem;color:var(--text-light)">5 o 10 pagos, semanales o quincenales</div>
           </div>
           <div class="pay-opt-check" id="pmTandaCheck" style="opacity:0">✓</div>
         </div>
       </div>
       <div class="plan-card" id="planCard" style="display:none">
         <h4>📅 ¿En cuánto tiempo lo quieres pagar?</h4>
+        <p class="pay-note" id="planAviso" style="margin:0 0 10px"></p>
         <div class="plan-opts">
           <button type="button" class="plan-btn selected" id="planB1" onclick="setPlanMeses(1)">1 mes</button>
           <button type="button" class="plan-btn" id="planB2" onclick="setPlanMeses(2)">2 meses</button>
@@ -2527,7 +2378,7 @@ function cerrarApertura(){}
         <div class="plan-fechas" id="planFechas"></div>
         <p class="pay-note" style="margin:10px 0 0">⚠️ Tu perfume queda apartado desde hoy. Si no terminas de pagar en la fecha límite, se regresa al catálogo.</p>
       </div>
-      <p class="pay-note" id="payNoteTanda" style="display:none;margin-top:12px">🤝 Te anotamos en la tanda. Por WhatsApp te decimos en qué número quedaste, de cuánto es el pago y cada cuándo toca. Tu perfume se aparta desde que entras.</p>
+      <p class="pay-note" id="payNoteTanda" style="display:none;margin-top:12px">🤝 La tanda se arregla directo contigo: eliges <strong>5 o 10 pagos</strong>, <strong>semanales o quincenales</strong>, como más te acomode. Escríbenos por WhatsApp y ahí te pasamos los detalles. Tu perfume se aparta desde que entras.</p>
       <p class="pay-note" id="payNoteCash" style="margin-top:12px">💵 Pagas en efectivo cuando pases por tu pedido al local. Te avisamos por WhatsApp en cuanto esté listo.</p>
       <div class="bank-card" id="bankCard" style="display:none;margin-top:12px">
         <h4>🏦 Datos de Transferencia</h4>
@@ -2681,6 +2532,15 @@ function cerrarApertura(){}
         <p>Una porción del perfume original pasada a un frasco chico, normalmente de 5 a 10 ml. Es el mismo perfume, solo que menos cantidad y mucho más barato. Ideal para probarlo antes de comprar el frasco completo.</p>
       </div>
       <div class="tipo-item">
+        <h4>Tester</h4>
+        <p>El frasco original que las marcas mandan para que la gente pruebe el perfume. Es el mismo contenido y la misma calidad; lo único distinto es la caja, más sencilla y a veces sin tapa. Por eso cuesta menos.</p>
+      </div>
+      <div class="tipo-item">
+        <h4>Agua de Colonia <em>EDC</em></h4>
+        <p>Entre 2 % y 5 % de esencia. El más ligero de todos, muy fresco y suave.</p>
+        <span class="tipo-dura">Dura 2 a 3 horas · bueno para el diario y para el calor</span>
+      </div>
+      <div class="tipo-item">
         <h4>Eau de Toilette <em>EDT</em></h4>
         <p>Entre 5 % y 15 % de esencia. Fresco y ligero.</p>
         <span class="tipo-dura">Dura 3 a 5 horas · ideal para diario y para el calor</span>
@@ -2699,6 +2559,16 @@ function cerrarApertura(){}
         <h4>Elixir</h4>
         <p>La versión más intensa de un perfume que ya existe: mismos ingredientes pero más cargados, casi siempre más dulces y amaderados.</p>
         <span class="tipo-dura">Alta duración · para la noche y el frío</span>
+      </div>
+      <div class="tipo-item">
+        <h4>Árabe</h4>
+        <p>Perfumes hechos en Medio Oriente. Vienen muy concentrados y con notas marcadas: oud, ámbar, incienso y dulces. Se sienten de lejos y aguantan todo el día.</p>
+        <span class="tipo-dura">Mucha duración y proyección · para la noche y ocasiones</span>
+      </div>
+      <div class="tipo-item">
+        <h4>Nicho</h4>
+        <p>Perfumes de casas chicas que producen poco. Aromas poco comunes, fuera de lo que se huele en todas partes, con ingredientes de mejor calidad y por eso más caros.</p>
+        <span class="tipo-dura">Para quien busca algo que nadie más traiga</span>
       </div>
     </div>
     <p style="font-size:.72rem;color:var(--text-light);text-align:center;margin-top:16px;line-height:1.6">
@@ -2753,18 +2623,7 @@ function cerrarApertura(){}
     <!-- Categoría -->
     <div class="form-group">
       <label class="form-label">Sección</label>
-      <select class="form-input" id="prodEditCat" onchange="updateSubcatOptions(this.value)">
-        <option value="mujer">Mujer</option>
-        <option value="hombre">Hombre</option>
-        <option value="unisex">Unisex</option>
-        <option value="arabes">Árabes</option>
-        <option value="nicho">Nicho</option>
-        <option value="sets">Sets y Estuches</option>
-        <option value="miniaturas">Miniaturas</option>
-        <option value="corporal">Línea Corporal</option>
-        <option value="hogar">Aromas de Hogar</option>
-        <option value="ofertas">Ofertas</option>
-      </select>
+      <select class="form-input" id="prodEditCat" onchange="updateSubcatOptions(this.value)"></select>
     </div>
     <!-- Sub-categoría -->
     <div class="form-group">
@@ -2775,18 +2634,7 @@ function cerrarApertura(){}
     <!-- Presentaciones -->
     <div class="form-group">
       <label class="form-label">Presentaciones disponibles</label>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px" id="sizesCheckboxes">
-        <label style="display:flex;align-items:center;gap:5px;font-size:.75rem;cursor:pointer"><input type="checkbox" value="Decant 5 ml" class="size-check"> Decant 5 ml</label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:.75rem;cursor:pointer"><input type="checkbox" value="Decant 10 ml" class="size-check"> Decant 10 ml</label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:.75rem;cursor:pointer"><input type="checkbox" value="30 ml" class="size-check"> 30 ml</label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:.75rem;cursor:pointer"><input type="checkbox" value="50 ml" class="size-check"> 50 ml</label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:.75rem;cursor:pointer"><input type="checkbox" value="60 ml" class="size-check"> 60 ml</label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:.75rem;cursor:pointer"><input type="checkbox" value="75 ml" class="size-check"> 75 ml</label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:.75rem;cursor:pointer"><input type="checkbox" value="100 ml" class="size-check"> 100 ml</label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:.75rem;cursor:pointer"><input type="checkbox" value="125 ml" class="size-check"> 125 ml</label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:.75rem;cursor:pointer"><input type="checkbox" value="200 ml" class="size-check"> 200 ml</label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:.75rem;cursor:pointer"><input type="checkbox" value="Única" class="size-check"> Única</label>
-      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px" id="sizesCheckboxes"></div>
     </div>
 
     <!-- SKU -->
@@ -2867,13 +2715,7 @@ function cerrarApertura(){}
 
     <div class="foot-col">
       <h4>Catálogo</h4>
-      <ul>
-        <li><a href="#catalogo" onclick="showCatalog('mujer')">Mujer</a></li>
-        <li><a href="#catalogo" onclick="showCatalog('hombre')">Hombre</a></li>
-        <li><a href="#catalogo" onclick="showCatalog('arabes')">Árabes</a></li>
-        <li><a href="#catalogo" onclick="showCatalog('nicho')">Nicho</a></li>
-        <li><a href="#catalogo" onclick="showCatalog('miniaturas')">Miniaturas</a></li>
-      </ul>
+      <ul id="footCatList"></ul>
     </div>
 
     <div class="foot-col">
@@ -3076,9 +2918,17 @@ const PAY_LABELS = {
   bank:     '🏦 Transferencia',
   mp:       '💳 MercadoPago',
   apartado: '📅 Apartado a plazos',
-  tanda:    '🤝 Tanda',
+  tanda:    '🤝 Tanda · 5 o 10 pagos',
 };
-const APARTADO_MESES = [1, 2];    // plazos que ofrece la tienda
+const APARTADO_MESES = [1, 2];          // plazos que ofrece la tienda
+const APARTADO_MONTO_2_MESES = 2000;    // arriba de este monto se puede pagar a 2 meses
+
+/* Plazos que puede elegir el carrito actual: arriba de $2,000 el apartado
+   llega a 2 meses; de ahi para abajo, un mes como maximo. */
+function plazosDisponibles(){
+  const total = cartSubtotal() + S.shipCost;
+  return total > APARTADO_MONTO_2_MESES ? APARTADO_MESES : [1];
+}
 const REPARTIDOR = 'Reynel Martínez González';
 
 /* ──────────────────────────────────────────────────────
@@ -3281,30 +3131,105 @@ let _currentSection = null;    // mujer | hombre | unisex | null
 
 const COMING_SOON = new Set([]);
 
-const SECTION_TABS = {
-  mujer:       [['all','✦ Todos'],['eau-de-parfum','Eau de Parfum'],['eau-de-toilette','Eau de Toilette'],['arabe','Árabes'],['nicho','Nicho'],['floral','Florales'],['dulce','Dulces / Gourmand'],['amaderado','Amaderados'],['citrico','Cítricos'],['set','Sets'],['exclusivo','Marca Exclusiva']],
-  hombre:      [['all','✦ Todos'],['eau-de-parfum','Eau de Parfum'],['eau-de-toilette','Eau de Toilette'],['arabe','Árabes'],['nicho','Nicho'],['amaderado','Amaderados'],['aromatico','Aromáticos'],['citrico','Cítricos'],['especiado','Especiados'],['set','Sets'],['exclusivo','Marca Exclusiva']],
-  unisex:      [['all','✦ Todos'],['eau-de-parfum','Eau de Parfum'],['arabe','Árabes'],['nicho','Nicho'],['oud','Oud'],['amaderado','Amaderados'],['dulce','Dulces / Gourmand'],['citrico','Cítricos'],['set','Sets']],
-  arabes:      [['all','✦ Todos'],['oud','Oud'],['attar','Attar / Aceites'],['bakhoor','Bakhoor'],['spray','Sprays'],['dulce','Dulces / Gourmand'],['set','Sets']],
-  nicho:       [['all','✦ Todos'],['extracto','Extracto de Perfume'],['eau-de-parfum','Eau de Parfum'],['oud','Oud'],['amaderado','Amaderados'],['floral','Florales'],['exclusivo','Marca Exclusiva']],
-  sets:        [['all','✦ Todos'],['set-pareja','Sets de Pareja'],['set-viaje','Sets de Viaje'],['cofre','Cofres de Lujo'],['estuche','Estuches de Regalo'],['set-corporal','Sets Corporales']],
-  miniaturas:  [['all','✦ Todos'],['decant-5','Decants 5 ml'],['decant-10','Decants 10 ml'],['miniatura','Miniaturas'],['probador','Probadores / Testers'],['coleccion','Colecciones de Minis']],
-  corporal:    [['all','✦ Todos'],['body-mist','Body Mist'],['splash','Splash'],['crema','Cremas Corporales'],['desodorante','Desodorantes'],['jabon','Jabones Perfumados'],['aceite','Aceites Corporales']],
-  hogar:       [['all','✦ Todos'],['difusor','Difusores de Varitas'],['vela','Velas Aromáticas'],['spray-textil','Sprays Textiles'],['aromatizante','Aromatizantes de Ambiente'],['auto','Aromas para Auto']],
-  ofertas:     [['all','✦ Todos'],['liquidacion','Liquidación'],['ultimas-piezas','Últimas Piezas'],['combo','Combos'],['descuento','Descuentos']],
+/* ── Categorias de la tienda ───────────────────────────
+   CAT_ORDER es el orden en que las ve el cliente: Dama, Caballero,
+   Unisex, Tester y despues el resto. Las llaves internas no se tocan
+   (mujer, hombre) porque los productos y pedidos ya guardados las usan;
+   lo que cambia es la etiqueta. Arabes y Nicho dejaron de ser categorias
+   y ahora son subcategorias, pero siguen en CAT_LABELS para poder
+   nombrar lo que se guardo antes. */
+const CAT_ORDER = ['mujer','hombre','unisex','tester','sets','miniaturas','corporal','hogar','accesorios','ofertas','lanzamientos'];
+const CAT_LABELS = {
+  mujer:'Dama', hombre:'Caballero', unisex:'Unisex', tester:'Tester',
+  sets:'Sets y Estuches', miniaturas:'Miniaturas', corporal:'Línea Corporal',
+  hogar:'Aromas de Hogar', accesorios:'Accesorios', ofertas:'Ofertas',
+  lanzamientos:'Próximos Lanzamientos',
+  arabes:'Árabes', nicho:'Nicho',          // categorias retiradas del menu
 };
+
+/* Dama, Caballero y Unisex comparten las mismas subcategorias. */
+const GENERO_SUBCATS = [['arabe','Árabes'],['disenador','Diseñador'],['nicho','Nicho'],['decant','Decant']];
+
 const SUBCATS = {
-  mujer:       [['eau-de-parfum','Eau de Parfum'],['eau-de-toilette','Eau de Toilette'],['arabe','Árabes'],['nicho','Nicho'],['floral','Florales'],['dulce','Dulces / Gourmand'],['amaderado','Amaderados'],['citrico','Cítricos'],['set','Sets'],['exclusivo','Marca Exclusiva']],
-  hombre:      [['eau-de-parfum','Eau de Parfum'],['eau-de-toilette','Eau de Toilette'],['arabe','Árabes'],['nicho','Nicho'],['amaderado','Amaderados'],['aromatico','Aromáticos'],['citrico','Cítricos'],['especiado','Especiados'],['set','Sets'],['exclusivo','Marca Exclusiva']],
-  unisex:      [['eau-de-parfum','Eau de Parfum'],['arabe','Árabes'],['nicho','Nicho'],['oud','Oud'],['amaderado','Amaderados'],['dulce','Dulces / Gourmand'],['citrico','Cítricos'],['set','Sets']],
-  arabes:      [['oud','Oud'],['attar','Attar / Aceites'],['bakhoor','Bakhoor'],['spray','Sprays'],['dulce','Dulces / Gourmand'],['set','Sets']],
-  nicho:       [['extracto','Extracto de Perfume'],['eau-de-parfum','Eau de Parfum'],['oud','Oud'],['amaderado','Amaderados'],['floral','Florales'],['exclusivo','Marca Exclusiva']],
-  sets:        [['set-pareja','Sets de Pareja'],['set-viaje','Sets de Viaje'],['cofre','Cofres de Lujo'],['estuche','Estuches de Regalo'],['set-corporal','Sets Corporales']],
-  miniaturas:  [['decant-5','Decants 5 ml'],['decant-10','Decants 10 ml'],['miniatura','Miniaturas'],['probador','Probadores / Testers'],['coleccion','Colecciones de Minis']],
-  corporal:    [['body-mist','Body Mist'],['splash','Splash'],['crema','Cremas Corporales'],['desodorante','Desodorantes'],['jabon','Jabones Perfumados'],['aceite','Aceites Corporales']],
-  hogar:       [['difusor','Difusores de Varitas'],['vela','Velas Aromáticas'],['spray-textil','Sprays Textiles'],['aromatizante','Aromatizantes de Ambiente'],['auto','Aromas para Auto']],
-  ofertas:     [['liquidacion','Liquidación'],['ultimas-piezas','Últimas Piezas'],['combo','Combos'],['descuento','Descuentos']],
+  mujer:        GENERO_SUBCATS,
+  hombre:       GENERO_SUBCATS,
+  unisex:       GENERO_SUBCATS,
+  tester:       [['dama','Dama'],['caballero','Caballero'],['unisex','Unisex']],
+  sets:         [['dama','Dama'],['caballero','Caballero'],['estuche','Estuches de Regalo'],['set-corporal','Sets Corporales']],
+  miniaturas:   [['decant-1','Decants 1 ml'],['decant-3','Decants 3 ml'],['decant-5','Decants 5 ml'],['decant-10','Decants 10 ml'],['miniatura','Miniaturas'],['coleccion','Colecciones de Minis']],
+  corporal:     [['body-mist','Body Mist'],['splash','Splash'],['crema','Cremas Corporales'],['desodorante','Desodorantes'],['jabon','Jabones Perfumados'],['aceite','Aceites Corporales']],
+  hogar:        [['difusor','Difusores de Varitas'],['vela','Velas Aromáticas'],['spray-textil','Sprays Textiles'],['aromatizante','Aromatizantes de Ambiente'],['auto','Aromas para Auto']],
+  accesorios:   [['perfumero','Perfumeros'],['bolsa','Bolsas']],
+  ofertas:      [['liquidacion','Liquidación'],['ultimas-piezas','Últimas Piezas'],['combo','Combos'],['descuento','Descuentos']],
+  lanzamientos: [],
 };
+
+/* Los filtros de cada seccion son sus subcategorias con "Todos" al frente. */
+const SECTION_TABS = Object.fromEntries(
+  Object.entries(SUBCATS).map(([cat, subs]) => [cat, [['all','✦ Todos'], ...subs]])
+);
+
+/* Presentaciones que maneja la tienda. Los decants van de 1 a 10 ml.
+   Esta lista llena las casillas del panel de admin y ordena los chips
+   de presentacion en el catalogo, asi no hay dos listas que cuidar. */
+const SIZES = ['Decant 1 ml','Decant 3 ml','Decant 5 ml','Decant 10 ml',
+               '30 ml','50 ml','60 ml','75 ml','100 ml','125 ml','200 ml','Única'];
+
+/* Categorias que se pintan en el menu lateral, el menu movil, el pie y el
+   selector del panel de admin. Antes estaban escritas a mano en cada lugar,
+   y cualquier cambio habia que repetirlo cuatro veces. */
+function renderSidebarCats(){
+  const nav = document.getElementById('sbBody');
+  if(!nav) return;
+  nav.innerHTML = CAT_ORDER.map(cat => {
+    const subs = SUBCATS[cat] || [];
+    const clase = cat === 'lanzamientos' ? ' sb-cat-nuevo' : '';
+    if(!subs.length){
+      return `<div class="sb-section">
+        <button class="sb-cat${clase}" onclick="goToSection('${cat}','all')">
+          <span>${CAT_LABELS[cat]}</span><span class="sb-arrow">›</span>
+        </button>
+      </div>`;
+    }
+    return `<div class="sb-section">
+      <button class="sb-cat${clase}" onclick="toggleSidebarCat(this,'sub-${cat}')">
+        <span>${CAT_LABELS[cat]}</span><span class="sb-arrow">›</span>
+      </button>
+      <div class="sb-sub" id="sub-${cat}">
+        <a onclick="goToSection('${cat}','all')">✦ Todos</a>
+        ${subs.map(([val,lbl]) => `<a onclick="goToSection('${cat}','${val}')">${lbl}</a>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderMobileNav(){
+  const nav = document.getElementById('mobileNav');
+  if(!nav) return;
+  nav.innerHTML = CAT_ORDER.map(cat =>
+    `<a href="#catalogo" class="${cat === 'lanzamientos' ? 'nav-nuevo' : ''}" onclick="showCatalog('${cat}');closeMobileNav()">${CAT_LABELS[cat]}</a>`
+  ).join('');
+}
+
+function renderFooterCats(){
+  const ul = document.getElementById('footCatList');
+  if(!ul) return;
+  const cats = ['mujer','hombre','unisex','tester','miniaturas','lanzamientos'];
+  ul.innerHTML = cats.map(cat =>
+    `<li><a href="#catalogo" class="${cat === 'lanzamientos' ? 'nav-nuevo' : ''}" onclick="showCatalog('${cat}')">${CAT_LABELS[cat]}</a></li>`
+  ).join('');
+}
+
+/* Selector de seccion y casillas de presentacion del panel de admin. */
+function renderAdminProductFields(){
+  const sel = document.getElementById('prodEditCat');
+  if(sel) sel.innerHTML = CAT_ORDER.map(cat =>
+    `<option value="${cat}">${CAT_LABELS[cat]}</option>`).join('');
+  const box = document.getElementById('sizesCheckboxes');
+  if(box) box.innerHTML = SIZES.map(sz =>
+    `<label style="display:flex;align-items:center;gap:5px;font-size:.75rem;cursor:pointer"><input type="checkbox" value="${sz}" class="size-check"> ${sz}</label>`
+  ).join('');
+}
 
 function renderSectionTabs(section) {
   const tabs = SECTION_TABS[section] || [['all','✦ Todos']];
@@ -3327,9 +3252,18 @@ function renderSectionTabs(section) {
   const chevron = document.getElementById('filterDropdownChevron');
   if (chevron) chevron.style.transform = '';
   // Label de sección
-  const labels = { mujer:'Mujer', hombre:'Hombre', unisex:'Unisex', arabes:'Árabes', nicho:'Nicho', sets:'Sets y Estuches', miniaturas:'Miniaturas', corporal:'Línea Corporal', hogar:'Aromas de Hogar', ofertas:'Ofertas' };
+  const labels = CAT_LABELS;
   const el = document.getElementById('sectionGenderLabel');
-  if (el) el.textContent = labels[section] || '';
+  if (el) {
+    el.textContent = labels[section] || '';
+    el.classList.toggle('es-nuevo', section === 'lanzamientos');
+  }
+  /* Proximos lanzamientos lleva su propio color, tipografia y bajada. */
+  const tag = document.querySelector('.section-tagline');
+  if (tag) {
+    tag.classList.toggle('es-nuevo', section === 'lanzamientos');
+    tag.textContent = section === 'lanzamientos' ? 'Lo que viene en camino' : 'Fragancias y accesorios';
+  }
   // Sin hero banner para categorías próximamente
   if (COMING_SOON.has(section)) {
     const banner = document.getElementById('catBanner');
@@ -4052,8 +3986,8 @@ function switchAdminTab(tab, mantenerFiltro) {
 function renderAdminHeroes(activeCat) {
   const sec = document.getElementById('adminHeroesSection');
   if (!sec) return;
-  const cats = ['mujer','hombre','unisex','arabes'];
-  const labels = { mujer:'Mujer', hombre:'Hombre', unisex:'Unisex', arabes:'Árabes', nicho:'Nicho', sets:'Sets y Estuches', miniaturas:'Miniaturas', corporal:'Línea Corporal', hogar:'Aromas de Hogar', ofertas:'Ofertas' };
+  const cats = ['mujer','hombre','unisex','tester'];
+  const labels = CAT_LABELS;
   const selected = CAT_HEROES[activeCat] || [];
   const prods = getMergedProducts().filter(p => !p.hidden && p.cat === activeCat);
 
@@ -4363,7 +4297,15 @@ function openProductEditModal(id) {
   document.getElementById('prodEditPrice').value = p ? p.price : '';
   document.getElementById('prodEditStock').value = p ? p.stock : '';
   const editCat = p ? (p.cat || 'mujer') : 'mujer';
-  document.getElementById('prodEditCat').value = editCat;
+  const selCat = document.getElementById('prodEditCat');
+  /* Un producto guardado en una categoria retirada (Arabes, Nicho) conserva
+     su opcion en la lista: si no, el selector caeria en Dama y al guardar se
+     lo cambiaria sin que el vendedor se diera cuenta. */
+  if (!CAT_ORDER.includes(editCat) && !selCat.querySelector(`option[value="${editCat}"]`)) {
+    selCat.insertAdjacentHTML('afterbegin',
+      `<option value="${editCat}">${catLabel(editCat)} (categoría retirada)</option>`);
+  }
+  selCat.value = editCat;
   updateSubcatOptions(editCat, p ? (p.subcat || '') : '');
   document.getElementById('prodEditDesc').value  = p ? (p.desc || '') : '';
   document.getElementById('prodImgStatus').textContent = '';
@@ -4431,23 +4373,24 @@ const INFO_CONTENT = {
         Puedes pagar en efectivo al recoger tu pedido, o por transferencia antes — en ese caso pídenos los datos por WhatsApp y mándanos tu comprobante.
       </div>
       <div style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
-        <strong style="color:var(--text-dark)">📅 Apartado a 1 o 2 meses</strong><br>
-        Apartamos tu perfume y lo pagas en el plazo que elijas. Al apartarlo se fija la fecha límite; si no se liquida para entonces, el perfume regresa al catálogo.
+        <strong style="color:var(--text-dark)">📅 Apartado a plazos</strong><br>
+        Apartamos tu perfume y lo pagas poco a poco. Los pedidos de <strong>más de $2,000</strong> se pueden pagar en <strong>1 o 2 meses</strong>; los de <strong>$2,000 o menos</strong>, en <strong>1 mes</strong> como máximo. Al apartarlo se fija la fecha límite; si no se liquida para entonces, el perfume regresa al catálogo.
       </div>
       <div style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
         <strong style="color:var(--text-dark)">🤝 Tanda</strong><br>
-        También puedes entrar a la tanda. Tu perfume se aparta desde que entras y por WhatsApp te decimos en qué número quedaste, de cuánto es el pago y cada cuándo toca.
+        La tanda se arregla directamente contigo: eliges <strong>5 o 10 pagos</strong>, <strong>semanales o quincenales</strong>, según te acomode. Tu perfume se aparta desde que entras y los detalles te los pasamos por WhatsApp.
       </div>
     </div>`,
   devolucion: `
     <h2 class="auth-title" style="margin-bottom:6px">↩️ Devoluciones</h2>
     <p class="auth-sub" style="margin-bottom:22px">Política de devoluciones Dealer de Aromas</p>
     <div style="background:#fde2e2;border-radius:12px;padding:16px 18px;font-size:.84rem;line-height:1.7;color:#8b0000">
-      <strong>No se aceptan devoluciones.</strong><br><br>
-      Te recomendamos revisar bien la descripción, presentación y fotos del producto antes de realizar tu compra. Si tienes dudas, contáctanos antes de pagar.
+      <strong>Solo dentro de los primeros 3 días.</strong><br><br>
+      Tienes <strong>3 días</strong> contados desde que recoges tu pedido para pedir una devolución. Pasados esos 3 días ya no aplica.
     </div>
     <p style="margin-top:16px;font-size:.78rem;color:var(--text-light);line-height:1.6">
-      En caso de recibir un producto con defecto de fábrica, toma una fotografía y envíala a nuestro número de contacto a la brevedad.
+      Para solicitarla, escríbenos por WhatsApp dentro de ese plazo. Si el producto tiene un defecto de fábrica, toma una fotografía y envíala a nuestro número de contacto lo antes posible.
+      Aun así, te recomendamos revisar bien la descripción, presentación y fotos antes de pagar; si tienes dudas, contáctanos primero.
     </p>`,
   contacto: `
     <h2 class="auth-title" style="margin-bottom:6px">📞 Contacto</h2>
@@ -4480,7 +4423,7 @@ const INFO_CONTENT = {
       </details>
       <details style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
         <summary style="font-weight:700;color:var(--text-dark);cursor:pointer">¿Qué hago si el producto llega en mal estado?</summary>
-        <p style="margin-top:8px">Toma fotografías del defecto inmediatamente y envíalas a nuestro número de contacto. Atenderemos tu caso a la brevedad.</p>
+        <p style="margin-top:8px">Toma fotografías del defecto y envíalas a nuestro número de contacto <strong>dentro de los primeros 3 días</strong> después de recoger tu pedido. Pasado ese plazo ya no podemos aplicar la devolución.</p>
       </details>
       <details style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
         <summary style="font-weight:700;color:var(--text-dark);cursor:pointer">¿Cómo se acuerda la entrega?</summary>
@@ -4532,7 +4475,7 @@ function heroTransitionTo(cat, evt, panel) {
   const overlay   = document.getElementById('heroOverlay');
   const overlayImg= document.getElementById('heroOverlayImg');
   const label     = document.getElementById('heroOverlayLabel');
-  const labels = { mujer:'Mujer', hombre:'Hombre', unisex:'Unisex', arabes:'Árabes', nicho:'Nicho', sets:'Sets y Estuches', miniaturas:'Miniaturas', corporal:'Línea Corporal', hogar:'Aromas de Hogar', ofertas:'Ofertas' };
+  const labels = CAT_LABELS;
 
   // Origin point for the circle reveal
   const x = evt ? `${evt.clientX}px` : '50%';
@@ -4838,6 +4781,10 @@ window.addEventListener('popstate', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+  renderSidebarCats();
+  renderMobileNav();
+  renderFooterCats();
+  renderAdminProductFields();
   loadUsers();
   loadSession();
   loadCart();
@@ -5035,11 +4982,16 @@ function togglePass(id, btn) {
     ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
     : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
 }
+/* Nombre legible de una categoria o subcategoria. Las categorias salen de
+   CAT_LABELS para que no haya dos listas que se puedan desfasar; aqui abajo
+   quedan las subcategorias, incluidas las que ya no se ofrecen pero siguen
+   guardadas en productos y pedidos viejos. */
 function catLabel(c){
+  if (typeof CAT_LABELS !== 'undefined' && CAT_LABELS[c]) return CAT_LABELS[c];
   return {
-    mujer:'Mujer',hombre:'Hombre',unisex:'Unisex',arabes:'Árabes',
-    nicho:'Nicho',sets:'Sets y Estuches',miniaturas:'Miniaturas',corporal:'Línea Corporal',
-    hogar:'Aromas de Hogar',ofertas:'Ofertas','eau-de-parfum':'Eau de Parfum','eau-de-toilette':'Eau de Toilette',
+    disenador:'Diseñador',decant:'Decant',dama:'Dama',caballero:'Caballero',
+    perfumero:'Perfumero',bolsa:'Bolsa','decant-1':'Decant 1 ml','decant-3':'Decant 3 ml',
+    'eau-de-parfum':'Eau de Parfum','eau-de-toilette':'Eau de Toilette',
     extracto:'Extracto de Perfume',arabe:'Árabe',oud:'Oud',attar:'Attar / Aceite',
     bakhoor:'Bakhoor',spray:'Spray',floral:'Floral',dulce:'Dulce / Gourmand',
     amaderado:'Amaderado',citrico:'Cítrico',aromatico:'Aromático',especiado:'Especiado',
@@ -5101,7 +5053,7 @@ function showCatalog(section, pushHistory = true) {
    categoria principal, y tambien desde el boton de arriba del catalogo.
    No sale si ya hay otro modal encima: el aviso llega con retraso y no
    debe taparle al cliente algo que acaba de abrir el mismo. */
-const CATS_CON_AVISO = ['mujer', 'hombre', 'unisex', 'arabes'];
+const CATS_CON_AVISO = ['mujer', 'hombre', 'unisex', 'tester'];
 
 function abrirTiposPerfume(manual){
   if(!manual && document.querySelector('.modal.open')) return;
@@ -5261,7 +5213,7 @@ function renderSizeFilter(products) {
   // Recopilar todas las presentaciones disponibles en estos productos
   const sizeSet = new Set();
   products.forEach(p => (p.sizes || []).forEach(s => sizeSet.add(s)));
-  const ORDER = ['Decant 5 ml','Decant 10 ml','30 ml','50 ml','60 ml','75 ml','100 ml','125 ml','200 ml','Única'];
+  const ORDER = SIZES;
   const sizes = [...sizeSet].sort((a,b) => {
     const ia = ORDER.indexOf(a), ib = ORDER.indexOf(b);
     return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
@@ -5281,9 +5233,12 @@ function filterBySize(size, btn) {
 }
 
 function filterBy(subcat, btn) {
-  _currentFilter = subcat;
   _currentSizeFilter = null;
   clearSearch();
+  /* clearSearch regresa el filtro a "Todos", asi que la subcategoria se
+     fija despues: si no, elegir una presentacion volvia a mostrar toda
+     la seccion. */
+  _currentFilter = subcat;
   // Tabs ocultos
   if (btn) { document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
   // Dropdown: actualizar label y estado activo
@@ -5878,10 +5833,7 @@ function planApartado(){
 }
 
 function setPlanMeses(n){
-  S.planMeses = n;
-  const b1 = document.getElementById('planB1'), b2 = document.getElementById('planB2');
-  if(b1) b1.classList.toggle('selected', n===1);
-  if(b2) b2.classList.toggle('selected', n===2);
+  S.planMeses = plazosDisponibles().includes(n) ? n : 1;
   pintarPlan();
   buildSummaries();
 }
@@ -5889,6 +5841,18 @@ function setPlanMeses(n){
 function pintarPlan(){
   const caja = document.getElementById('planFechas');
   if(!caja) return;
+  /* El plazo se ajusta al monto del carrito: si el pedido bajo de $2,000
+     mientras el cliente ya habia elegido 2 meses, regresa a un mes solo. */
+  const plazos = plazosDisponibles();
+  if(!plazos.includes(S.planMeses || 1)) S.planMeses = 1;
+  const b1 = document.getElementById('planB1'), b2 = document.getElementById('planB2');
+  if(b2) b2.style.display = plazos.includes(2) ? '' : 'none';
+  if(b1) b1.classList.toggle('selected', S.planMeses === 1);
+  if(b2) b2.classList.toggle('selected', S.planMeses === 2);
+  const aviso = document.getElementById('planAviso');
+  if(aviso) aviso.innerHTML = plazos.includes(2)
+    ? `Tu pedido pasa de ${fmtMXN(APARTADO_MONTO_2_MESES)}, así que lo puedes pagar en <strong>1 o 2 meses</strong>.`
+    : `Los pedidos de ${fmtMXN(APARTADO_MONTO_2_MESES)} o menos se apartan a <strong>1 mes</strong> como máximo.`;
   const pl = planApartado();
   const total = cartSubtotal() + S.shipCost;
   const porMes = Math.ceil(total / pl.meses);
@@ -5966,7 +5930,7 @@ function summaryHTML(){
     const pl = planApartado();
     plazo = `<div class="summary-line"><span>📅 Apartado · ${pl.meses === 1 ? '1 mes' : '2 meses'}</span><span>hasta el ${pl.limiteTxt}</span></div>`;
   } else if(S.payMethod === 'tanda'){
-    plazo = `<div class="summary-line"><span>🤝 Tanda</span><span>te confirmamos por WhatsApp</span></div>`;
+    plazo = `<div class="summary-line"><span>🤝 Tanda · 5 o 10 pagos</span><span>lo acordamos por WhatsApp</span></div>`;
   }
   return `<div class="summary-hdr">Resumen del Pedido</div>${lines}<div class="summary-line"><span>Subtotal</span><span>${fmtMXN(sub)}</span></div><div class="summary-line"><span>${deliveryLbl}</span><span>${S.shipCost===0?'Gratis':fmtMXN(S.shipCost)}</span></div>${plazo}<div class="summary-total"><span>Total</span><span>${fmtMXN(total)} MXN</span></div>`;
 }
@@ -6111,12 +6075,12 @@ async function confirmOrder(){
       + `<li>Al quedar liquidado, pasas por él a <strong>${STORE_LOCATION.name}</strong></li></ol>`;
   } else if (S.payMethod === 'tanda') {
     msg = `¡Hola! 🖤 Quiero *entrar a la tanda* con mi pedido *${num}* por *${fmtMXN(total)} MXN*. `
-        + `¿En qué número quedo y de cuánto es el pago? ¡Gracias!`;
-    pasosHtml = `<h4>🤝 Tu lugar en la tanda:</h4><ol>`
-      + `<li>Toca el botón de abajo para <strong>apartar tu lugar por WhatsApp</strong></li>`
-      + `<li>Te decimos <strong>en qué número quedaste</strong>, de cuánto es el pago y cada cuándo toca</li>`
+        + `¿Lo dejamos en 5 o en 10 pagos, y los hago semanales o quincenales? ¡Gracias!`;
+    pasosHtml = `<h4>🤝 Tu tanda:</h4><ol>`
+      + `<li>Toca el botón de abajo para <strong>arreglarla por WhatsApp</strong></li>`
+      + `<li>Eliges <strong>5 o 10 pagos</strong>, <strong>semanales o quincenales</strong>, como te acomode</li>`
       + `<li>Tu perfume <strong>se aparta desde que entras</strong></li>`
-      + `<li>Cuando te toque tu número, pasas por él a <strong>${STORE_LOCATION.name}</strong></li></ol>`;
+      + `<li>Al terminar tus pagos, pasas por él a <strong>${STORE_LOCATION.name}</strong></li></ol>`;
   } else {
     msg = `¡Hola! 🖤 Acabo de hacer mi pedido *${num}* por *${fmtMXN(total)} MXN*. `
         + `Paso por él al local y pago en efectivo al recoger. ¡Gracias!`;
