@@ -5079,7 +5079,13 @@ function showCatalog(section, pushHistory = true) {
   renderGrid('all');
   if (!hasData) {
     // Primera visita sin caché: descarga metadatos (36MB) una sola vez, guarda slim
-    fbRefreshProductMeta().then(() => { _fbFetching = false; renderGrid('all'); });
+    /* Si el cliente ya empezo a buscar mientras cargaba el catalogo,
+       repintamos los resultados y no la seccion: antes la carga le borraba
+       lo que estaba buscando. */
+    fbRefreshProductMeta().then(() => {
+      _fbFetching = false;
+      if (_searchQuery) renderSearchResults(_searchQuery); else renderGrid('all');
+    });
   }
   setTimeout(() => document.getElementById('catalogo').scrollIntoView({behavior:'smooth'}), 50);
 }
@@ -5098,7 +5104,10 @@ function reintentarCarga() {
   _fbFetching = true;
   _fbLoadError = false;
   renderGrid(_currentFilter || 'all');
-  fbRefreshProductMeta().then(() => { _fbFetching = false; renderGrid(_currentFilter || 'all'); });
+  fbRefreshProductMeta().then(() => {
+    _fbFetching = false;
+    if (_searchQuery) renderSearchResults(_searchQuery); else renderGrid(_currentFilter || 'all');
+  });
 }
 /* El logo regresa a la portada sin dejar #inicio en la barra: lo que la
    gente copia y comparte tiene que ser la direccion limpia, y Google
@@ -5167,7 +5176,10 @@ function buildFuse() {
       { name: 'subcat', weight: 0.15 },
       { name: 'cat',    weight: 0.1  },
     ],
-    threshold: 0.45,
+    /* La busqueda abarca toda la tienda, asi que se aprieta un poco: con
+       0.45 cualquier palabra traia practicamente todo el catalogo. Con 0.30
+       siguen pasando los errores de dedo (sauvaje → Sauvage). */
+    threshold: 0.30,
     includeScore: true,
     ignoreLocation: true,
     minMatchCharLength: 2,
@@ -5217,21 +5229,19 @@ function renderSearchResults(query) {
   const info = document.getElementById('searchInfo');
 
   const normalized = normalizeQuery(query);
-  let results = _fuseInstance.search(normalized);
-
-  // Filtrar por sección actual si hay una
-  if (_currentSection) {
-    results = results.filter(r => r.item.cat === _currentSection);
-  }
+  /* La busqueda abarca toda la tienda, no solo la categoria abierta: quien
+     busca "oud" quiere verlo venga de donde venga. Por eso cada resultado
+     lleva su categoria en la etiqueta. */
+  const results = _fuseInstance.search(normalized);
 
   if (!results.length) {
-    grid.innerHTML = `<p class="no-products">No encontramos "${query}" 😕<br><small>Intenta con otro término o revisa el catálogo completo.</small></p>`;
+    grid.innerHTML = `<p class="no-products">No encontramos "${query}" en toda la tienda 😕<br><small>Intenta con otro término: una marca, una nota o el tipo de perfume.</small></p>`;
     info.textContent = '';
     return;
   }
 
-  info.textContent = `${results.length} resultado${results.length !== 1 ? 's' : ''} para "${query}"`;
-  grid.innerHTML = results.map(r => cardHTML(r.item)).join('');
+  info.textContent = `${results.length} resultado${results.length !== 1 ? 's' : ''} para "${query}" en todo el catálogo`;
+  grid.innerHTML = results.map(r => cardHTML(r.item, true)).join('');
 }
 
 let _currentSizeFilter = null;
@@ -5314,7 +5324,7 @@ function renderGrid(subcat) {
   }
   grid.innerHTML = list.map(cardHTML).join('');
 }
-function cardHTML(p) {
+function cardHTML(p, conCategoria) {
   const eff = getEffectiveStock(p);
   const stkTxt = eff===0 ? 'Agotado' : eff<=5 ? `Solo ${eff} disponibles` : `${eff} disponibles`;
   const quickLbl = eff===0 ? 'Agotado' : 'Añadir al Carrito';
@@ -5328,7 +5338,7 @@ function cardHTML(p) {
     <div class="product-card" id="card${p.id}">
       <div class="product-img-wrap" onclick="openLightbox(${idArg})">
         <img src="${prodThumb(p) || IMG_FALLBACK}" alt="${p.name}" onerror="imgErr(this)" loading="lazy" decoding="async">
-        <span class="cat-badge">${catLabel(p.subcat || p.cat)}</span>
+        <span class="cat-badge">${conCategoria && p.subcat ? `${catLabel(p.cat)} · ${catLabel(p.subcat)}` : catLabel(p.subcat || p.cat)}</span>
         <button class="card-quick-add" id="badd${p.id}" onclick="event.stopPropagation();addToCart(${idArg})" ${eff===0?'disabled':''}>${quickLbl}</button>
       </div>
       <div class="product-info">
