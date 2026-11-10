@@ -1000,6 +1000,11 @@
     .bank-row { display:flex; justify-content:space-between; margin-bottom:9px; align-items:center; }
     .bank-lbl { font-size:.62rem; color:var(--text-light); font-weight:600; text-transform:uppercase; letter-spacing:.1em; }
     .bank-val { font-size:.84rem; font-weight:700; color:var(--text-dark); text-align:right; }
+    .btn-copiar-clabe { width:100%; margin-top:10px; padding:9px; background:transparent;
+      border:1px solid var(--border-dark); border-radius:6px; color:var(--rose);
+      font-family:var(--ff-body); font-size:.66rem; font-weight:700; letter-spacing:.1em;
+      text-transform:uppercase; cursor:pointer; transition:background .2s, color .2s; }
+    .btn-copiar-clabe:hover { background:var(--rose); color:#fff; }
     .btn-copy { display:inline-flex; align-items:center; gap:5px; padding:6px 13px; border-radius:50px;
       border:1.5px solid var(--rose); background:#fff; color:var(--rose); font-family:var(--ff-body);
       font-size:.64rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; cursor:pointer;
@@ -2409,10 +2414,11 @@ function cerrarApertura(){}
       <p class="pay-note" id="payNoteCash" style="margin-top:12px">💵 Pagas en efectivo cuando pases por tu pedido al local. Te avisamos por WhatsApp en cuanto esté listo.</p>
       <div class="bank-card" id="bankCard" style="display:none;margin-top:12px">
         <h4>🏦 Datos de Transferencia</h4>
-        <div class="bank-row"><span class="bank-lbl">Banco</span><span class="bank-val" data-banco>XXXXXXXX</span></div>
-        <div class="bank-row"><span class="bank-lbl">Titular</span><span class="bank-val" data-titular>XXXXXXXX</span></div>
-        <div class="bank-row"><span class="bank-lbl">CLABE</span><span class="bank-val" data-clabe>XXXX XXXX XXXX XXXX XX</span></div>
-        <p class="pay-note" style="margin-top:10px;margin-bottom:0">⚠️ Pídenos los datos por WhatsApp antes de transferir. Transfiere el monto exacto e incluye tu número de pedido en el concepto.</p>
+        <div class="bank-row"><span class="bank-lbl">Banco</span><span class="bank-val" data-banco></span></div>
+        <div class="bank-row"><span class="bank-lbl">Titular</span><span class="bank-val" data-titular></span></div>
+        <div class="bank-row"><span class="bank-lbl">CLABE</span><span class="bank-val" data-clabe></span></div>
+        <button type="button" class="btn-copiar-clabe" onclick="copiarClabe(this)">📋 Copiar CLABE</button>
+        <p class="pay-note" style="margin-top:10px;margin-bottom:0">⚠️ Transfiere el monto exacto e incluye tu número de pedido en el concepto. Al terminar, mándanos tu comprobante por WhatsApp.</p>
       </div>
       <div class="summary-box" id="sum2"></div>
       <div class="checkout-nav">
@@ -2935,6 +2941,36 @@ const STORE_LOCATION = {
   maps:    'https://www.google.com/maps/search/?api=1&query=' +
            encodeURIComponent('Impresión en Tabloide, Calle Pte. 3, U.H. Pemex, 42808 Tula de Allende, Hgo.'),
 };
+/* Cuenta a la que se transfiere. La CLABE se guarda en limpio y se
+   muestra separada de cuatro en cuatro, que es como viene en el banco y
+   como es mas dificil equivocarse al copiarla. */
+const BANK_DATA = {
+  banco:   'Banamex',
+  titular: 'Reynel Martínez González',
+  clabe:   '002311701981943188',
+};
+function clabeBonita(c){
+  return c.replace(/(.{4})/g, '$1 ').trim();
+}
+/* Rellena la tarjeta de transferencia del checkout. */
+function pintarDatosBancarios(){
+  const set = (sel, txt) => { const el = document.querySelector(sel); if(el) el.textContent = txt; };
+  set('[data-banco]',   BANK_DATA.banco);
+  set('[data-titular]', BANK_DATA.titular);
+  set('[data-clabe]',   clabeBonita(BANK_DATA.clabe));
+}
+async function copiarClabe(btn){
+  try {
+    await navigator.clipboard.writeText(BANK_DATA.clabe);
+    toast('✓ CLABE copiada','ok');
+  } catch(e){
+    /* Sin permiso de portapapeles al menos la dejamos seleccionada. */
+    const el = document.querySelector('[data-clabe]');
+    if(el){ const r = document.createRange(); r.selectNodeContents(el); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); }
+    toast('Copia la CLABE manualmente','err');
+  }
+}
+
 const DELIVERY_LABELS = {
   local:    '🏪 Entrega en local — Impresión en Tabloide',
   personal: '🤝 Entrega personalizada con Reynel Martínez González',  // pedidos viejos
@@ -4405,7 +4441,7 @@ const INFO_CONTENT = {
       </div>
       <div style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
         <strong style="color:var(--text-dark)">💵 Efectivo o transferencia</strong><br>
-        Puedes pagar en efectivo al recoger tu pedido, o por transferencia antes — en ese caso pídenos los datos por WhatsApp y mándanos tu comprobante.
+        Puedes pagar en efectivo al recoger tu pedido, o por transferencia antes. Los datos de la cuenta aparecen al elegir transferencia en el pago: <strong>${BANK_DATA.banco}</strong>, a nombre de ${BANK_DATA.titular}, CLABE <strong>${clabeBonita(BANK_DATA.clabe)}</strong>. Manda tu comprobante por WhatsApp.
       </div>
       <div style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
         <strong style="color:var(--text-dark)">📅 Apartado a plazos</strong><br>
@@ -4817,6 +4853,7 @@ window.addEventListener('popstate', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   renderSidebarCats();
+  pintarDatosBancarios();
   renderMobileNav();
   renderFooterCats();
   renderAdminProductFields();
@@ -6096,11 +6133,11 @@ async function confirmOrder(){
   let msg, pasosHtml;
 
   if (S.payMethod === 'bank') {
-    msg = `¡Hola! 🖤 Acabo de hacer mi pedido *${num}* por *${fmtMXN(total)} MXN* y quiero pagar por *transferencia*. `
-        + `¿Me pasan los datos de la cuenta? En cuanto transfiera les mando el comprobante. ¡Gracias!`;
+    msg = `¡Hola! 🖤 Acabo de hacer mi pedido *${num}* por *${fmtMXN(total)} MXN* y voy a pagar por *transferencia*. `
+        + `En cuanto transfiera les mando el comprobante. ¡Gracias!`;
     pasosHtml = `<h4>📋 Lo que sigue:</h4><ol>`
-      + `<li>Toca el botón de abajo y <strong>pídenos los datos por WhatsApp</strong></li>`
-      + `<li>Transfiere el monto exacto e incluye tu número de pedido en el concepto</li>`
+      + `<li>Transfiere <strong>${fmtMXN(total)}</strong> a la CLABE <strong>${clabeBonita(BANK_DATA.clabe)}</strong> — ${BANK_DATA.banco}, a nombre de ${BANK_DATA.titular}</li>`
+      + `<li>Pon tu número de pedido <strong>${num}</strong> en el concepto</li>`
       + `<li><strong>Manda tu comprobante</strong> por WhatsApp</li>`
       + `<li>Te avisamos cuando esté listo</li>${recoge}</ol>`;
   } else if (S.payMethod === 'apartado') {
