@@ -1616,6 +1616,15 @@
     }
     .foot-btn:hover { background:var(--rose); border-color:var(--rose); color:#fff; }
 
+    /* ── Botones flotantes que se pueden mover ──────────
+       touch-action:none es lo que deja arrastrarlos con el dedo sin que
+       la pagina se desplace debajo. Al moverlos se esconde el globito de
+       "Escríbenos", que esta pegado al lado derecho y quedaria fuera de
+       la pantalla si el boton se va a la izquierda. */
+    .wa-float, .search-float { touch-action:none; -webkit-user-select:none; user-select:none; -webkit-tap-highlight-color:transparent; }
+    .wa-float.arrastrando, .search-float.arrastrando { cursor:grabbing; box-shadow:0 16px 34px rgba(0,0,0,.45); }
+    .wa-float.movido::after { display:none; }
+
     /* ── Buscador flotante ──────────────────────────────
        En el celular el buscador del header no cabe y esta escondido, asi
        que este boton es la forma de buscar desde el catalogo. Va arriba
@@ -1631,7 +1640,7 @@
       opacity:0; pointer-events:none; transform:scale(.8);
       transition:opacity .22s, transform .22s, background .2s, color .2s;
     }
-    .search-float svg { width:19px; height:19px; }
+    .search-float svg { width:19px; height:19px; pointer-events:none; }
     .search-float:hover { background:var(--rose); color:#fff; border-color:var(--rose); }
     body:has(.header.catalog-open) .search-float { opacity:1; pointer-events:auto; transform:scale(1); }
     body:has(.modal.open) .search-float,
@@ -1653,7 +1662,7 @@
       transition:transform .2s, box-shadow .2s;
     }
     .wa-float:hover { transform:scale(1.07); box-shadow:0 12px 30px rgba(0,0,0,.36), 0 0 0 8px rgba(31,168,85,.2); }
-    .wa-float svg { width:28px; height:28px; }
+    .wa-float svg { width:28px; height:28px; pointer-events:none; }
     .wa-float::after {
       content:'Escríbenos'; position:absolute; right:64px; white-space:nowrap;
       background:#16130E; color:#fff; font-family:var(--ff-body); font-size:.62rem;
@@ -3239,6 +3248,92 @@ const SECTION_TABS = Object.fromEntries(
    de presentacion en el catalogo, asi no hay dos listas que cuidar. */
 const SIZES = ['Decant 1 ml','Decant 3 ml','Decant 5 ml','Decant 10 ml',
                '30 ml','50 ml','60 ml','75 ml','100 ml','125 ml','200 ml','Única'];
+
+/* ── Botones flotantes que el cliente puede mover ──────
+   El de WhatsApp y el de buscar se arrastran con el dedo. Cada uno
+   recuerda en ese telefono donde lo dejaron y, al soltarlo, se pega al
+   lado mas cercano: asi nunca queda en medio tapando los perfumes, pero
+   el cliente lo puede subir, bajar o cambiarlo de lado. */
+const ARRASTRE_MIN = 6;        // px que hay que mover para que cuente como arrastre
+const ARRASTRE_MARGEN = 14;    // separacion minima de las orillas
+
+function hacerArrastrable(el, clave){
+  if(!el) return;
+  const guardar = pos => { try{ localStorage.setItem(clave, JSON.stringify(pos)); }catch(e){} };
+  const colocar = (x, y) => {
+    const r = el.getBoundingClientRect();
+    const maxX = Math.max(ARRASTRE_MARGEN, innerWidth  - r.width  - ARRASTRE_MARGEN);
+    const maxY = Math.max(ARRASTRE_MARGEN, innerHeight - r.height - ARRASTRE_MARGEN);
+    const px = Math.min(Math.max(ARRASTRE_MARGEN, x), maxX);
+    const py = Math.min(Math.max(ARRASTRE_MARGEN, y), maxY);
+    el.style.left = px + 'px';
+    el.style.top  = py + 'px';
+    el.style.right = 'auto';
+    el.style.bottom = 'auto';
+    return { x: px, y: py };
+  };
+
+  let puesto = null;
+  try { puesto = JSON.parse(localStorage.getItem(clave) || 'null'); } catch(e){}
+  /* Se coloca de una vez, sin requestAnimationFrame: en una pestana que
+     carga en segundo plano ese callback no corre hasta que la miran, y el
+     boton aparecia un momento en su sitio viejo. */
+  if(puesto){
+    el.classList.add('movido');
+    colocar(puesto.x, puesto.y);
+  }
+
+  let activo = false, movido = false, dx = 0, dy = 0, x0 = 0, y0 = 0;
+
+  el.addEventListener('pointerdown', e => {
+    if(e.button) return;                       // solo el boton principal del raton
+    const r = el.getBoundingClientRect();
+    dx = e.clientX - r.left; dy = e.clientY - r.top;
+    x0 = e.clientX; y0 = e.clientY;
+    activo = true; movido = false;
+    try { el.setPointerCapture(e.pointerId); } catch(err){}
+  });
+
+  el.addEventListener('pointermove', e => {
+    if(!activo) return;
+    if(!movido){
+      if(Math.hypot(e.clientX - x0, e.clientY - y0) < ARRASTRE_MIN) return;
+      movido = true;
+      el.classList.add('arrastrando', 'movido');
+    }
+    e.preventDefault();
+    colocar(e.clientX - dx, e.clientY - dy);
+  });
+
+  const soltar = () => {
+    if(!activo) return;
+    activo = false;
+    el.classList.remove('arrastrando');
+    if(!movido) return;
+    const r = el.getBoundingClientRect();
+    const aLaDerecha = r.left + r.width / 2 > innerWidth / 2;
+    guardar(colocar(aLaDerecha ? innerWidth - r.width - ARRASTRE_MARGEN : ARRASTRE_MARGEN, r.top));
+  };
+  el.addEventListener('pointerup', soltar);
+  el.addEventListener('pointercancel', soltar);
+
+  /* Arrastrarlo no debe abrir WhatsApp ni el buscador. */
+  el.addEventListener('click', e => {
+    if(movido){ e.preventDefault(); e.stopPropagation(); movido = false; }
+  }, true);
+
+  /* Al girar el telefono el boton podria quedar fuera de la pantalla. */
+  addEventListener('resize', () => {
+    if(!el.classList.contains('movido')) return;
+    const r = el.getBoundingClientRect();
+    guardar(colocar(r.left, r.top));
+  });
+}
+
+function activarBotonesFlotantes(){
+  hacerArrastrable(document.getElementById('waFloat'),     'dda_pos_wa');
+  hacerArrastrable(document.getElementById('searchFloat'), 'dda_pos_buscar');
+}
 
 /* Categorias que se pintan en el menu lateral, el menu movil, el pie y el
    selector del panel de admin. Antes estaban escritas a mano en cada lugar,
@@ -4854,6 +4949,7 @@ window.addEventListener('popstate', () => {
 document.addEventListener('DOMContentLoaded', () => {
   renderSidebarCats();
   pintarDatosBancarios();
+  activarBotonesFlotantes();
   renderMobileNav();
   renderFooterCats();
   renderAdminProductFields();
