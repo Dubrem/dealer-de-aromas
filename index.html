@@ -5275,9 +5275,9 @@ function showCatalog(section, pushHistory = true) {
 /* ── Explicacion de cada categoria y subcategoria ──────
    Cuando el cliente entra a Árabes, Diseñador o Nicho (dentro de Dama,
    Caballero, Unisex o Decant) y cuando abre la categoria Decant, le sale
-   una ventana con la explicacion tecnica. Se muestra una vez por visita
-   para no estorbarle, y queda un boton debajo de los filtros por si la
-   quiere volver a leer. */
+   una ventana con la explicacion tecnica. Sale cada vez que entra, y
+   ademas queda un boton debajo de los filtros por si la quiere volver a
+   leer sin salirse de ahi. */
 const NOTAS_CATALOGO = {
   arabe: {
     titulo: 'Perfumes Árabes',
@@ -5386,18 +5386,9 @@ function claveNota(cat, subcat){
   return null;
 }
 
-function abrirNota(clave, forzar){
+function abrirNota(clave){
   const n = NOTAS_CATALOGO[clave];
   if (!n) return;
-  /* Sin forzar, solo la primera vez en esta visita: si saliera cada vez
-     que toca la pestaña se volveria un estorbo. El boton de abajo la
-     vuelve a abrir cuando el cliente quiera. */
-  if (!forzar) {
-    try {
-      if (sessionStorage.getItem('dda_nota_' + clave)) return;
-      sessionStorage.setItem('dda_nota_' + clave, '1');
-    } catch(e) {}
-  }
   document.getElementById('notaTitulo').textContent = n.titulo;
   document.getElementById('notaSub').textContent    = n.sub;
   document.getElementById('notaCuerpo').innerHTML   = n.cuerpo;
@@ -5416,7 +5407,7 @@ function pintarAvisoNota(clave){
   const n = NOTAS_CATALOGO[clave];
   if (!n) { el.style.display = 'none'; el.innerHTML = ''; return; }
   el.style.display = '';
-  el.innerHTML = `<button class="btn-tipos" style="margin:0" onclick="abrirNota('${clave}',true)">ℹ️ ${n.boton}</button>`;
+  el.innerHTML = `<button class="btn-tipos" style="margin:0" onclick="abrirNota('${clave}')">ℹ️ ${n.boton}</button>`;
 }
 
 /* Muestra la explicacion de lo que el cliente acaba de abrir. */
