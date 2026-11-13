@@ -2133,8 +2133,12 @@ function cerrarApertura(){}
     </div>
     <!-- Tabs ocultos para compatibilidad con goToSection -->
     <div class="filter-tabs" id="filterTabs" style="display:none"></div>
+    <!-- Filtro de genero (solo decant) -->
+    <div class="size-filter-wrap" id="generoFilterWrap" style="display:none"></div>
     <!-- Filtro de presentaciones -->
     <div class="size-filter-wrap" id="sizeFilterWrap" style="display:none"></div>
+    <!-- Boton para volver a ver la explicacion de la categoria abierta -->
+    <div id="notaAviso" style="display:none;margin-top:14px"></div>
   </div>
 </section>
 
@@ -2561,6 +2565,20 @@ function cerrarApertura(){}
 
 </div>
 
+<!-- ========== AVISO DE CATEGORIA / SUBCATEGORIA ========== -->
+<div class="modal" id="notaModal" style="z-index:650">
+  <div class="modal-overlay" onclick="cerrarNota()"></div>
+  <div class="modal-box" style="max-width:460px">
+    <button class="modal-x" onclick="cerrarNota()">✕</button>
+    <h2 class="auth-title" style="margin-bottom:6px" id="notaTitulo"></h2>
+    <p class="auth-sub" style="margin-bottom:0" id="notaSub"></p>
+    <div class="tipos-lista" id="notaCuerpo"></div>
+    <p style="font-size:.72rem;color:var(--text-light);text-align:center;margin-top:16px;line-height:1.6">
+      ¿Sigues con dudas? Escríbenos por WhatsApp y te ayudamos a elegir.
+    </p>
+  </div>
+</div>
+
 <!-- ========== AVISO: TIPOS DE PERFUME ========== -->
 <div class="modal" id="tiposModal" style="z-index:650">
   <div class="modal-overlay" onclick="cerrarTiposPerfume()"></div>
@@ -2571,7 +2589,7 @@ function cerrarApertura(){}
     <div class="tipos-lista">
       <div class="tipo-item">
         <h4>Decant</h4>
-        <p>Una porción del perfume original pasada a un frasco chico, normalmente de 5 a 10 ml. Es el mismo perfume, solo que menos cantidad y mucho más barato. Ideal para probarlo antes de comprar el frasco completo.</p>
+        <p>Una porción del perfume original pasada a un frasco chico. Lo manejamos en 1, 3, 5, 10 y 30 ml. Es el mismo perfume, solo que menos cantidad y mucho más barato. Ideal para probarlo antes de comprar el frasco completo.</p>
       </div>
       <div class="tipo-item">
         <h4>Tester</h4>
@@ -2671,6 +2689,15 @@ function cerrarApertura(){}
     <div class="form-group">
       <label class="form-label">Sub-categoría</label>
       <select class="form-input" id="prodEditSubcat"></select>
+    </div>
+    <!-- Género: solo para los decants -->
+    <div class="form-group" id="generoGroup" style="display:none">
+      <label class="form-label">Para <span style="font-size:.65rem;color:var(--text-light);font-weight:400">(con esto el cliente filtra el decant)</span></label>
+      <select class="form-input" id="prodEditGenero">
+        <option value="">— Sin especificar —</option>
+        <option value="dama">Dama</option>
+        <option value="caballero">Caballero</option>
+      </select>
     </div>
 
     <!-- Presentaciones -->
@@ -3212,25 +3239,29 @@ const COMING_SOON = new Set([]);
    lo que cambia es la etiqueta. Arabes y Nicho dejaron de ser categorias
    y ahora son subcategorias, pero siguen en CAT_LABELS para poder
    nombrar lo que se guardo antes. */
-const CAT_ORDER = ['mujer','hombre','unisex','tester','sets','miniaturas','corporal','hogar','accesorios','ofertas','lanzamientos'];
+const CAT_ORDER = ['mujer','hombre','unisex','tester','decant','sets','miniaturas','corporal','hogar','accesorios','ofertas','lanzamientos'];
 const CAT_LABELS = {
   mujer:'Dama', hombre:'Caballero', unisex:'Unisex', tester:'Tester',
+  decant:'Decant',
   sets:'Sets y Estuches', miniaturas:'Miniaturas', corporal:'Línea Corporal',
   hogar:'Aromas de Hogar', accesorios:'Accesorios', ofertas:'Ofertas',
   lanzamientos:'Próximos Lanzamientos',
   arabes:'Árabes', nicho:'Nicho',          // categorias retiradas del menu
 };
 
-/* Dama, Caballero y Unisex comparten las mismas subcategorias. */
-const GENERO_SUBCATS = [['arabe','Árabes'],['disenador','Diseñador'],['nicho','Nicho'],['decant','Decant']];
+/* Dama, Caballero, Unisex y Decant comparten las mismas subcategorias.
+   Decant dejo de ser subcategoria de genero y ahora es su propia
+   categoria, con su filtro aparte de Dama / Caballero. */
+const GENERO_SUBCATS = [['arabe','Árabes'],['disenador','Diseñador'],['nicho','Nicho']];
 
 const SUBCATS = {
   mujer:        GENERO_SUBCATS,
   hombre:       GENERO_SUBCATS,
   unisex:       GENERO_SUBCATS,
   tester:       [['dama','Dama'],['caballero','Caballero'],['unisex','Unisex']],
+  decant:       GENERO_SUBCATS,
   sets:         [['dama','Dama'],['caballero','Caballero'],['estuche','Estuches de Regalo'],['set-corporal','Sets Corporales']],
-  miniaturas:   [['decant-1','Decants 1 ml'],['decant-3','Decants 3 ml'],['decant-5','Decants 5 ml'],['decant-10','Decants 10 ml'],['miniatura','Miniaturas'],['coleccion','Colecciones de Minis']],
+  miniaturas:   [['miniatura','Miniaturas'],['coleccion','Sets de Miniaturas']],
   corporal:     [['body-mist','Body Mist'],['splash','Splash'],['crema','Cremas Corporales'],['desodorante','Desodorantes'],['jabon','Jabones Perfumados'],['aceite','Aceites Corporales']],
   hogar:        [['difusor','Difusores de Varitas'],['vela','Velas Aromáticas'],['spray-textil','Sprays Textiles'],['aromatizante','Aromatizantes de Ambiente'],['auto','Aromas para Auto']],
   accesorios:   [['perfumero','Perfumeros'],['bolsa','Bolsas']],
@@ -3239,14 +3270,20 @@ const SUBCATS = {
 };
 
 /* Los filtros de cada seccion son sus subcategorias con "Todos" al frente. */
+/* Un decant se vende por genero, pero su subcategoria ya se usa para
+   arabe / disenador / nicho. Por eso el decant lleva un campo aparte y el
+   cliente lo filtra con sus propios botones. */
+const DECANT_GENEROS = [['dama','Dama'],['caballero','Caballero']];
+const CAT_CON_GENERO = 'decant';
+
 const SECTION_TABS = Object.fromEntries(
   Object.entries(SUBCATS).map(([cat, subs]) => [cat, [['all','✦ Todos'], ...subs]])
 );
 
-/* Presentaciones que maneja la tienda. Los decants van de 1 a 10 ml.
+/* Presentaciones que maneja la tienda. Los decants van de 1 a 30 ml.
    Esta lista llena las casillas del panel de admin y ordena los chips
    de presentacion en el catalogo, asi no hay dos listas que cuidar. */
-const SIZES = ['Decant 1 ml','Decant 3 ml','Decant 5 ml','Decant 10 ml',
+const SIZES = ['Decant 1 ml','Decant 3 ml','Decant 5 ml','Decant 10 ml','Decant 30 ml',
                '30 ml','50 ml','60 ml','75 ml','100 ml','125 ml','200 ml','Única'];
 
 /* ── Botones flotantes que el cliente puede mover ──────
@@ -3546,6 +3583,9 @@ function updateSubcatOptions(cat, selected) {
   document.getElementById('prodEditSubcat').innerHTML =
     `<option value="">— Sin sub-categoría —</option>` +
     opts.map(([v,l]) => `<option value="${v}"${v===selected?' selected':''}>${l}</option>`).join('');
+  /* El genero (Dama / Caballero) solo se pregunta en los decants. */
+  const grp = document.getElementById('generoGroup');
+  if (grp) grp.style.display = (cat === CAT_CON_GENERO) ? '' : 'none';
 }
 
 let _fbLoadError = false;
@@ -4473,6 +4513,7 @@ function openProductEditModal(id) {
   }
   selCat.value = editCat;
   updateSubcatOptions(editCat, p ? (p.subcat || '') : '');
+  document.getElementById('prodEditGenero').value = p ? (p.genero || '') : '';
   document.getElementById('prodEditDesc').value  = p ? (p.desc || '') : '';
   document.getElementById('prodImgStatus').textContent = '';
   // Load images array
@@ -4511,6 +4552,7 @@ function openNewProductModal() {
   document.getElementById('prodEditStock').value = '1';
   document.getElementById('prodEditCat').value = 'mujer';
   updateSubcatOptions('mujer', '');
+  document.getElementById('prodEditGenero').value = '';
   document.getElementById('prodEditDesc').value  = '';
   document.getElementById('prodImgStatus').textContent = '';
   _adminImgs = [];
@@ -4771,6 +4813,9 @@ async function saveProductEdit() {
   const stock = parseInt(document.getElementById('prodEditStock').value)   || 0;
   const cat    = document.getElementById('prodEditCat').value;
   const subcat = document.getElementById('prodEditSubcat').value;
+  /* El genero solo se guarda en los decants: si el producto cambia de
+     categoria no se queda arrastrando un dato que ahi no significa nada. */
+  const genero = (cat === CAT_CON_GENERO) ? document.getElementById('prodEditGenero').value : '';
   const desc   = document.getElementById('prodEditDesc').value.trim();
   const sizes = Array.from(document.querySelectorAll('.size-check:checked')).map(c=>c.value);
 
@@ -4783,7 +4828,7 @@ async function saveProductEdit() {
 
   if (!name) { toast('El nombre es obligatorio', 'err'); btn.textContent = 'Guardar'; btn.disabled = false; return; }
 
-  const data = { name, price, stock, cat, subcat, desc, img, imgs: [..._adminImgs], sizes };
+  const data = { name, price, stock, cat, subcat, genero, desc, img, imgs: [..._adminImgs], sizes };
 
   if (_editingProductId === null) {
     // Nuevo producto — generar SKU automático secuencial
@@ -5165,7 +5210,7 @@ function catLabel(c){
     amaderado:'Amaderado',citrico:'Cítrico',aromatico:'Aromático',especiado:'Especiado',
     set:'Set',exclusivo:'Marca Exclusiva','set-pareja':'Set de Pareja','set-viaje':'Set de Viaje',
     cofre:'Cofre de Lujo',estuche:'Estuche de Regalo','set-corporal':'Set Corporal','decant-5':'Decant 5 ml',
-    'decant-10':'Decant 10 ml',miniatura:'Miniatura',probador:'Probador / Tester',coleccion:'Colección de Minis',
+    'decant-10':'Decant 10 ml',miniatura:'Miniatura',probador:'Probador / Tester',coleccion:'Set de Miniaturas',
     'body-mist':'Body Mist',splash:'Splash',crema:'Crema Corporal',desodorante:'Desodorante',
     jabon:'Jabón Perfumado',aceite:'Aceite Corporal',difusor:'Difusor de Varitas',vela:'Vela Aromática',
     'spray-textil':'Spray Textil',aromatizante:'Aromatizante de Ambiente',auto:'Aroma para Auto',liquidacion:'Liquidación',
@@ -5199,6 +5244,7 @@ function showCatalog(section, pushHistory = true) {
   _currentSection = section;
   _currentFilter  = 'all';
   _currentSizeFilter = null;
+  _currentGeneroFilter = null;
   const si = document.getElementById('searchInput');
   if (si) si.value = '';
   _searchQuery = '';
@@ -5210,6 +5256,10 @@ function showCatalog(section, pushHistory = true) {
   const hasData = Object.keys(PRODUCT_OVERRIDES).length > 0;
   _fbFetching = !hasData;
   renderGrid('all');
+  /* Si el cliente entro directo a una subcategoria desde el menu, el aviso
+     lo da esa subcategoria y no la seccion: si no, saldrian dos seguidos. */
+  if (_omitirNota) { _omitirNota = false; pintarAvisoNota(null); }
+  else avisarCategoria(section, 'all');
   if (!hasData) {
     // Primera visita sin caché: descarga metadatos (36MB) una sola vez, guarda slim
     /* Si el cliente ya empezo a buscar mientras cargaba el catalogo,
@@ -5222,6 +5272,160 @@ function showCatalog(section, pushHistory = true) {
   }
   setTimeout(() => document.getElementById('catalogo').scrollIntoView({behavior:'smooth'}), 50);
 }
+/* ── Explicacion de cada categoria y subcategoria ──────
+   Cuando el cliente entra a Árabes, Diseñador o Nicho (dentro de Dama,
+   Caballero, Unisex o Decant) y cuando abre la categoria Decant, le sale
+   una ventana con la explicacion tecnica. Se muestra una vez por visita
+   para no estorbarle, y queda un boton debajo de los filtros por si la
+   quiere volver a leer. */
+const NOTAS_CATALOGO = {
+  arabe: {
+    titulo: 'Perfumes Árabes',
+    sub: 'Qué estás viendo en esta subcategoría',
+    boton: 'Sobre los perfumes árabes',
+    cuerpo: `
+      <div class="tipo-item">
+        <h4>Concentración</h4>
+        <p>Vienen muy cargados de esencia, casi siempre entre 20 % y 30 %, al nivel de un Parfum o Extrait. Con dos toques es suficiente.</p>
+        <span class="tipo-dura">Duran de 8 a 12 horas y se sienten de lejos</span>
+      </div>
+      <div class="tipo-item">
+        <h4>Notas típicas</h4>
+        <p>Oud (madera de agar), ámbar, incienso, azafrán, rosa y notas dulces y resinosas. Son aromas con cuerpo, nada discretos.</p>
+      </div>
+      <div class="tipo-item">
+        <h4>Origen</h4>
+        <p>Hechos en Medio Oriente — Emiratos, Arabia Saudita, Kuwait. Muchos vienen en aceite o con alcohol, y los frascos suelen traer mucho detalle.</p>
+      </div>
+      <div class="tipo-item">
+        <h4>Para quién</h4>
+        <p>Para la noche, el frío y las ocasiones. Si buscas algo ligero para la oficina o para el calor, mejor mira un Diseñador en EDT.</p>
+      </div>`,
+  },
+  disenador: {
+    titulo: 'Perfumes de Diseñador',
+    sub: 'Qué estás viendo en esta subcategoría',
+    boton: 'Sobre los perfumes de diseñador',
+    cuerpo: `
+      <div class="tipo-item">
+        <h4>Qué son</h4>
+        <p>Los de las casas de moda: Dior, Chanel, Versace, Carolina Herrera, Paco Rabanne. Producción grande, por eso se consiguen fácil y cuestan menos que un nicho.</p>
+      </div>
+      <div class="tipo-item">
+        <h4>Concentración</h4>
+        <p>Casi todos son EDT (5 % a 15 %) o EDP (15 % a 20 %). Están hechos para gustarle a mucha gente: equilibrados y fáciles de usar.</p>
+        <span class="tipo-dura">EDT dura 3 a 5 horas · EDP dura 6 a 8 horas</span>
+      </div>
+      <div class="tipo-item">
+        <h4>Para quién</h4>
+        <p>Para el diario, el trabajo y la escuela. Son la opción más segura: huelen rico y nadie se va a incomodar.</p>
+      </div>
+      <div class="tipo-item">
+        <h4>Ojo</h4>
+        <p>Son los más conocidos, así que es probable que alguien más los traiga puestos. Si quieres algo que nadie más use, revisa Nicho.</p>
+      </div>`,
+  },
+  nicho: {
+    titulo: 'Perfumes Nicho',
+    sub: 'Qué estás viendo en esta subcategoría',
+    boton: 'Sobre los perfumes nicho',
+    cuerpo: `
+      <div class="tipo-item">
+        <h4>Qué son</h4>
+        <p>De casas chicas que producen poco y no viven de la moda: Xerjoff, Parfums de Marly, Initio, Amouage. No los vas a encontrar en cualquier tienda.</p>
+      </div>
+      <div class="tipo-item">
+        <h4>Materia prima</h4>
+        <p>Usan ingredientes de mejor calidad y en mayor cantidad: oud real, iris, ámbar gris, absolutos naturales. De ahí viene el precio.</p>
+      </div>
+      <div class="tipo-item">
+        <h4>Concentración</h4>
+        <p>Normalmente EDP fuerte o Extrait, de 20 % para arriba. Rinden muchísimo y dejan estela.</p>
+        <span class="tipo-dura">Duran de 8 a 12 horas o más</span>
+      </div>
+      <div class="tipo-item">
+        <h4>Para quién</h4>
+        <p>Para quien ya probó los de diseñador y quiere algo distinto. Son aromas más atrevidos, no siempre fáciles a la primera. Te recomendamos empezar con un decant antes del frasco completo.</p>
+      </div>`,
+  },
+  decant: {
+    titulo: 'Decants',
+    sub: 'El mismo perfume, en frasco chico',
+    boton: 'Sobre los decants',
+    cuerpo: `
+      <div class="tipo-item">
+        <h4>Qué es un decant</h4>
+        <p>Es perfume pasado del frasco original a un atomizador más chico. No está rebajado ni mezclado: es exactamente el mismo líquido de la casa, solo en menos cantidad. Lo que no lleva es la caja ni el frasco de la marca, y por eso cuesta mucho menos.</p>
+      </div>
+      <div class="tipo-item">
+        <h4>Presentaciones</h4>
+        <p>Manejamos <strong>1 ml, 3 ml, 5 ml, 10 ml y 30 ml</strong>.</p>
+        <span class="tipo-dura">1 y 3 ml para probar · 5 y 10 ml para traer en la bolsa · 30 ml para usarlo a diario</span>
+      </div>
+      <div class="tipo-item">
+        <h4>Cuánto rinde</h4>
+        <p>Cada mililitro da como 10 aplicaciones de un atomizo. Un decant de 5 ml alcanza para unas 50, o sea más de un mes si lo usas de vez en cuando.</p>
+      </div>
+      <div class="tipo-item">
+        <h4>Para qué sirve</h4>
+        <p>Para conocer un perfume caro sin gastar en el frasco completo, para traer dos o tres aromas distintos y cambiarlos según el día, o para llevarlo de viaje sin cargar el frasco grande.</p>
+      </div>
+      <div class="tipo-item">
+        <h4>Cómo elegir</h4>
+        <p>Usa los botones de <strong>Dama</strong> y <strong>Caballero</strong> para ver solo lo que buscas, y las subcategorías de Árabe, Diseñador y Nicho según el tipo de perfume.</p>
+      </div>`,
+  },
+};
+
+/* Las categorias donde las subcategorias llevan explicacion. */
+const CATS_CON_NOTA = new Set(['mujer','hombre','unisex','decant']);
+
+function claveNota(cat, subcat){
+  if (subcat && subcat !== 'all' && CATS_CON_NOTA.has(cat) && NOTAS_CATALOGO[subcat]) return subcat;
+  if (cat === 'decant') return 'decant';
+  return null;
+}
+
+function abrirNota(clave, forzar){
+  const n = NOTAS_CATALOGO[clave];
+  if (!n) return;
+  /* Sin forzar, solo la primera vez en esta visita: si saliera cada vez
+     que toca la pestaña se volveria un estorbo. El boton de abajo la
+     vuelve a abrir cuando el cliente quiera. */
+  if (!forzar) {
+    try {
+      if (sessionStorage.getItem('dda_nota_' + clave)) return;
+      sessionStorage.setItem('dda_nota_' + clave, '1');
+    } catch(e) {}
+  }
+  document.getElementById('notaTitulo').textContent = n.titulo;
+  document.getElementById('notaSub').textContent    = n.sub;
+  document.getElementById('notaCuerpo').innerHTML   = n.cuerpo;
+  document.getElementById('notaModal').classList.add('open');
+  lockScroll();
+}
+function cerrarNota(){
+  document.getElementById('notaModal').classList.remove('open');
+  unlockScroll();
+}
+
+/* Boton de "volver a leer" debajo de los filtros. */
+function pintarAvisoNota(clave){
+  const el = document.getElementById('notaAviso');
+  if (!el) return;
+  const n = NOTAS_CATALOGO[clave];
+  if (!n) { el.style.display = 'none'; el.innerHTML = ''; return; }
+  el.style.display = '';
+  el.innerHTML = `<button class="btn-tipos" style="margin:0" onclick="abrirNota('${clave}',true)">ℹ️ ${n.boton}</button>`;
+}
+
+/* Muestra la explicacion de lo que el cliente acaba de abrir. */
+function avisarCategoria(cat, subcat){
+  const clave = claveNota(cat, subcat);
+  pintarAvisoNota(clave);
+  if (clave) abrirNota(clave);
+}
+
 /* Aviso de tipos de perfume. Solo sale cuando el cliente toca el boton de
    arriba del catalogo; ya no se abre solo al entrar a una categoria. */
 function abrirTiposPerfume(){
@@ -5373,11 +5577,36 @@ function renderSearchResults(query) {
     return;
   }
 
+  pintarAvisoNota(null);
   info.textContent = `${results.length} resultado${results.length !== 1 ? 's' : ''} para "${query}" en todo el catálogo`;
   grid.innerHTML = results.map(r => cardHTML(r.item, true)).join('');
 }
 
 let _currentSizeFilter = null;
+let _currentGeneroFilter = null;
+
+/* Botones de Dama / Caballero. Solo salen en Decant, porque es la unica
+   categoria donde el genero va aparte de la subcategoria. */
+function renderGeneroFilter(products) {
+  const wrap = document.getElementById('generoFilterWrap');
+  if (!wrap) return;
+  if (_currentSection !== CAT_CON_GENERO) { wrap.style.display = 'none'; wrap.innerHTML = ''; return; }
+  const hay = new Set(products.map(p => p.genero || '').filter(Boolean));
+  const opciones = DECANT_GENEROS.filter(([v]) => hay.has(v));
+  if (!opciones.length) { wrap.style.display = 'none'; wrap.innerHTML = ''; return; }
+  wrap.style.display = 'flex';
+  wrap.innerHTML = `<span class="size-filter-label">Para</span>` +
+    `<button class="size-chip genero-chip${!_currentGeneroFilter?' active':''}" onclick="filterByGenero(null,this)">Todos</button>` +
+    opciones.map(([v,l]) => `<button class="size-chip genero-chip${_currentGeneroFilter===v?' active':''}" onclick="filterByGenero('${v}',this)">${l}</button>`).join('');
+}
+
+function filterByGenero(genero, btn) {
+  _currentGeneroFilter = genero;
+  _currentSizeFilter = null;
+  document.querySelectorAll('.genero-chip').forEach(c => c.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderGrid(_currentFilter);
+}
 
 function renderSizeFilter(products) {
   const wrap = document.getElementById('sizeFilterWrap');
@@ -5406,6 +5635,7 @@ function filterBySize(size, btn) {
 
 function filterBy(subcat, btn) {
   _currentSizeFilter = null;
+  _currentGeneroFilter = null;
   clearSearch();
   /* clearSearch regresa el filtro a "Todos", asi que la subcategoria se
      fija despues: si no, elegir una presentacion volvia a mostrar toda
@@ -5423,6 +5653,7 @@ function filterBy(subcat, btn) {
   });
   closeFilterDropdown();
   renderGrid(subcat);
+  avisarCategoria(_currentSection, subcat);
   document.getElementById('catalogo').scrollIntoView({behavior:'smooth'});
 }
 let _fbFetching = false;
@@ -5439,6 +5670,8 @@ function renderGrid(subcat) {
   let all = getMergedProducts().filter(p => !p.hidden);
   if (_currentSection) all = all.filter(p => p.cat === _currentSection);
   let list = (subcat === 'all') ? all : all.filter(p => p.subcat === subcat);
+  renderGeneroFilter(list);
+  if (_currentGeneroFilter) list = list.filter(p => (p.genero || '') === _currentGeneroFilter);
   renderSizeFilter(list);
   if (_currentSizeFilter) list = list.filter(p => (p.sizes||[]).includes(_currentSizeFilter));
   if (!list.length) {
@@ -5650,8 +5883,10 @@ function toggleSidebarCat(btn, subId) {
   sub.classList.toggle('open');
   btn.classList.toggle('expanded');
 }
+let _omitirNota = false;
 function goToSection(section, subcat) {
   closeSidebar();
+  _omitirNota = !!(subcat && subcat !== 'all');
   showCatalog(section);
   if (subcat !== 'all') {
     setTimeout(() => {
