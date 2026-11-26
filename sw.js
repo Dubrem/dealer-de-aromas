@@ -1,4 +1,4 @@
-const CACHE = 'dda-v20';
+const CACHE = 'dda-v21';
 const IMG_CACHE = 'dda-img-v1';
 const IMG_MAX = 300;
 
