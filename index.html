@@ -2133,8 +2133,8 @@ function cerrarApertura(){}
     </div>
     <!-- Tabs ocultos para compatibilidad con goToSection -->
     <div class="filter-tabs" id="filterTabs" style="display:none"></div>
-    <!-- Filtro de genero (solo decant) -->
-    <div class="size-filter-wrap" id="generoFilterWrap" style="display:none"></div>
+    <!-- Segundo filtro: genero en decant, tipo en linea corporal -->
+    <div class="size-filter-wrap" id="extraFilterWrap" style="display:none"></div>
     <!-- Filtro de presentaciones -->
     <div class="size-filter-wrap" id="sizeFilterWrap" style="display:none"></div>
     <!-- Boton para volver a ver la explicacion de la categoria abierta -->
@@ -2690,14 +2690,10 @@ function cerrarApertura(){}
       <label class="form-label">Sub-categoría</label>
       <select class="form-input" id="prodEditSubcat"></select>
     </div>
-    <!-- Género: solo para los decants -->
-    <div class="form-group" id="generoGroup" style="display:none">
-      <label class="form-label">Para <span style="font-size:.65rem;color:var(--text-light);font-weight:400">(con esto el cliente filtra el decant)</span></label>
-      <select class="form-input" id="prodEditGenero">
-        <option value="">— Sin especificar —</option>
-        <option value="dama">Dama</option>
-        <option value="caballero">Caballero</option>
-      </select>
+    <!-- Segundo dato: género en decants, tipo en línea corporal -->
+    <div class="form-group" id="extraGroup" style="display:none">
+      <label class="form-label" id="extraLabel">Para <span style="font-size:.65rem;color:var(--text-light);font-weight:400">(con esto lo filtra el cliente)</span></label>
+      <select class="form-input" id="prodEditExtra"></select>
     </div>
 
     <!-- Presentaciones -->
@@ -3239,7 +3235,7 @@ const COMING_SOON = new Set([]);
    lo que cambia es la etiqueta. Arabes y Nicho dejaron de ser categorias
    y ahora son subcategorias, pero siguen en CAT_LABELS para poder
    nombrar lo que se guardo antes. */
-const CAT_ORDER = ['mujer','hombre','unisex','tester','decant','sets','miniaturas','corporal','hogar','accesorios','ofertas','lanzamientos'];
+const CAT_ORDER = ['mujer','hombre','unisex','decant','tester','sets','miniaturas','corporal','hogar','accesorios','ofertas','lanzamientos'];
 const CAT_LABELS = {
   mujer:'Dama', hombre:'Caballero', unisex:'Unisex', tester:'Tester',
   decant:'Decant',
@@ -3260,21 +3256,37 @@ const SUBCATS = {
   unisex:       GENERO_SUBCATS,
   tester:       [['dama','Dama'],['caballero','Caballero'],['unisex','Unisex']],
   decant:       GENERO_SUBCATS,
-  sets:         [['dama','Dama'],['caballero','Caballero'],['estuche','Estuches de Regalo'],['set-corporal','Sets Corporales']],
+  sets:         [['dama','Dama'],['caballero','Caballero']],
   miniaturas:   [['miniatura','Miniaturas'],['coleccion','Sets de Miniaturas']],
-  corporal:     [['body-mist','Body Mist'],['splash','Splash'],['crema','Cremas Corporales'],['desodorante','Desodorantes'],['jabon','Jabones Perfumados'],['aceite','Aceites Corporales']],
-  hogar:        [['difusor','Difusores de Varitas'],['vela','Velas Aromáticas'],['spray-textil','Sprays Textiles'],['aromatizante','Aromatizantes de Ambiente'],['auto','Aromas para Auto']],
-  accesorios:   [['perfumero','Perfumeros'],['bolsa','Bolsas']],
+  corporal:     [['victorias-secret','Victoria\u2019s Secret'],['bath-body-works','Bath & Body Works'],['dove-caribel','Dove y Caribel'],['arabes-celebridades','Árabes y Celebridades']],
+  hogar:        [['vela','Veladoras'],['difusor-hogar','Difusores de Hogar'],['difusor-auto','Difusores de Automóvil'],['ambientador','Ambientadores']],
+  accesorios:   [['gorro','Gorros'],['holder','Holders'],['base-veladora','Bases para Veladora'],['bolsa','Bolsas'],['porta-difusor','Porta Difusores'],['termo','Termos'],['perfumero','Perfumeros'],['varios','Varios']],
   ofertas:      [['liquidacion','Liquidación'],['ultimas-piezas','Últimas Piezas'],['combo','Combos'],['descuento','Descuentos']],
   lanzamientos: [],
 };
 
 /* Los filtros de cada seccion son sus subcategorias con "Todos" al frente. */
-/* Un decant se vende por genero, pero su subcategoria ya se usa para
-   arabe / disenador / nicho. Por eso el decant lleva un campo aparte y el
-   cliente lo filtra con sus propios botones. */
-const DECANT_GENEROS = [['dama','Dama'],['caballero','Caballero']];
-const CAT_CON_GENERO = 'decant';
+/* Hay dos categorias que no caben en un solo nivel. El decant se vende
+   por genero, pero su subcategoria ya la ocupa arabe / disenador / nicho;
+   y la linea corporal se acomoda por marca, pero cada marca trae varios
+   tipos de producto. En las dos, ese segundo dato va en un campo aparte
+   del producto y el cliente lo filtra con sus propios botones, debajo de
+   las subcategorias. */
+const FILTRO_EXTRA = {
+  decant: {
+    campo: 'genero', etiqueta: 'Para', titulo: 'Para',
+    opciones: [['dama','Dama'],['caballero','Caballero']],
+  },
+  corporal: {
+    campo: 'tipo', etiqueta: 'Tipo', titulo: 'Tipo de producto',
+    opciones: [
+      ['mist','Mist'], ['crema','Cremas'], ['exfoliante','Exfoliantes'],
+      ['gel-antibacterial','Gel Antibacterial'], ['antibacterial-spray','Antibacterial en Spray'],
+      ['jabon-corporal','Jabón Corporal'], ['jabon-manos','Jabón de Manos'],
+      ['mini-set','Miniaturas y Sets'],
+    ],
+  },
+};
 
 const SECTION_TABS = Object.fromEntries(
   Object.entries(SUBCATS).map(([cat, subs]) => [cat, [['all','✦ Todos'], ...subs]])
@@ -3578,14 +3590,33 @@ function closeFilterDropdown() {
   if (chevron) chevron.style.transform = '';
 }
 
-function updateSubcatOptions(cat, selected) {
+function updateSubcatOptions(cat, selected, extraSel) {
   const opts = SUBCATS[cat] || [];
-  document.getElementById('prodEditSubcat').innerHTML =
+  const sel = document.getElementById('prodEditSubcat');
+  sel.innerHTML =
     `<option value="">— Sin sub-categoría —</option>` +
     opts.map(([v,l]) => `<option value="${v}"${v===selected?' selected':''}>${l}</option>`).join('');
-  /* El genero (Dama / Caballero) solo se pregunta en los decants. */
-  const grp = document.getElementById('generoGroup');
-  if (grp) grp.style.display = (cat === CAT_CON_GENERO) ? '' : 'none';
+  /* Igual que con las categorias retiradas: si el producto quedo en una
+     subcategoria que ya no esta en la lista, se le deja su opcion. Si no,
+     el selector caeria en "sin sub-categoria" y al guardar se la quitaria
+     sin que el vendedor se diera cuenta. */
+  if (selected && !opts.some(([v]) => v === selected)) {
+    sel.insertAdjacentHTML('beforeend',
+      `<option value="${selected}" selected>${catLabel(selected)} (retirada)</option>`);
+  }
+  /* El segundo dato solo se pregunta donde aplica: genero en los decants,
+     tipo de producto en la linea corporal. */
+  const grp = document.getElementById('extraGroup');
+  const selExtra = document.getElementById('prodEditExtra');
+  const ex = FILTRO_EXTRA[cat];
+  if (!grp || !selExtra) return;
+  if (!ex) { grp.style.display = 'none'; selExtra.innerHTML = ''; return; }
+  grp.style.display = '';
+  document.getElementById('extraLabel').innerHTML =
+    `${ex.titulo} <span style="font-size:.65rem;color:var(--text-light);font-weight:400">(con esto lo filtra el cliente)</span>`;
+  const valor = extraSel || '';
+  selExtra.innerHTML = `<option value="">— Sin especificar —</option>` +
+    ex.opciones.map(([v,l]) => `<option value="${v}"${v===valor?' selected':''}>${l}</option>`).join('');
 }
 
 let _fbLoadError = false;
@@ -4512,8 +4543,9 @@ function openProductEditModal(id) {
       `<option value="${editCat}">${catLabel(editCat)} (categoría retirada)</option>`);
   }
   selCat.value = editCat;
-  updateSubcatOptions(editCat, p ? (p.subcat || '') : '');
-  document.getElementById('prodEditGenero').value = p ? (p.genero || '') : '';
+  const exEdit = FILTRO_EXTRA[editCat];
+  updateSubcatOptions(editCat, p ? (p.subcat || '') : '',
+    (p && exEdit) ? (p[exEdit.campo] || '') : '');
   document.getElementById('prodEditDesc').value  = p ? (p.desc || '') : '';
   document.getElementById('prodImgStatus').textContent = '';
   // Load images array
@@ -4551,8 +4583,7 @@ function openNewProductModal() {
   document.getElementById('prodEditPrice').value = '';
   document.getElementById('prodEditStock').value = '1';
   document.getElementById('prodEditCat').value = 'mujer';
-  updateSubcatOptions('mujer', '');
-  document.getElementById('prodEditGenero').value = '';
+  updateSubcatOptions('mujer', '', '');
   document.getElementById('prodEditDesc').value  = '';
   document.getElementById('prodImgStatus').textContent = '';
   _adminImgs = [];
@@ -4813,9 +4844,10 @@ async function saveProductEdit() {
   const stock = parseInt(document.getElementById('prodEditStock').value)   || 0;
   const cat    = document.getElementById('prodEditCat').value;
   const subcat = document.getElementById('prodEditSubcat').value;
-  /* El genero solo se guarda en los decants: si el producto cambia de
-     categoria no se queda arrastrando un dato que ahi no significa nada. */
-  const genero = (cat === CAT_CON_GENERO) ? document.getElementById('prodEditGenero').value : '';
+  /* El segundo dato solo se guarda donde aplica: si el producto cambia de
+     categoria no se queda arrastrando un campo que ahi no significa nada. */
+  const exGuardar = FILTRO_EXTRA[cat];
+  const valorExtra = exGuardar ? document.getElementById('prodEditExtra').value : '';
   const desc   = document.getElementById('prodEditDesc').value.trim();
   const sizes = Array.from(document.querySelectorAll('.size-check:checked')).map(c=>c.value);
 
@@ -4828,7 +4860,8 @@ async function saveProductEdit() {
 
   if (!name) { toast('El nombre es obligatorio', 'err'); btn.textContent = 'Guardar'; btn.disabled = false; return; }
 
-  const data = { name, price, stock, cat, subcat, genero, desc, img, imgs: [..._adminImgs], sizes };
+  const data = { name, price, stock, cat, subcat, desc, img, imgs: [..._adminImgs], sizes };
+  if (exGuardar) data[exGuardar.campo] = valorExtra;
 
   if (_editingProductId === null) {
     // Nuevo producto — generar SKU automático secuencial
@@ -5203,6 +5236,15 @@ function catLabel(c){
   if (typeof CAT_LABELS !== 'undefined' && CAT_LABELS[c]) return CAT_LABELS[c];
   return {
     disenador:'Diseñador',decant:'Decant',dama:'Dama',caballero:'Caballero',
+    'victorias-secret':'Victoria\u2019s Secret','bath-body-works':'Bath & Body Works',
+    'dove-caribel':'Dove y Caribel','arabes-celebridades':'Árabes y Celebridades',
+    mist:'Mist',exfoliante:'Exfoliante','gel-antibacterial':'Gel Antibacterial',
+    'antibacterial-spray':'Antibacterial en Spray','jabon-corporal':'Jabón Corporal',
+    'jabon-manos':'Jabón de Manos','mini-set':'Miniaturas y Sets',
+    'difusor-hogar':'Difusor de Hogar','difusor-auto':'Difusor de Automóvil',
+    ambientador:'Ambientador',gorro:'Gorro',holder:'Holder',
+    'base-veladora':'Base para Veladora','porta-difusor':'Porta Difusor',
+    termo:'Termo',varios:'Varios',
     perfumero:'Perfumero',bolsa:'Bolsa','decant-1':'Decant 1 ml','decant-3':'Decant 3 ml',
     'eau-de-parfum':'Eau de Parfum','eau-de-toilette':'Eau de Toilette',
     extracto:'Extracto de Perfume',arabe:'Árabe',oud:'Oud',attar:'Attar / Aceite',
@@ -5212,7 +5254,7 @@ function catLabel(c){
     cofre:'Cofre de Lujo',estuche:'Estuche de Regalo','set-corporal':'Set Corporal','decant-5':'Decant 5 ml',
     'decant-10':'Decant 10 ml',miniatura:'Miniatura',probador:'Probador / Tester',coleccion:'Set de Miniaturas',
     'body-mist':'Body Mist',splash:'Splash',crema:'Crema Corporal',desodorante:'Desodorante',
-    jabon:'Jabón Perfumado',aceite:'Aceite Corporal',difusor:'Difusor de Varitas',vela:'Vela Aromática',
+    jabon:'Jabón Perfumado',aceite:'Aceite Corporal',difusor:'Difusor de Varitas',vela:'Veladora',
     'spray-textil':'Spray Textil',aromatizante:'Aromatizante de Ambiente',auto:'Aroma para Auto',liquidacion:'Liquidación',
     'ultimas-piezas':'Últimas Piezas',combo:'Combo',descuento:'Descuento',
   }[c]||c;
@@ -5244,7 +5286,7 @@ function showCatalog(section, pushHistory = true) {
   _currentSection = section;
   _currentFilter  = 'all';
   _currentSizeFilter = null;
-  _currentGeneroFilter = null;
+  _currentExtraFilter = null;
   const si = document.getElementById('searchInput');
   if (si) si.value = '';
   _searchQuery = '';
@@ -5574,27 +5616,29 @@ function renderSearchResults(query) {
 }
 
 let _currentSizeFilter = null;
-let _currentGeneroFilter = null;
+let _currentExtraFilter = null;
 
-/* Botones de Dama / Caballero. Solo salen en Decant, porque es la unica
-   categoria donde el genero va aparte de la subcategoria. */
-function renderGeneroFilter(products) {
-  const wrap = document.getElementById('generoFilterWrap');
+/* Botones del segundo filtro: Dama / Caballero en Decant y el tipo de
+   producto en Linea Corporal. Solo aparecen las opciones que de verdad
+   tienen producto, igual que los chips de presentacion. */
+function renderExtraFilter(products) {
+  const wrap = document.getElementById('extraFilterWrap');
   if (!wrap) return;
-  if (_currentSection !== CAT_CON_GENERO) { wrap.style.display = 'none'; wrap.innerHTML = ''; return; }
-  const hay = new Set(products.map(p => p.genero || '').filter(Boolean));
-  const opciones = DECANT_GENEROS.filter(([v]) => hay.has(v));
+  const ex = FILTRO_EXTRA[_currentSection];
+  if (!ex) { wrap.style.display = 'none'; wrap.innerHTML = ''; return; }
+  const hay = new Set(products.map(p => p[ex.campo] || '').filter(Boolean));
+  const opciones = ex.opciones.filter(([v]) => hay.has(v));
   if (!opciones.length) { wrap.style.display = 'none'; wrap.innerHTML = ''; return; }
   wrap.style.display = 'flex';
-  wrap.innerHTML = `<span class="size-filter-label">Para</span>` +
-    `<button class="size-chip genero-chip${!_currentGeneroFilter?' active':''}" onclick="filterByGenero(null,this)">Todos</button>` +
-    opciones.map(([v,l]) => `<button class="size-chip genero-chip${_currentGeneroFilter===v?' active':''}" onclick="filterByGenero('${v}',this)">${l}</button>`).join('');
+  wrap.innerHTML = `<span class="size-filter-label">${ex.etiqueta}</span>` +
+    `<button class="size-chip extra-chip${!_currentExtraFilter?' active':''}" onclick="filterByExtra(null,this)">Todos</button>` +
+    opciones.map(([v,l]) => `<button class="size-chip extra-chip${_currentExtraFilter===v?' active':''}" onclick="filterByExtra('${v}',this)">${l}</button>`).join('');
 }
 
-function filterByGenero(genero, btn) {
-  _currentGeneroFilter = genero;
+function filterByExtra(valor, btn) {
+  _currentExtraFilter = valor;
   _currentSizeFilter = null;
-  document.querySelectorAll('.genero-chip').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.extra-chip').forEach(c => c.classList.remove('active'));
   if (btn) btn.classList.add('active');
   renderGrid(_currentFilter);
 }
@@ -5626,7 +5670,7 @@ function filterBySize(size, btn) {
 
 function filterBy(subcat, btn) {
   _currentSizeFilter = null;
-  _currentGeneroFilter = null;
+  _currentExtraFilter = null;
   clearSearch();
   /* clearSearch regresa el filtro a "Todos", asi que la subcategoria se
      fija despues: si no, elegir una presentacion volvia a mostrar toda
@@ -5661,8 +5705,9 @@ function renderGrid(subcat) {
   let all = getMergedProducts().filter(p => !p.hidden);
   if (_currentSection) all = all.filter(p => p.cat === _currentSection);
   let list = (subcat === 'all') ? all : all.filter(p => p.subcat === subcat);
-  renderGeneroFilter(list);
-  if (_currentGeneroFilter) list = list.filter(p => (p.genero || '') === _currentGeneroFilter);
+  renderExtraFilter(list);
+  const exFiltro = FILTRO_EXTRA[_currentSection];
+  if (exFiltro && _currentExtraFilter) list = list.filter(p => (p[exFiltro.campo] || '') === _currentExtraFilter);
   renderSizeFilter(list);
   if (_currentSizeFilter) list = list.filter(p => (p.sizes||[]).includes(_currentSizeFilter));
   if (!list.length) {
