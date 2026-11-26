@@ -31,6 +31,8 @@
     "description": "Perfumería para mujer, hombre y unisex en Tula de Allende, Hidalgo: fragancias árabes, de nicho, sets, decants y línea corporal. Envíos a todo México.",
     "address": {
       "@type": "PostalAddress",
+      "streetAddress": "Av. Pte. 5, U.H. Pemex",
+      "postalCode": "42808",
       "addressLocality": "Tula de Allende",
       "addressRegion": "Hidalgo",
       "addressCountry": "MX"
@@ -40,7 +42,7 @@
     "priceRange": "$$",
     "currenciesAccepted": "MXN",
     "paymentAccepted": "Cash, Bank Transfer",
-    "hasMap": "https://maps.google.com/?q=Tula+de+Allende+Hidalgo+Mexico"
+    "hasMap": "https://www.google.com/maps/search/?api=1&query=Av.+Pte.+5%2C+U.H.+Pemex%2C+42808+Tula+de+Allende%2C+Hidalgo%2C+M%C3%A9xico"
   }
   </script>
   <link rel="icon" href="img/icono.png" type="image/png">
@@ -2357,9 +2359,9 @@ function cerrarApertura(){}
           <input type="radio" name="dv" value="local" checked onchange="setDelivery('local')">
           <div class="delivery-opt-body">
             <h4>🏪 Entrega en local</h4>
-            <p>Recoges tu pedido en <strong>Impresión en Tabloide</strong><br>
-               Calle Pte. 3, U.H. Pemex, 42808 Tula de Allende, Hgo.</p>
-            <a class="mapa-link" id="linkMapa" href="#" target="_blank" rel="noopener"
+            <p>Recoges tu pedido en <strong data-tienda></strong><br>
+               <span data-tienda-dir></span></p>
+            <a class="mapa-link" id="linkMapa" data-tienda-mapa href="#" target="_blank" rel="noopener"
                onclick="event.stopPropagation()">📍 Ver en Google Maps</a>
           </div>
           <span class="delivery-opt-price">Gratis</span>
@@ -2967,11 +2969,14 @@ const FIREBASE_API_KEY = 'AIzaSyDsl_hZ4m2kfKWHUoDl5BMj6XYuzu9vBYo';
 const MP_ACTIVO = false;
 const SHIP_LOCAL = 0;
 const STORE_LOCATION = {
-  name:    'Impresión en Tabloide',
-  address: 'Calle Pte. 3, U.H. Pemex, 42808 Tula de Allende, Hgo.',
+  name:    'Dealer Aromas',
+  address: 'Av. Pte. 5, U.H. Pemex, 42808 Tula de Allende, Hgo.',
   hours:   'Lun–Sáb 10:00–19:00 h',
+  /* El mapa busca la direccion sola, sin el nombre: el local todavia no
+     esta dado de alta en Google Maps y buscandolo por nombre no cae en
+     ningun lado. Con la direccion el cliente siempre llega. */
   maps:    'https://www.google.com/maps/search/?api=1&query=' +
-           encodeURIComponent('Impresión en Tabloide, Calle Pte. 3, U.H. Pemex, 42808 Tula de Allende, Hgo.'),
+           encodeURIComponent('Av. Pte. 5, U.H. Pemex, 42808 Tula de Allende, Hidalgo, México'),
 };
 /* Cuenta a la que se transfiere. La CLABE se guarda en limpio y se
    muestra separada de cuatro en cuatro, que es como viene en el banco y
@@ -2991,6 +2996,13 @@ function pintarDatosBancarios(){
   set('[data-titular]', BANK_DATA.titular);
   set('[data-clabe]',   clabeBonita(BANK_DATA.clabe));
 }
+/* El nombre y la direccion del punto de entrega se escriben una sola vez,
+   en STORE_LOCATION, y de ahi se pintan en el checkout. */
+function pintarDatosTienda(){
+  document.querySelectorAll('[data-tienda]').forEach(el => el.textContent = STORE_LOCATION.name);
+  document.querySelectorAll('[data-tienda-dir]').forEach(el => el.textContent = STORE_LOCATION.address);
+  document.querySelectorAll('[data-tienda-mapa]').forEach(el => el.href = STORE_LOCATION.maps);
+}
 async function copiarClabe(btn){
   try {
     await navigator.clipboard.writeText(BANK_DATA.clabe);
@@ -3004,7 +3016,7 @@ async function copiarClabe(btn){
 }
 
 const DELIVERY_LABELS = {
-  local:    '🏪 Entrega en local — Impresión en Tabloide',
+  local:    `🏪 Entrega en local — ${STORE_LOCATION.name}`,
   personal: '🤝 Entrega personalizada con Reynel Martínez González',  // pedidos viejos
 };
 
@@ -3258,9 +3270,9 @@ const SUBCATS = {
   decant:       GENERO_SUBCATS,
   sets:         [['dama','Dama'],['caballero','Caballero']],
   miniaturas:   [['miniatura','Miniaturas'],['coleccion','Sets de Miniaturas']],
-  corporal:     [['victorias-secret','Victoria\u2019s Secret'],['bath-body-works','Bath & Body Works'],['dove-caribel','Dove y Caribel'],['arabes-celebridades','Árabes y Celebridades']],
+  corporal:     [['victorias-secret','Victoria\u2019s Secret'],['bath-body-works','Bath & Body Works'],['dove-crumbl','Dove y Crumbl'],['arabes-celebridades','Árabes y Celebridades']],
   hogar:        [['vela','Veladoras'],['difusor-hogar','Difusores de Hogar'],['difusor-auto','Difusores de Automóvil'],['ambientador','Ambientadores']],
-  accesorios:   [['gorro','Gorros'],['holder','Holders'],['base-veladora','Bases para Veladora'],['bolsa','Bolsas'],['porta-difusor','Porta Difusores'],['termo','Termos'],['perfumero','Perfumeros'],['varios','Varios']],
+  accesorios:   [['holder','Holders'],['base-veladora','Bases para Veladora'],['bolsa','Bolsas'],['porta-difusor','Porta Difusores'],['termo','Termos'],['perfumero','Perfumeros'],['varios','Varios']],
   ofertas:      [['liquidacion','Liquidación'],['ultimas-piezas','Últimas Piezas'],['combo','Combos'],['descuento','Descuentos']],
   lanzamientos: [],
 };
@@ -4605,7 +4617,7 @@ const INFO_CONTENT = {
     <div style="display:flex;flex-direction:column;gap:14px;font-size:.84rem;line-height:1.7;color:var(--text-med)">
       <div style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
         <strong style="color:var(--text-dark)">🏪 Entrega en local</strong><br>
-        Recoges tu pedido en <strong>Impresión en Tabloide</strong> — Calle Pte. 3, U.H. Pemex, 42808 Tula de Allende, Hgo. Te avisamos por WhatsApp en cuanto esté listo.
+        Recoges tu pedido en <strong>${STORE_LOCATION.name}</strong> — ${STORE_LOCATION.address} Te avisamos por WhatsApp en cuanto esté listo.
       </div>
       <div style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
         <strong style="color:var(--text-dark)">💵 Efectivo o transferencia</strong><br>
@@ -4666,7 +4678,7 @@ const INFO_CONTENT = {
       </details>
       <details style="background:var(--blush-light);border-radius:12px;padding:14px 16px">
         <summary style="font-weight:700;color:var(--text-dark);cursor:pointer">¿Cómo se acuerda la entrega?</summary>
-        <p style="margin-top:8px">Al confirmar tu pedido nos escribes por WhatsApp y te avisamos en cuanto esté listo. Pasas por él a <strong>Impresión en Tabloide</strong> — Calle Pte. 3, U.H. Pemex, 42808 Tula de Allende, Hgo.</p>
+        <p style="margin-top:8px">Al confirmar tu pedido nos escribes por WhatsApp y te avisamos en cuanto esté listo. Pasas por él a <strong>${STORE_LOCATION.name}</strong> — ${STORE_LOCATION.address}</p>
       </details>
     </div>`,
   nosotros: `
@@ -5027,6 +5039,7 @@ window.addEventListener('popstate', () => {
 document.addEventListener('DOMContentLoaded', () => {
   renderSidebarCats();
   pintarDatosBancarios();
+  pintarDatosTienda();
   activarBotonesFlotantes();
   renderMobileNav();
   renderFooterCats();
@@ -5237,7 +5250,7 @@ function catLabel(c){
   return {
     disenador:'Diseñador',decant:'Decant',dama:'Dama',caballero:'Caballero',
     'victorias-secret':'Victoria\u2019s Secret','bath-body-works':'Bath & Body Works',
-    'dove-caribel':'Dove y Caribel','arabes-celebridades':'Árabes y Celebridades',
+    'dove-crumbl':'Dove y Crumbl','arabes-celebridades':'Árabes y Celebridades',
     mist:'Mist',exfoliante:'Exfoliante','gel-antibacterial':'Gel Antibacterial',
     'antibacterial-spray':'Antibacterial en Spray','jabon-corporal':'Jabón Corporal',
     'jabon-manos':'Jabón de Manos','mini-set':'Miniaturas y Sets',
